@@ -1,9 +1,14 @@
 <div>
     {{-- In work, do what you enjoy. --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <button type="button" wire:click='message'>sdas</button>
     <div class="overflow-x-auto">
         @if (!$tickets->isEmpty())
-            <button onclick="my_modal_4.showModal()" class="btn btn-sm"><i class="ri-add-line"></i> Add ticket</button>
+            <button onclick="my_modal_4.showModal()" wire:click='fresh' class="btn btn-sm"><i class="ri-add-line"></i> Add
+                ticket</button>
         @endif
+
         @if (!$tickets->isEmpty())
             <table class="table">
                 <!-- head -->
@@ -28,7 +33,7 @@
                                     </div>
                                 @elseif ($ticket->proces->status_id == 2)
                                     <div class="lg:tooltip" data-tip="vertified your ticket">
-                                        <button class="w-32 btn btn-secondary btn-sm"><i class="ri-flag-line"></i>
+                                        <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
                                             vertified</button>
                                     </div>
                                 @elseif ($ticket->proces->status_id == 3)
@@ -74,10 +79,12 @@
             </div>
         @endif
 
-        @if (!$isEdit)
-            <x-create-form-modal :devices="$devices" />
-        @else
+        @if ($isEdit)
             <x-update-form-modal :devices="$devices" />
+        @else
+            <x-create-form-modal :devices="$devices" :isEdit="$isEdit" />
         @endif
+
     </div>
+
 </div>

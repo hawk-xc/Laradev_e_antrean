@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Livewire\Component;
 
+
 class Ticket extends Component
 {
-    public $device_id, $description;
+    public $ticket_id, $device_id, $description;
     public $isEdit = false;
 
     public function fresh(): void
@@ -19,6 +20,24 @@ class Ticket extends Component
         $this->device_id = '';
         $this->description = '';
         $this->isEdit = false;
+    }
+
+    public function store()
+    {
+        $validate = $this->validate([
+            'device_id' => 'required|numeric',
+            'description' => 'required|min:3'
+        ]);
+
+        TicketModel::find($this->ticket_id)->update($validate);
+
+        $this->fresh();
+    }
+
+    public function message()
+    {
+        // session()->flash('notify', 'this is message');
+        $this->render();
     }
 
     public function create(): void
@@ -37,7 +56,9 @@ class Ticket extends Component
                 'user_id' => Auth::user()->id
             ];
 
-            Proces::create($data);
+            if (Proces::create($data)) {
+                session()->flash('notify', 'data successfull create!');
+            }
         endif;
 
         $this->fresh();
@@ -46,7 +67,10 @@ class Ticket extends Component
     public function delete(int $id): void
     {
         $ticket = TicketModel::find($id);
-        $ticket->delete();
+
+        if ($ticket->delete()) {
+            session()->flash('notify', 'data successfull delete!');
+        }
 
         $this->fresh();
     }
@@ -56,9 +80,9 @@ class Ticket extends Component
         // $this->fresh();
         $this->isEdit = true;
         $ticket = TicketModel::find($id);
+        $this->ticket_id = $id;
         $this->device_id = $ticket->device_id;
         $this->description = $ticket->description;
-
         // dd($this->device_id, $this->description);
     }
 
@@ -67,6 +91,7 @@ class Ticket extends Component
         $tickets = TicketModel::orderBy('created_at', 'asc')->paginate(5);
         $devices = Device::where('user_id', Auth::user()->id)->get();
 
+        session()->flash('notify', 'data successfull delete!');
         return view('livewire.ticket', [
             'tickets' => $tickets,
             'devices' => $devices,
