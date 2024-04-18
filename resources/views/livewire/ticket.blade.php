@@ -5,7 +5,7 @@
     <button type="button" wire:click='message'>sdas</button>
     <div class="overflow-x-auto">
         @if (!$tickets->isEmpty())
-            <button onclick="my_modal_4.showModal()" wire:click='fresh' class="btn btn-sm"><i class="ri-add-line"></i> Add
+            <button onclick="my_modal_4.showModal()" wire:click='create' class="btn btn-sm"><i class="ri-add-line"></i> Add
                 ticket</button>
         @endif
 
@@ -79,12 +79,46 @@
             </div>
         @endif
 
-        @if ($isEdit)
-            <x-update-form-modal :devices="$devices" />
-        @else
-            <x-create-form-modal :devices="$devices" :isEdit="$isEdit" />
+        @if ($openModal)
+            @if ($isEdit)
+                <x-update-form-modal :devices="$devices" />
+            @else
+                <x-create-form-modal :devices="$devices" :isEdit="$isEdit" />
+            @endif
         @endif
 
     </div>
+    @if (session('notify'))
+        <x-notification-laravel :message="session('notify')" />
+    @endif
 
+    @push('scripts')
+        <script>
+            document.addEventListener('livewire:load', function() {
+                // Eksekusi JavaScript setelah Livewire selesai dimuat
+                Livewire.on('messageReceived', function(message) {
+                    // Tampilkan pesan notifikasi
+                    var notification = document.getElementById("notification");
+                    var closeButton = document.getElementById("close-button");
+
+                    function showNotification() {
+                        // var notification = $("#notification");
+                        setTimeout(function() {
+                            // notification.addClass("opacity-0");
+                            notification.fadeOut('slow');
+                        }, 4000);
+                    }
+
+                    showNotification()
+
+                    closeButton.on("click", function() {
+                        notification.fadeOut('slow');
+                        // notification.addClass("opacity-0");
+                    });
+
+                    notification.hide();
+                });
+            });
+        </script>
+    @endpush
 </div>

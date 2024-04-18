@@ -13,35 +13,32 @@ use Livewire\Component;
 class Ticket extends Component
 {
     public $ticket_id, $device_id, $description;
+    public $openModal = true;
     public $isEdit = false;
+    public $messa = 'ksong';
+
+    // public function dehydrate()
+    // {
+    //     session()->flash('notify', 'nanskdnas');
+    // }
 
     public function fresh(): void
     {
         $this->device_id = '';
         $this->description = '';
         $this->isEdit = false;
+        $this->openModal = false;
     }
 
-    public function store()
+    public function updated()
     {
-        $validate = $this->validate([
-            'device_id' => 'required|numeric',
-            'description' => 'required|min:3'
-        ]);
-
-        TicketModel::find($this->ticket_id)->update($validate);
-
-        $this->fresh();
-    }
-
-    public function message()
-    {
-        // session()->flash('notify', 'this is message');
-        $this->render();
+        $this->openModal = true;
+        session()->flash('notify', $this->messa);
     }
 
     public function create(): void
     {
+        // $this->openModal = true;
         $this->isEdit = false;
         $validate = $this->validate([
             'device_id' => 'required',
@@ -57,33 +54,44 @@ class Ticket extends Component
             ];
 
             if (Proces::create($data)) {
-                session()->flash('notify', 'data successfull create!');
+                $this->messa = 'sukses dibuat teman';
+                $this->fresh();
             }
         endif;
-
-        $this->fresh();
     }
 
     public function delete(int $id): void
     {
         $ticket = TicketModel::find($id);
 
+        $this->messa = 'dihapus aja';
         if ($ticket->delete()) {
-            session()->flash('notify', 'data successfull delete!');
+            $this->fresh();
         }
-
-        $this->fresh();
     }
 
-    public function edit($id)
+    public function edit(int $id): void
     {
-        // $this->fresh();
+        $this->openModal = true;
         $this->isEdit = true;
         $ticket = TicketModel::find($id);
         $this->ticket_id = $id;
         $this->device_id = $ticket->device_id;
         $this->description = $ticket->description;
-        // dd($this->device_id, $this->description);
+    }
+
+    public function store()
+    {
+        $validate = $this->validate([
+            'device_id' => 'required|numeric',
+            'description' => 'required|min:3'
+        ]);
+
+        if (TicketModel::find($this->ticket_id)->update($validate)) {
+            session()->flash('notify', 'data successfull updated!');
+        }
+
+        $this->fresh();
     }
 
     public function render(): View
@@ -91,7 +99,7 @@ class Ticket extends Component
         $tickets = TicketModel::orderBy('created_at', 'asc')->paginate(5);
         $devices = Device::where('user_id', Auth::user()->id)->get();
 
-        session()->flash('notify', 'data successfull delete!');
+        // session()->flash('notify', 'data successfull delete!');
         return view('livewire.ticket', [
             'tickets' => $tickets,
             'devices' => $devices,

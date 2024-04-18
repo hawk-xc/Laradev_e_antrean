@@ -7,4 +7,25 @@
         {{ $message }}
         <span class="ml-4 text-lg" id="close-button"><i class="ri-close-large-line"></i></span>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var notification = $("#notification");
+            var closeButton = $("#close-button");
+
+            function showNotification() {
+                // var notification = $("#notification");
+                setTimeout(function() {
+                    notification.addClass("opacity-0");
+                    // notification.fadeOut('slow');
+                }, 4000);
+            }
+
+            showNotification()
+
+            closeButton.on("click", function() {
+                // notification.fadeOut('slow');
+                notification.addClass("opacity-0");
+            });
+        });
+    </script>
 </div>
