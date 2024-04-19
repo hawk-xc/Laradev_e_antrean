@@ -37,6 +37,11 @@
                     }
                 });
             })
+
+            $wire.on('closeButton', () => {
+                var button = $('#closeButton');
+                button[0].click();
+            })
         </script>
     @endscript
 </div>
