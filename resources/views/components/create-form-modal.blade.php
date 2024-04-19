@@ -39,7 +39,7 @@ textarea-warning
             <button class="btn btn-neutral" wire:click="create">create</button>
             <form method="dialog" class="flex gap-3">
                 <!-- if there is a button, it will close the modal -->
-                <button class="btn" wire:click="fresh">Close</button>
+                <button id="closeButton" class="btn" wire:click="fresh">Close</button>
             </form>
         </div>
     </div>
