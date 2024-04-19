@@ -89,6 +89,7 @@ class Ticket extends Component
 
     public function deleteTicket(): void
     {
+        Proces::where('ticket_id', $this->delete_id)->delete();
         $ticket = TicketModel::find($this->delete_id);
 
         if ($ticket->delete()) {
