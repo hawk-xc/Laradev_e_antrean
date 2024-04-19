@@ -5,7 +5,7 @@
             <form wire:submit='testing'>
                 <label class="max-w-xs w-96 form-control">
                     <div class="label">
-                        <span class="label-text">Select Device</span>
+                        <span class="label-text">Select Status</span>
                         @error('device_id')
                             <span class="label-text-alt">{{ $message }}</span>
                         @enderror
@@ -14,23 +14,25 @@
                         class="select select-bordered @error('device_id')
                 select-error
                 @enderror"
-                        wire:model="device_id">
+                        wire:model="status_id">
                         <option selected value="null">Pick one</option>
-                        @foreach ($devices as $device)
-                            <option value="{{ $device->id }}">{{ $device->device_name }}</option>
+                        @foreach ($process as $proces)
+                            <option value="{{ $proces->id }}">{{ $proces->status->name }}</option>
                         @endforeach
                     </select>
                 </label>
                 <label class="form-control">
-                    <div class="label">
+                    {{-- <div class="label">
                         <span class="label-text">Description</span>
                         @error('description')
                             <span class="label-text-alt">{{ $message }}</span>
                         @enderror
-                    </div>
-                    <textarea wire:model="description"
-                        class="h-36 textarea textarea-bordered @error('description') textarea-warning @enderror" rows="3"
-                        placeholder="Description..."></textarea>
+                    </div> --}}
+                    {{-- <textarea wire:model="description"
+                        class="h-36 textarea textarea-bordered @error('description')
+textarea-warning
+@enderror" rows="3"
+                        placeholder="Description..."></textarea> --}}
                     {{-- <input type="text" @if ($isEdit) value="{{ $description }}" @endif> --}}
                 </label>
             </form>

@@ -10,6 +10,7 @@
                     </a>
                 </div>
 
+                
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="gap-2">
@@ -25,6 +26,8 @@
                         {{ __('Devices') }}
                     </x-nav-link>
                 </div>
+                
+
 
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('ticket')" :active="request()->routeIs('ticket')" class="gap-2">
@@ -32,7 +35,17 @@
                         {{ __('Tickets') }}
                     </x-nav-link>
                 </div>
+
+                                <!-- Navigation Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('process')" :active="request()->routeIs('process')" class="gap-2">
+                        <i class="ri-stack-line"></i>
+                        {{ __('Process') }}
+                    </x-nav-link>
+                </div>
             </div>
+
+            
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
