@@ -8,22 +8,36 @@ use \App\Models\Ticket as TicketModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Livewire\Component;
+use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
+
 
 class Ticket extends Component
 {
-    public $device_id, $description;
-    public $isEdit = false;
+    use WithPagination, WithoutUrlPagination;
+
+    public $ticket_id, $device_id, $description;
+    public $openModal = true;
+    public $action = 'create';
+
+    public $notif = false;
+
+    // delete functionality
+    public $delete_id;
+    protected $listeners = ['confirmDelete' => 'deleteTicket'];
 
     public function fresh(): void
     {
         $this->device_id = '';
         $this->description = '';
-        $this->isEdit = false;
+        $this->action = 'create';
+        $this->openModal = false;
     }
 
     public function create(): void
     {
-        $this->isEdit = false;
+        $this->openModal = true;
+        $this->action = 'create';
         $validate = $this->validate([
             'device_id' => 'required',
             'description' => 'required|min:3'
@@ -37,29 +51,50 @@ class Ticket extends Component
                 'user_id' => Auth::user()->id
             ];
 
-            Proces::create($data);
+            if (Proces::create($data)) {
+                $this->dispatch('notify', type: 'success', message: 'data successfully created!');
+                $this->fresh();
+            }
         endif;
-
-        $this->fresh();
     }
 
-    public function delete(int $id): void
+    public function edit(int $id): void
     {
+        $this->action = 'edit';
+        $this->openModal = true;
         $ticket = TicketModel::find($id);
-        $ticket->delete();
-
-        $this->fresh();
-    }
-
-    public function edit($id)
-    {
-        // $this->fresh();
-        $this->isEdit = true;
-        $ticket = TicketModel::find($id);
+        $this->ticket_id = $id;
         $this->device_id = $ticket->device_id;
         $this->description = $ticket->description;
+    }
 
-        // dd($this->device_id, $this->description);
+    public function store()
+    {
+        $validate = $this->validate([
+            'device_id' => 'required|numeric',
+            'description' => 'required|min:3'
+        ]);
+
+        if (TicketModel::find($this->ticket_id)->update($validate)) {
+            $this->dispatch('notify', type: 'success', message: 'data successfull updated!');
+            $this->fresh();
+        }
+    }
+
+    public function deleteConfirmation(int $id): void
+    {
+        $this->delete_id = $id;
+        $this->dispatch('show-delete');
+    }
+
+    public function deleteTicket(): void
+    {
+        $ticket = TicketModel::find($this->delete_id);
+
+        if ($ticket->delete()) {
+            $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
+            $this->fresh();
+        }
     }
 
     public function render(): View
@@ -67,6 +102,7 @@ class Ticket extends Component
         $tickets = TicketModel::orderBy('created_at', 'asc')->paginate(5);
         $devices = Device::where('user_id', Auth::user()->id)->get();
 
+        // session()->flash('notify', 'data successfull delete!');
         return view('livewire.ticket', [
             'tickets' => $tickets,
             'devices' => $devices,

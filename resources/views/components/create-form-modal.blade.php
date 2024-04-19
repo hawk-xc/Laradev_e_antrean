@@ -1,6 +1,7 @@
 <dialog id="my_modal_4" class="modal" wire:ignore.self>
     <div class="w-11/12 max-w-5xl modal-box">
         <h3 class="text-lg font-bold">Hello!</h3>
+        <span>create new Ticket</span>
         <div class="flex flex-col gap-2">
             <label class="max-w-xs w-96 form-control">
                 <div class="label">
@@ -32,7 +33,6 @@
 textarea-warning
 @enderror" rows="3"
                     placeholder="Description..."></textarea>
-                {{-- <input type="text" @if ($isEdit) value="{{ $description }}" @endif> --}}
             </label>
         </div>
         <div class="modal-action">
