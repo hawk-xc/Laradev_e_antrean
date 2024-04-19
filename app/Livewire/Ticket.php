@@ -31,7 +31,7 @@ class Ticket extends Component
         $this->device_id = '';
         $this->description = '';
         $this->action = 'create';
-        $this->openModal = false;
+        // $this->openModal = false;
     }
 
     public function create(): void
@@ -55,6 +55,7 @@ class Ticket extends Component
                 $this->dispatch('notify', type: 'success', message: 'data successfully created!');
                 $this->fresh();
             }
+            $this->dispatch('closeButton');
         endif;
     }
 
@@ -78,6 +79,7 @@ class Ticket extends Component
         if (TicketModel::find($this->ticket_id)->update($validate)) {
             $this->dispatch('notify', type: 'success', message: 'data successfull updated!');
             $this->fresh();
+            $this->dispatch('closeButton');
         }
     }
 
