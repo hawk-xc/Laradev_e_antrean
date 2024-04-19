@@ -53,11 +53,9 @@
                             <td>
                                 <button class="btn btn-neutral" onclick="my_modal_4.showModal()"
                                     wire:click="edit({{ $ticket->id }})">edit</button>
-                                <button class="btn btn-error" wire:click="delete({{ $ticket->id }})"
-                                    wire:confirm="are you sure to delete this data?">Delete</button>
 
                                 {{-- this is delete example --}}
-                                <button type="button" class="btn"
+                                <button type="button" class="btn btn-error"
                                     wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>delete</button>
                             </td>
                         </tr>
@@ -73,7 +71,7 @@
                         <h1 class="text-5xl font-bold">Hello there</h1>
                         <p class="py-6">Currently the data is still empty, you can add data via the button below!
                         </p>
-                        <button onclick="my_modal_4.showModal()" class="btn btn-neutral btn-sm"><i
+                        <button wire:click='create' onclick="my_modal_4.showModal()" class="btn btn-neutral btn-sm"><i
                                 class="ri-add-line"></i> Add
                             ticket</button>
                     </div>
