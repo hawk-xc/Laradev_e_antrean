@@ -33,7 +33,6 @@
 textarea-warning
 @enderror" rows="3"
                     placeholder="Description..."></textarea>
-                {{-- <input type="text" @if ($isEdit) value="{{ $description }}" @endif> --}}
             </label>
         </div>
         <div class="modal-action">

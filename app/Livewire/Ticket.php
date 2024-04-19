@@ -8,38 +8,32 @@ use \App\Models\Ticket as TicketModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Livewire\Component;
+use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
 
 
 class Ticket extends Component
 {
+    use WithPagination, WithoutUrlPagination;
+
     public $ticket_id, $device_id, $description;
     public $openModal = true;
-    public $isEdit = false;
-    public $messa = 'ksong';
+    public $action = 'create';
 
-    // public function dehydrate()
-    // {
-    //     session()->flash('notify', 'nanskdnas');
-    // }
+    public $notif = false;
 
     public function fresh(): void
     {
         $this->device_id = '';
         $this->description = '';
-        $this->isEdit = false;
+        $this->action = 'create';
         $this->openModal = false;
-    }
-
-    public function updated()
-    {
-        $this->openModal = true;
-        session()->flash('notify', $this->messa);
     }
 
     public function create(): void
     {
-        // $this->openModal = true;
-        $this->isEdit = false;
+        $this->openModal = true;
+        $this->action = 'create';
         $validate = $this->validate([
             'device_id' => 'required',
             'description' => 'required|min:3'
@@ -54,26 +48,16 @@ class Ticket extends Component
             ];
 
             if (Proces::create($data)) {
-                $this->messa = 'sukses dibuat teman';
+                $this->dispatch('notify', type: 'success', message: 'data successfully created!');
                 $this->fresh();
             }
         endif;
     }
 
-    public function delete(int $id): void
-    {
-        $ticket = TicketModel::find($id);
-
-        $this->messa = 'dihapus aja';
-        if ($ticket->delete()) {
-            $this->fresh();
-        }
-    }
-
     public function edit(int $id): void
     {
+        $this->action = 'edit';
         $this->openModal = true;
-        $this->isEdit = true;
         $ticket = TicketModel::find($id);
         $this->ticket_id = $id;
         $this->device_id = $ticket->device_id;
@@ -88,10 +72,19 @@ class Ticket extends Component
         ]);
 
         if (TicketModel::find($this->ticket_id)->update($validate)) {
-            session()->flash('notify', 'data successfull updated!');
+            $this->dispatch('notify', type: 'success', message: 'data successfull updated!');
+            $this->fresh();
         }
+    }
 
-        $this->fresh();
+    public function delete(int $id): void
+    {
+        $ticket = TicketModel::find($id);
+
+        if ($ticket->delete()) {
+            $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
+            $this->fresh();
+        }
     }
 
     public function render(): View

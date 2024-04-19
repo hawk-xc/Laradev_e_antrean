@@ -1,13 +1,12 @@
 <div>
     {{-- In work, do what you enjoy. --}}
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <button type="button" wire:click='message'>sdas</button>
     <div class="overflow-x-auto">
         @if (!$tickets->isEmpty())
             <button onclick="my_modal_4.showModal()" wire:click='create' class="btn btn-sm"><i class="ri-add-line"></i> Add
                 ticket</button>
         @endif
+
+        <x-notification-laravel />
 
         @if (!$tickets->isEmpty())
             <table class="table">
@@ -70,7 +69,8 @@
                 <div class="text-center hero-content">
                     <div class="max-w-md">
                         <h1 class="text-5xl font-bold">Hello there</h1>
-                        <p class="py-6">Currently the data is still empty, you can add data via the button below!</p>
+                        <p class="py-6">Currently the data is still empty, you can add data via the button below!
+                        </p>
                         <button onclick="my_modal_4.showModal()" class="btn btn-neutral btn-sm"><i
                                 class="ri-add-line"></i> Add
                             ticket</button>
@@ -80,10 +80,10 @@
         @endif
 
         @if ($openModal)
-            @if ($isEdit)
+            @if ($action == 'edit')
                 <x-update-form-modal :devices="$devices" />
-            @else
-                <x-create-form-modal :devices="$devices" :isEdit="$isEdit" />
+            @elseif ($action == 'create')
+                <x-create-form-modal :devices="$devices" />
             @endif
         @endif
 
