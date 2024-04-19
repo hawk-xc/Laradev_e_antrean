@@ -51,12 +51,14 @@
                             <td>{{ $ticket->description }}</td>
                             <td>{{ $ticket->created_at->diffForHumans() }}</td>
                             <td>
-                                {{-- <label wire:click="edit({{ $ticket->id }})" class="btn btn-neutral" --}}
                                 <button class="btn btn-neutral" onclick="my_modal_4.showModal()"
                                     wire:click="edit({{ $ticket->id }})">edit</button>
                                 <button class="btn btn-error" wire:click="delete({{ $ticket->id }})"
                                     wire:confirm="are you sure to delete this data?">Delete</button>
-                                {{-- <button type="button" class="btn" wire:click="setter({{ $ticket->id }})">setter</button> --}}
+
+                                {{-- this is delete example --}}
+                                <button type="button" class="btn"
+                                    wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>delete</button>
                             </td>
                         </tr>
                     @endforeach

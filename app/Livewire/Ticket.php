@@ -22,6 +22,10 @@ class Ticket extends Component
 
     public $notif = false;
 
+    // delete functionality
+    public $delete_id;
+    protected $listeners = ['confirmDelete' => 'deleteTicket'];
+
     public function fresh(): void
     {
         $this->device_id = '';
@@ -77,9 +81,15 @@ class Ticket extends Component
         }
     }
 
-    public function delete(int $id): void
+    public function deleteConfirmation(int $id): void
     {
-        $ticket = TicketModel::find($id);
+        $this->delete_id = $id;
+        $this->dispatch('show-delete');
+    }
+
+    public function deleteTicket(): void
+    {
+        $ticket = TicketModel::find($this->delete_id);
 
         if ($ticket->delete()) {
             $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
