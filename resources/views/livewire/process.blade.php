@@ -1,10 +1,10 @@
 <div>
     {{-- In work, do what you enjoy. --}}
     <div class="overflow-x-auto">
-        @if (!$process->isEmpty())
+        {{-- @if (!$process->isEmpty())
             <button onclick="my_modal_4.showModal()" wire:click='create' class="btn btn-sm"><i class="ri-add-line"></i> Add
                 Process</button>
-        @endif
+        @endif --}}
 
         <x-notification-laravel />
 
@@ -49,14 +49,15 @@
                                 @endif
                             </th>
                             {{-- <td>{{ $proces->device->device_name }}</td> --}}
-                            <td>{{ $proces->user->name}}</td>
+
+                            <td>{{ $proces->ticket->device->user->name }}</td>
                             {{-- <td>{{ $proces->ticket->device->device_name }}</td> --}}
                             @if($proces->ticket)
                             <td>{{ optional($proces->ticket->device)->device_name }}</td>
                             @else
                             <td>No device</td>
                             @endif
-                            <td>{{ $proces->user->role->name }}</td>
+                            <td>{{ $proces->user->name }}</td>
 
                             <td>{{ $proces->created_at->diffForHumans() }}</td>
                             <td>
@@ -91,9 +92,9 @@
 
         @if ($openModal)
             @if ($action == 'edit')
-                <x-update-status :process="$process" />
+                <x-update-status :process="$process" :employees="$employees" />
             @elseif ($action == 'create')
-                <x-create-form-modal :process="$process" />
+                {{-- <x-create-form-modal :process="$process" :employees="$employees" :devices="$devices" /> --}}
             @endif
         @endif
 

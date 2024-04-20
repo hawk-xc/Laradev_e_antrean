@@ -21,6 +21,25 @@
                         @endforeach
                     </select>
                 </label>
+                
+                <label class="max-w-xs w-96 form-control">
+                    <div class="label">
+                        <span class="label-text">Select Employee</span>
+                        @error('user_id')
+                            <span class="label-text-alt">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <select
+                        class="select select-bordered @error('user_id')
+                select-error
+                @enderror"
+                        wire:model="employe_id">
+                        <option selected value="null">Pick one</option>
+                        @foreach ($employees as $employee)
+                            <option value="{{ $employee->id }}">{{ $employee->username }}</option>
+                        @endforeach
+                    </select>
+                </label>
                 <label class="form-control">
                     {{-- <div class="label">
                         <span class="label-text">Description</span>
