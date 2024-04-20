@@ -91,9 +91,9 @@
 
         @if ($openModal)
             @if ($action == 'edit')
-                <x-update-status :process="$process" />
+                <x-update-status :process="$process" :employees="$employees" />
             @elseif ($action == 'create')
-                <x-create-form-modal :process="$process" />
+                {{-- <x-create-form-modal :process="$process" :employees="$employees" :devices="$devices" /> --}}
             @endif
         @endif
 
