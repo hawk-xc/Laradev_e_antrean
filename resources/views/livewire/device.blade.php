@@ -38,7 +38,7 @@
                             <td>{{ $device->created_at->diffForHumans() }}</td>
                             <td>
                                 {{-- <label wire:click="edit({{ $device->id }})" class="btn btn-neutral" --}}
-                                <label wire:click.live="add({{ $device->id }})" class="btn btn-neutral"
+                                <label wire:click.live="edit({{ $device->id }})" class="btn btn-neutral"
                                     for="my_modal_6">Edit</label>
                                 <label class="btn btn-error"
                                     wire:click.prevent='deleteConfirmation({{ $device->id }})'>
@@ -96,7 +96,11 @@
                     </label>
                 </div>
                 <div class="modal-action">
-                    <button wire:click="create" class="btn btn-neutral">save!</button>
+                    @if ($action == 'create')
+                        <button wire:click="create" class="btn btn-neutral">save!</button>
+                    @elseif($action == 'update')
+                        <button wire:click="store" class="btn btn-neutral">update!</button>
+                    @endif
                     <label id="closeButton" for="my_modal_6" class="btn">Close!</label>
                 </div>
             </div>

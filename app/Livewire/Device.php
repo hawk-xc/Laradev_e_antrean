@@ -8,7 +8,9 @@ use Livewire\Component;
 
 class Device extends Component
 {
-    public $device_name, $device_year, $delete_id;
+    public $device_name, $device_year, $device_id, $delete_id;
+
+    public $action = 'create';
 
     public array $checks = [];
 
@@ -38,10 +40,12 @@ class Device extends Component
     {
         $this->reset('device_name');
         $this->reset('device_year');
+        $this->action = 'create';
     }
 
     public function create()
     {
+        $this->action = 'create';
         $validate = $this->validate([
             'device_name' => 'required|min:3',
             'device_year' => 'required|numeric|min:4'
@@ -56,31 +60,28 @@ class Device extends Component
         }
     }
 
-    public function add($id)
-    {
-        $device = DeviceModel::find($id);
-        // $this->data[] = $device->device_name;
-        // $this->data[] = $device->device_year;
-
-        dd($this->device_year, $this->device_name);
-    }
-
-    public function sets()
-    {
-        // $this->device_name = 'testing';
-        // $this->device_year = "sdsdf";
-
-        dd($this->data);
-        // dd($this->device_name, $this->device_year);
-    }
-
     public function edit($id)
     {
-        // $device = DeviceModel::find($id);
-        // $this->device_name = $device->device_name;
-        // $this->device_year = $device->device_year;
+        $this->action = 'update';
+        $this->device_id = $id;
+        $device = DeviceModel::find($id);
+        $this->device_name = $device->device_name;
+        $this->device_year = $device->device_year;
+    }
 
-        dd($this->device_name, $this->device_year);
+    public function store()
+    {
+        $validate = $this->validate([
+            'device_name' => 'required|min:3',
+            'device_year' => 'required|numeric|min:4'
+        ]);
+        $validate['user_id'] = Auth::user()->id;
+        $device = DeviceModel::find($this->device_id);
+        if ($device->update($validate)) {
+            $this->dispatch('closeButton');
+            $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
+            $this->fresh();
+        }
     }
 
     public function delete($id)
