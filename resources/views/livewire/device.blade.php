@@ -21,8 +21,8 @@
                     <tr class="text-lg">
                         <th><i class="ri-list-check-3"></i></th>
                         <th>device name</th>
-                        <th>device year</th>
-                        <th>added on</th>
+                        <th class="hidden sm:table-cell">device year</th>
+                        <th class="hidden sm:table-cell">added on</th>
                         <th>option</th>
                     </tr>
                 </thead>
@@ -34,15 +34,25 @@
                                     wire:model.live='checks' class="checkbox" />
                             </th>
                             <td>{{ $device->device_name }}</td>
-                            <td>{{ $device->device_year }}</td>
-                            <td>{{ $device->created_at->diffForHumans() }}</td>
-                            <td>
+                            <td class="hidden sm:table-cell">{{ $device->device_year }}</td>
+                            <td class="hidden sm:table-cell">{{ $device->created_at->diffForHumans() }}</td>
+                            <td class="hidden sm:table-cell">
                                 {{-- <label wire:click="edit({{ $device->id }})" class="btn btn-neutral" --}}
                                 <label wire:click.live="edit({{ $device->id }})" class="btn btn-neutral"
-                                    for="my_modal_6">Edit</label>
+                                    for="my_modal_6">
+                                    Edit
+                                </label>
                                 <label class="btn btn-error"
                                     wire:click.prevent='deleteConfirmation({{ $device->id }})'>
                                     Delete
+                                </label>
+                            </td>
+                            <td class="sm:table-cell md:hidden">
+                                <label wire:click.live="edit({{ $device->id }})" class="btn btn-sm" for="my_modal_6">
+                                    <i class="ri-edit-box-fill"></i>
+                                </label>
+                                <label class="btn btn-sm" wire:click.prevent='deleteConfirmation({{ $device->id }})'>
+                                    <i class="ri-delete-bin-fill"></i>
                                 </label>
                             </td>
                         </tr>
