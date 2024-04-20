@@ -69,17 +69,6 @@ class Ticket extends Component
         $this->description = $ticket->description;
     }
 
-    public function inspect(int $id): void
-    {
-        $this->action = 'edit';
-        $this->delete_id = $id;
-        $this->openModal = true;
-        $ticket = TicketModel::find($id);
-        $this->ticket_id = $id;
-        $this->device_id = $ticket->device_id;
-        $this->description = $ticket->description;
-    }
-
     public function store()
     {
         $validate = $this->validate([

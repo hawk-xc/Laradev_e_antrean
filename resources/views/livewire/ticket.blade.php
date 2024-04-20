@@ -15,8 +15,8 @@
                     <tr class="text-lg">
                         <th><i class="ri-bubble-chart-line"></i></i></th>
                         <th>Device name</th>
-                        <th>Description</th>
-                        <th>added on</th>
+                        <th class="hidden sm:table-cell">Description</th>
+                        <th class="hidden sm:table-cell">added on</th>
                         <th>option</th>
                     </tr>
                 </thead>
@@ -27,7 +27,9 @@
 
                                 @if ($ticket->proces->status_id == 1)
                                     <div class="lg:tooltip" data-tip="currently registered">
-                                        <button class="w-32 btn btn-secondary btn-sm"><i class="ri-flag-line"></i>
+                                        <button
+                                            class="max-sm:btn-xs sm:btn-xs max-sm:text-[10px] md:w-32 btn btn-secondary btn-sm"><i
+                                                class="ri-flag-line max-sm:hidden"></i>
                                             registered</button>
                                     </div>
                                 @elseif ($ticket->proces->status_id == 2)
@@ -48,15 +50,26 @@
                                 @endif
                             </th>
                             <td>{{ $ticket->device->device_name }}</td>
-                            <td>{{ $ticket->description }}</td>
-                            <td>{{ $ticket->created_at->diffForHumans() }}</td>
-                            <td>
+                            <td class="hidden sm:table-cell">{{ $ticket->description }}</td>
+                            <td class="hidden sm:table-cell">{{ $ticket->created_at->diffForHumans() }}
+                            </td>
+                            <td class="hidden sm:table-cell">
                                 <button class="btn btn-neutral" onclick="my_modal_4.showModal()"
                                     wire:click="edit({{ $ticket->id }})">edit</button>
 
                                 {{-- this is delete example --}}
                                 <button type="button" class="btn btn-error"
                                     wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>delete</button>
+                            </td>
+                            <td class="sm:table-cell md:hidden">
+                                <button class="btn btn-sm" onclick="my_modal_4.showModal()"
+                                    wire:click="edit({{ $ticket->id }})">
+                                    <i class="ri-edit-box-fill"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm"
+                                    wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>
+                                    <i class="ri-delete-bin-fill"></i>
+                                </button>
                             </td>
                         </tr>
                     @endforeach
