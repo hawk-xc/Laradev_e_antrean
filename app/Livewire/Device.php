@@ -8,13 +8,30 @@ use Livewire\Component;
 
 class Device extends Component
 {
-    public $device_name, $device_year;
+    public $device_name, $device_year, $delete_id;
 
     public array $checks = [];
+
+    protected $listeners = ['confirmDelete' => 'deleteTicket'];
 
     public function bulkDelete(): void
     {
         DeviceModel::whereIn('id', $this->checks)->delete();
+    }
+
+    public function deleteConfirmation(int $id): void
+    {
+        $this->delete_id = $id;
+        $this->dispatch('show-delete');
+    }
+
+    public function deleteTicket(): void
+    {
+        $device = DeviceModel::find($this->delete_id);
+        if ($device->delete()) {
+            $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
+            $this->fresh();
+        }
     }
 
     public function fresh()

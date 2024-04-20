@@ -40,9 +40,10 @@
                                 {{-- <label wire:click="edit({{ $device->id }})" class="btn btn-neutral" --}}
                                 <label wire:click.live="add({{ $device->id }})" class="btn btn-neutral"
                                     for="my_modal_6">Edit</label>
-                                <button class="btn btn-error" wire:click="delete({{ $device->id }})"
-                                    wire:confirm="are you sure to delete this data?">Delete</button>
-                                {{-- <button type="button" class="btn" wire:click="setter({{ $device->id }})">setter</button> --}}
+                                <label class="btn btn-error"
+                                    wire:click.prevent='deleteConfirmation({{ $device->id }})'>
+                                    Delete
+                                </label>
                             </td>
                         </tr>
                     @endforeach
