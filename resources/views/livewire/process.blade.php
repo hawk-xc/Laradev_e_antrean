@@ -1,82 +1,81 @@
 <div>
     {{-- In work, do what you enjoy. --}}
     <div class="overflow-x-auto">
-        @if (!$tickets->isEmpty())
+        {{-- @if (!$process->isEmpty())
             <button onclick="my_modal_4.showModal()" wire:click='create' class="btn btn-sm"><i class="ri-add-line"></i> Add
-                ticket</button>
-        @endif
+                Process</button>
+        @endif --}}
 
         <x-notification-laravel />
 
-        @if (!$tickets->isEmpty())
+        @if (!$process->isEmpty())
             <table class="table">
                 <!-- head -->
                 <thead>
                     <tr class="text-lg">
-                        <th><i class="ri-bubble-chart-line"></i></i></th>
-                        <th>Device name</th>
-                        <th class="hidden sm:table-cell">Description</th>
-                        <th class="hidden sm:table-cell">added on</th>
-                        <th>option</th>
+                        <th><i class="ri-bubble-chart-line"></i> Status</th>
+                        <th>Customer name</th>
+                        <th>Device Name</th>
+                        <th>Employee Name</th>
+                        <th>Added on</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($tickets as $ticket)
+                    @foreach ($process as $proces)
                         <tr class="cursor-pointer hover:bg-gray-50">
                             <th>
-                                @if ($ticket->proces->status_id == 1)
+
+                                @if ($proces->status_id == 1)
                                     <div class="lg:tooltip" data-tip="currently registered">
-                                        <button
-                                            class="max-sm:btn-xs sm:btn-xs max-sm:text-[10px] md:w-32 btn btn-secondary btn-sm"><i
-                                                class="ri-flag-line max-sm:hidden"></i>
+                                        <button class="w-32 btn btn-secondary btn-sm"><i class="ri-flag-line"></i>
                                             registered</button>
                                     </div>
-                                @elseif ($ticket->proces->status_id == 2)
+                                @elseif ($proces->status_id == 2)
                                     <div class="lg:tooltip" data-tip="vertified your ticket">
                                         <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
                                             vertified</button>
                                     </div>
-                                @elseif ($ticket->proces->status_id == 3)
+                                @elseif ($proces->status_id == 3)
                                     <div class="lg:tooltip" data-tip="process by team">
                                         <button class="w-32 btn btn-info btn-sm"><i class="ri-flag-line"></i>
                                             process</button>
                                     </div>
-                                @elseif ($ticket->proces->status_id == 4)
+                                @elseif ($proces->status_id == 4)
                                     <div class="lg:tooltip" data-tip="done">
                                         <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
                                             done</button>
                                     </div>
                                 @endif
                             </th>
-                            <td>{{ $ticket->device->device_name }}</td>
-                            <td class="hidden sm:table-cell">{{ $ticket->description }}</td>
-                            <td class="hidden sm:table-cell">{{ $ticket->created_at->diffForHumans() }}
-                            </td>
-                            <td class="hidden sm:table-cell">
-                                <button class="btn btn-neutral" onclick="my_modal_4.showModal()"
-                                    wire:click="edit({{ $ticket->id }})">edit</button>
+                            {{-- <td>{{ $proces->device->device_name }}</td> --}}
+
+                            <td>{{ $proces->ticket->device->user->name }}</td>
+                            {{-- <td>{{ $proces->ticket->device->device_name }}</td> --}}
+                            @if($proces->ticket)
+                            <td>{{ optional($proces->ticket->device)->device_name }}</td>
+                            @else
+                            <td>No device</td>
+                            @endif
+                            <td>{{ $proces->user->name }}</td>
+
+                            <td>{{ $proces->created_at->diffForHumans() }}</td>
+                            <td>
+                                <button class="btn btn-warning" onclick="my_modal_4.showModal()"
+                                    wire:click="edit({{ $proces->id }})">update</button>
 
                                 {{-- this is delete example --}}
-                                <button type="button" class="btn btn-error"
-                                    wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>delete</button>
-                            </td>
-                            <td class="sm:table-cell md:hidden">
-                                <button class="btn btn-sm" onclick="my_modal_4.showModal()"
-                                    wire:click="edit({{ $ticket->id }})">
-                                    <i class="ri-edit-box-fill"></i>
-                                </button>
-                                <button type="button" class="btn btn-sm"
-                                    wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>
-                                    <i class="ri-delete-bin-fill"></i>
-                                </button>
+                                
+                                {{-- <button type="button" class="btn btn-error"
+                                    wire:click.prevent='deleteConfirmation({{ $proces->id }})'>delete</button> --}}
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
-            <span>{{ $tickets->links() }}</span>
+            <span>{{ $process->links() }}</span>
         @endif
-        @if ($tickets->isEmpty())
+        @if ($process->isEmpty())
             <div class="py-20 hero">
                 <div class="text-center hero-content">
                     <div class="max-w-md">
@@ -93,9 +92,9 @@
 
         @if ($openModal)
             @if ($action == 'edit')
-                <x-update-form-modal :devices="$devices" />
+                <x-update-status :process="$process" :employees="$employees" />
             @elseif ($action == 'create')
-                <x-create-form-modal :devices="$devices" />
+                {{-- <x-create-form-modal :process="$process" :employees="$employees" :devices="$devices" /> --}}
             @endif
         @endif
 

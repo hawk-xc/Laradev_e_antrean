@@ -29,7 +29,9 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/device', fn () => view('Device'))->name('device');
     Route::get('/ticket', fn () => view('Ticket'))->name('ticket');
+    Route::get('/process', fn () => view('Process'))->name('process');
 });
+
 
 Route::get('/', function () {
     // route('dashboard');
