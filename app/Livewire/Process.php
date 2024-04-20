@@ -26,11 +26,9 @@ class Process extends Component
     public function render()
     {
         $process = Proces::orderBy('created_at', 'asc')->paginate(5);
-        // $process = Proces::orderBy('created_at', 'asc')->get();
         $employees = User::where('role_id', '2')->get();
-        // $devices = Device::where('user_id');
+
         return view('livewire.process', compact('process', 'employees',));
-        // dd($process);
     }
 
     public function create(): void

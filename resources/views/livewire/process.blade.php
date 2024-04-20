@@ -51,6 +51,7 @@
                             {{-- <td>{{ $proces->device->device_name }}</td> --}}
 
                             <td>{{ $proces->ticket->device->user->name }}</td>
+                            
                             {{-- <td>{{ $proces->ticket->device->device_name }}</td> --}}
                             @if($proces->ticket)
                             <td>{{ optional($proces->ticket->device)->device_name }}</td>
@@ -74,6 +75,7 @@
                 </tbody>
             </table>
             <span>{{ $process->links() }}</span>
+            
         @endif
         @if ($process->isEmpty())
             <div class="py-20 hero">
