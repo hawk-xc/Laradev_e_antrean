@@ -87,6 +87,7 @@ class Ticket extends Component
     {
         $this->delete_id = $id;
         $this->dispatch('show-delete');
+        $this->dispatch('closeButton');
     }
 
     public function deleteTicket(): void
@@ -102,8 +103,8 @@ class Ticket extends Component
 
     public function render(): View
     {
-        $tickets = TicketModel::orderBy('created_at', 'asc')->paginate(5);
         $devices = Device::where('user_id', Auth::user()->id)->get();
+        $tickets = TicketModel::whereIn('device_id', $devices->pluck('id'))->orderBy('created_at', 'asc')->paginate(5);
 
         // session()->flash('notify', 'data successfull delete!');
         return view('livewire.ticket', [

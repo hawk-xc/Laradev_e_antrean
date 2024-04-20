@@ -8,23 +8,44 @@ use Livewire\Component;
 
 class Device extends Component
 {
-    public $device_name, $device_year;
+    public $device_name, $device_year, $device_id, $delete_id;
+
+    public $action = 'create';
 
     public array $checks = [];
+
+    protected $listeners = ['confirmDelete' => 'deleteTicket'];
 
     public function bulkDelete(): void
     {
         DeviceModel::whereIn('id', $this->checks)->delete();
     }
 
+    public function deleteConfirmation(int $id): void
+    {
+        $this->delete_id = $id;
+        $this->dispatch('show-delete');
+    }
+
+    public function deleteTicket(): void
+    {
+        $device = DeviceModel::find($this->delete_id);
+        if ($device->delete()) {
+            $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
+            $this->fresh();
+        }
+    }
+
     public function fresh()
     {
         $this->reset('device_name');
         $this->reset('device_year');
+        $this->action = 'create';
     }
 
     public function create()
     {
+        $this->action = 'create';
         $validate = $this->validate([
             'device_name' => 'required|min:3',
             'device_year' => 'required|numeric|min:4'
@@ -32,35 +53,35 @@ class Device extends Component
 
         $validate['user_id'] = Auth::user()->id;
 
-        DeviceModel::create($validate);
-        $this->fresh();
-    }
-
-    public function add($id)
-    {
-        $device = DeviceModel::find($id);
-        // $this->data[] = $device->device_name;
-        // $this->data[] = $device->device_year;
-
-        dd($this->device_year, $this->device_name);
-    }
-
-    public function sets()
-    {
-        // $this->device_name = 'testing';
-        // $this->device_year = "sdsdf";
-
-        dd($this->data);
-        // dd($this->device_name, $this->device_year);
+        if (DeviceModel::create($validate)) {
+            $this->dispatch('closeButton');
+            $this->dispatch('notify', type: 'success', message: 'data successfully created!');
+            $this->fresh();
+        }
     }
 
     public function edit($id)
     {
-        // $device = DeviceModel::find($id);
-        // $this->device_name = $device->device_name;
-        // $this->device_year = $device->device_year;
+        $this->action = 'update';
+        $this->device_id = $id;
+        $device = DeviceModel::find($id);
+        $this->device_name = $device->device_name;
+        $this->device_year = $device->device_year;
+    }
 
-        dd($this->device_name, $this->device_year);
+    public function store()
+    {
+        $validate = $this->validate([
+            'device_name' => 'required|min:3',
+            'device_year' => 'required|numeric|min:4'
+        ]);
+        $validate['user_id'] = Auth::user()->id;
+        $device = DeviceModel::find($this->device_id);
+        if ($device->update($validate)) {
+            $this->dispatch('closeButton');
+            $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
+            $this->fresh();
+        }
     }
 
     public function delete($id)

@@ -1,4 +1,5 @@
 <div>
+    <x-notification-laravel />
     <div class="overflow-x-auto">
         @if (!$devices->isEmpty())
             <label for="my_modal_6" class="btn btn-sm"><i class="ri-add-line"></i> Add device</label>
@@ -20,8 +21,8 @@
                     <tr class="text-lg">
                         <th><i class="ri-list-check-3"></i></th>
                         <th>device name</th>
-                        <th>device year</th>
-                        <th>added on</th>
+                        <th class="hidden sm:table-cell">device year</th>
+                        <th class="hidden sm:table-cell">added on</th>
                         <th>option</th>
                     </tr>
                 </thead>
@@ -33,15 +34,26 @@
                                     wire:model.live='checks' class="checkbox" />
                             </th>
                             <td>{{ $device->device_name }}</td>
-                            <td>{{ $device->device_year }}</td>
-                            <td>{{ $device->created_at->diffForHumans() }}</td>
-                            <td>
+                            <td class="hidden sm:table-cell">{{ $device->device_year }}</td>
+                            <td class="hidden sm:table-cell">{{ $device->created_at->diffForHumans() }}</td>
+                            <td class="hidden sm:table-cell">
                                 {{-- <label wire:click="edit({{ $device->id }})" class="btn btn-neutral" --}}
-                                <label wire:click.live="add({{ $device->id }})" class="btn btn-neutral"
-                                    for="my_modal_6">Edit</label>
-                                <button class="btn btn-error" wire:click="delete({{ $device->id }})"
-                                    wire:confirm="are you sure to delete this data?">Delete</button>
-                                {{-- <button type="button" class="btn" wire:click="setter({{ $device->id }})">setter</button> --}}
+                                <label wire:click.live="edit({{ $device->id }})" class="btn btn-neutral"
+                                    for="my_modal_6">
+                                    Edit
+                                </label>
+                                <label class="btn btn-error"
+                                    wire:click.prevent='deleteConfirmation({{ $device->id }})'>
+                                    Delete
+                                </label>
+                            </td>
+                            <td class="sm:table-cell md:hidden">
+                                <label wire:click.live="edit({{ $device->id }})" class="btn btn-sm" for="my_modal_6">
+                                    <i class="ri-edit-box-fill"></i>
+                                </label>
+                                <label class="btn btn-sm" wire:click.prevent='deleteConfirmation({{ $device->id }})'>
+                                    <i class="ri-delete-bin-fill"></i>
+                                </label>
                             </td>
                         </tr>
                     @endforeach
@@ -94,8 +106,12 @@
                     </label>
                 </div>
                 <div class="modal-action">
-                    <button wire:click="create" class="btn btn-neutral">save!</button>
-                    <label for="my_modal_6" class="btn">Close!</label>
+                    @if ($action == 'create')
+                        <button wire:click="create" class="btn btn-neutral">save!</button>
+                    @elseif($action == 'update')
+                        <button wire:click="store" class="btn btn-neutral">update!</button>
+                    @endif
+                    <label id="closeButton" for="my_modal_6" class="btn">Close!</label>
                 </div>
             </div>
         </div>
