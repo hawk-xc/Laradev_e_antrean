@@ -26,34 +26,21 @@ class Process extends Component
     public function render()
     {
         $process = Proces::orderBy('created_at', 'asc')->paginate(5);
+        // $process = Proces::orderBy('created_at', 'asc')->get();
         $employees = User::where('role_id', '2')->get();
         // $devices = Device::where('user_id');
         return view('livewire.process', compact('process', 'employees',));
+        // dd($process);
     }
 
     public function create(): void
     {
         $this->validate([
             'status_id' => 'required',
-            'description' => 'required|min:3'
+            'employe_id' => 'required'
         ]);
-
-        $ticket = Ticket::create([
-            'status_id' => 1, // Asumsikan status_id default adalah 1
-            'description' => $this->description
-        ]);
-
-        $data = [
-            'status_id' => $this->status_id,
-            'ticket_id' => $ticket->id,
-            'user_id' => Auth::user()->id
-        ];
-
-        if (Proces::create($data)) {
-            $this->openModal = false; // Tutup modal setelah proses berhasil
-            session()->flash('message', 'Data successfully created!');
-            $this->reset(['status_id', 'description']); // Reset nilai input setelah proses berhasil
-        }
+        $process = Process::findOrFail($this->id);
+        $employee = User::findOrFail($this->id);
     }
 
     public function edit(int $id): void
@@ -73,7 +60,7 @@ class Process extends Component
         // Lakukan validasi sesuai kebutuhan Anda
         $this->validate([
             'status_id' => 'required',
-            'user_id' => 'required',
+            'employe_id' => 'required', // Ubah user_id menjadi employe_id
             // Tambahkan aturan validasi lainnya jika diperlukan
         ]);
 
@@ -83,13 +70,13 @@ class Process extends Component
         // Lakukan pembaruan nilai status_id dan user_id
         $proces->update([
             'status_id' => $this->status_id,
-            'user_id' => $this->user_id,
+            'user_id' => $this->employe_id, // Ubah user_id menjadi employe_id
             // Masukkan kolom lainnya yang perlu diperbarui sesuai kebutuhan Anda
         ]);
 
         // Setelah melakukan pembaruan, Anda bisa melakukan beberapa tindakan lainnya,
         // seperti menampilkan pesan sukses atau melakukan reset input
         session()->flash('message', 'Data successfully updated!');
-        $this->reset(['status_id', 'user_id']);
+        $this->reset(['status_id', 'employe_id']); // Ubah user_id menjadi employe_id
     }
 }
