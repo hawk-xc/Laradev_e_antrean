@@ -1,4 +1,5 @@
 <div>
+    <x-notification-laravel />
     <div class="overflow-x-auto">
         @if (!$devices->isEmpty())
             <label for="my_modal_6" class="btn btn-sm"><i class="ri-add-line"></i> Add device</label>
@@ -95,7 +96,7 @@
                 </div>
                 <div class="modal-action">
                     <button wire:click="create" class="btn btn-neutral">save!</button>
-                    <label for="my_modal_6" class="btn">Close!</label>
+                    <label id="closeButton" for="my_modal_6" class="btn">Close!</label>
                 </div>
             </div>
         </div>

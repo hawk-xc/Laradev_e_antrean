@@ -32,8 +32,11 @@ class Device extends Component
 
         $validate['user_id'] = Auth::user()->id;
 
-        DeviceModel::create($validate);
-        $this->fresh();
+        if (DeviceModel::create($validate)) {
+            $this->dispatch('closeButton');
+            $this->dispatch('notify', type: 'success', message: 'data successfully created!');
+            $this->fresh();
+        }
     }
 
     public function add($id)
