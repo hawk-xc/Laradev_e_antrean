@@ -69,6 +69,17 @@ class Ticket extends Component
         $this->description = $ticket->description;
     }
 
+    public function inspect(int $id): void
+    {
+        $this->action = 'edit';
+        $this->delete_id = $id;
+        $this->openModal = true;
+        $ticket = TicketModel::find($id);
+        $this->ticket_id = $id;
+        $this->device_id = $ticket->device_id;
+        $this->description = $ticket->description;
+    }
+
     public function store()
     {
         $validate = $this->validate([
@@ -87,6 +98,7 @@ class Ticket extends Component
     {
         $this->delete_id = $id;
         $this->dispatch('show-delete');
+        $this->dispatch('closeButton');
     }
 
     public function deleteTicket(): void
@@ -102,8 +114,8 @@ class Ticket extends Component
 
     public function render(): View
     {
-        $tickets = TicketModel::orderBy('created_at', 'asc')->paginate(5);
         $devices = Device::where('user_id', Auth::user()->id)->get();
+        $tickets = TicketModel::whereIn('device_id', $devices->pluck('id'))->orderBy('created_at', 'asc')->paginate(5);
 
         // session()->flash('notify', 'data successfull delete!');
         return view('livewire.ticket', [
