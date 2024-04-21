@@ -28,8 +28,9 @@ class Ticket extends Component
 
     public function fresh(): void
     {
-        $this->device_id = '';
-        $this->description = '';
+        $this->reset('device_id');
+        $this->reset('device_id');
+        $this->reset('description');
         $this->action = 'create';
         // $this->openModal = false;
     }
@@ -57,6 +58,11 @@ class Ticket extends Component
             }
             $this->dispatch('closeButton');
         endif;
+    }
+
+    public function close()
+    {
+        $this->fresh();
     }
 
     public function edit(int $id): void

@@ -39,7 +39,7 @@
             <button type="button" class="btn btn-neutral" wire:click='store'>update</button>
             <form method="dialog" class="flex gap-3">
                 <!-- if there is a button, it will close the modal -->
-                <button id="closeButton" class="btn">Close</button>
+                <button id="closeButton" class="btn" wire:click='close'>Close</button>
             </form>
         </div>
     </div>
