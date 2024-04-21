@@ -7,7 +7,6 @@
         @endif
 
         <x-notification-laravel />
-
         @if (!$tickets->isEmpty())
             <table class="table">
                 <!-- head -->

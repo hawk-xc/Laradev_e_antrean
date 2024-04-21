@@ -6,18 +6,19 @@
                 <label class="max-w-xs w-96 form-control">
                     <div class="label">
                         <span class="label-text">Select Status</span>
-                        @error('device_id')
+                        @error('status_id')
                             <span class="label-text-alt">{{ $message }}</span>
                         @enderror
                     </div>
                     <select
-                        class="select select-bordered @error('device_id')
+                        class="select select-bordered @error('status_id')
                 select-error
                 @enderror"
                         wire:model="status_id">
                         <option selected value="null">Pick one</option>
-                        @foreach ($process as $proces)
-                            <option value="{{ $proces->id }}">{{ $proces->status->name }}</option>
+                        
+                        @foreach ($statuses as $status)
+                            <option value="{{ $status->id }}">{{ $status->name }}</option>
                         @endforeach
                     </select>
                 </label>
@@ -25,12 +26,12 @@
                 <label class="max-w-xs w-96 form-control">
                     <div class="label">
                         <span class="label-text">Select Employee</span>
-                        @error('user_id')
+                        @error('employe_id')
                             <span class="label-text-alt">{{ $message }}</span>
                         @enderror
                     </div>
                     <select
-                        class="select select-bordered @error('user_id')
+                        class="select select-bordered @error('employe_id')
                 select-error
                 @enderror"
                         wire:model="employe_id">

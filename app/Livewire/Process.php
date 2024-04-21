@@ -4,7 +4,9 @@ namespace App\Livewire;
 
 use App\Models\Proces;
 use App\Models\User;
+use App\Models\Status;
 use App\Models\Ticket; // Import model Ticket
+use Clockwork\Request\Request;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -16,6 +18,7 @@ class Process extends Component
     public $description;
     public $proces_id;
     public $device_id;
+    public $employe_id;
 
     public function fresh()
     {
@@ -25,10 +28,13 @@ class Process extends Component
     }
     public function render()
     {
+        // $statuses = Status::get();
+        $statuses = Status::get();
         $process = Proces::orderBy('created_at', 'asc')->paginate(5);
         $employees = User::where('role_id', '2')->get();
+        // dd($statuses);
 
-        return view('livewire.process', compact('process', 'employees',));
+        return view('livewire.process', compact('process', 'employees', 'statuses'));
     }
 
     public function create(): void
@@ -41,16 +47,14 @@ class Process extends Component
         $employee = User::findOrFail($this->id);
     }
 
-    public function edit(int $id): void
+    public function edit($id)
     {
         $this->action = 'edit';
         $this->openModal = true;
         $process = Proces::find($id);
-
-        // Assign nilai variabel dari hasil query
         $this->proces_id = $process->id;
         $this->status_id = $process->status_id;
-        $this->status_id = $process->status->name;
+        $this->employe_id = $process->user_id;
     }
 
     public function store()
@@ -58,23 +62,20 @@ class Process extends Component
         // Lakukan validasi sesuai kebutuhan Anda
         $this->validate([
             'status_id' => 'required',
-            'employe_id' => 'required', // Ubah user_id menjadi employe_id
-            // Tambahkan aturan validasi lainnya jika diperlukan
+            'employe_id' => 'required',
         ]);
 
-        // Temukan dan perbarui entitas Proces yang sesuai dengan id yang diinginkan
+        // $proces = Proces::findOrFail($this->status_id);
         $proces = Proces::findOrFail($this->proces_id);
+        // $employee = User::findOrFail($this->employe_id);
 
-        // Lakukan pembaruan nilai status_id dan user_id
         $proces->update([
             'status_id' => $this->status_id,
-            'user_id' => $this->employe_id, // Ubah user_id menjadi employe_id
-            // Masukkan kolom lainnya yang perlu diperbarui sesuai kebutuhan Anda
+            'user_id' => $this->employe_id,
         ]);
 
-        // Setelah melakukan pembaruan, Anda bisa melakukan beberapa tindakan lainnya,
-        // seperti menampilkan pesan sukses atau melakukan reset input
+
         session()->flash('message', 'Data successfully updated!');
-        $this->reset(['status_id', 'employe_id']); // Ubah user_id menjadi employe_id
+        $this->reset(['status_id', 'employe_id']);
     }
 }
