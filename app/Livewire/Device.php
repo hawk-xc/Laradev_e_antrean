@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use \App\Models\Device as DeviceModel;
+use App\Rules\YearValidation;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -47,8 +48,8 @@ class Device extends Component
     {
         $this->action = 'create';
         $validate = $this->validate([
-            'device_name' => 'required|min:3',
-            'device_year' => 'required|numeric|min:4'
+            'device_name' => ['required', 'min:3'],
+            'device_year' => ['required', 'numeric', 'min:4', new YearValidation]
         ]);
 
         $validate['user_id'] = Auth::user()->id;
