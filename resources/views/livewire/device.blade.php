@@ -111,7 +111,7 @@
                     @elseif($action == 'update')
                         <button wire:click="store" class="btn btn-neutral">update!</button>
                     @endif
-                    <label id="closeButton" for="my_modal_6" class="btn">Close!</label>
+                    <label wire:click='close' id="closeButton" for="my_modal_6" class="btn">Close!</label>
                 </div>
             </div>
         </div>

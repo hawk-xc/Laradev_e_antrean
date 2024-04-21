@@ -39,8 +39,8 @@ class Device extends Component
 
     public function fresh()
     {
-        $this->reset('device_name');
-        $this->reset('device_year');
+        $this->device_name = '';
+        $this->device_year = '';
         $this->action = 'create';
     }
 
@@ -68,6 +68,11 @@ class Device extends Component
         $device = DeviceModel::find($id);
         $this->device_name = $device->device_name;
         $this->device_year = $device->device_year;
+    }
+
+    public function close()
+    {
+        $this->fresh();
     }
 
     public function store()
