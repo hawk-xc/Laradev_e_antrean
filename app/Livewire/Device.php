@@ -81,6 +81,7 @@ class Device extends Component
             'device_name' => 'required|min:3',
             'device_year' => 'required|numeric|min:4'
         ]);
+
         $validate['user_id'] = Auth::user()->id;
         $device = DeviceModel::find($this->device_id);
         if ($device->update($validate)) {

@@ -43,4 +43,8 @@
             </form>
         </div>
     </div>
+    <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
+        <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
+        <span class="block mx-auto mb-10">please wait a moment...</span>
+    </div>
 </dialog>
