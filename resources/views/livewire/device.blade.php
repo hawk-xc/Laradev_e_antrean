@@ -1,5 +1,6 @@
 <div>
     <x-notification-laravel />
+
     <div class="overflow-x-auto">
         @if (!$devices->isEmpty())
             <label for="my_modal_6" class="btn btn-sm"><i class="ri-add-line"></i> Add device</label>
@@ -14,6 +15,7 @@
                 @endif
             </span>
         @endif
+
         @if (!$devices->isEmpty())
             <table class="table">
                 <!-- head -->
@@ -77,7 +79,7 @@
         <!-- Open the modal using ID.showModal() method -->
         <input type="checkbox" id="my_modal_6" class="modal-toggle" />
         <div class="modal" role="dialog" wire:ignore.self>
-            <div class="modal-box">
+            <div class="modal-box" wire:loading.remove>
                 <h3 class="text-lg font-bold">Edit Device!</h3>
                 <div class="flex gap-2 md:flex-row max-sm:flex-col">
                     <label class="w-full max-w-xs form-control">
@@ -111,8 +113,12 @@
                     @elseif($action == 'update')
                         <button wire:click="store" class="btn btn-neutral">update!</button>
                     @endif
-                    <label id="closeButton" for="my_modal_6" class="btn">Close!</label>
+                    <label wire:click='close' id="closeButton" for="my_modal_6" class="btn">Close!</label>
                 </div>
+            </div>
+            <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
+                <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
+                <span class="block mx-auto mb-10">please wait a moment...</span>
             </div>
         </div>
     </div>
