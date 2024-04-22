@@ -58,13 +58,18 @@
                             @else
                             <td>No device</td>
                             @endif
-                            <td>{{ $proces->user->name }}</td>
+                            <td >{{ $proces->user->name }}</td>
 
                             <td>{{ $proces->created_at->diffForHumans() }}</td>
                             <td>
                                 <button class="btn btn-warning" onclick="my_modal_4.showModal()"
                                     wire:click="edit({{ $proces->id }})">update</button>
-
+                                    <button class="btn btn-warning" onclick="my_modal_4.showModal()"
+                                    wire:click="processed({{ $proces->id }})">processed</button>
+                                    @if ($proces->status_id == 3)
+                                         <button class="btn btn-warning" onclick="my_modal_4.showModal()"
+                                    wire:click="done({{ $proces->id }})">Selesai</button>
+                                    @endif
                                 {{-- this is delete example --}}
                                 
                                 {{-- <button type="button" class="btn btn-error"
@@ -101,6 +106,10 @@
         @endif
 
     </div>
+    @if (session('notify'))
+        <x-notification-laravel :message="session('notify')" />
+    @endif
+
     @if (session('notify'))
         <x-notification-laravel :message="session('notify')" />
     @endif

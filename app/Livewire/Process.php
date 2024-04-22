@@ -57,10 +57,26 @@ class Process extends Component
         $this->employe_id = $process->user_id;
     }
 
+    public function processed($id)
+    {
+        Proces::find($id)->update(['status_id' => 4]);
+        $this->dispatch('notify', type: 'success', message: 'Has Been Final!');
+        $this->fresh();
+        $this->dispatch('closeButton');
+    }
+
+    public function done($id)
+    {
+        Proces::find($id)->update(['status_id' => 3]);
+        $this->dispatch('notify', type: 'success', message: 'data successfull updated!');
+        $this->fresh();
+        $this->dispatch('closeButton');
+    }
+
     public function store()
     {
         // Lakukan validasi sesuai kebutuhan Anda
-        $this->validate([
+        $validate = $this->validate([
             'status_id' => 'required',
             'employe_id' => 'required',
         ]);
@@ -69,12 +85,16 @@ class Process extends Component
         $proces = Proces::findOrFail($this->proces_id);
         // $employee = User::findOrFail($this->employe_id);
 
-        $proces->update([
-            'status_id' => $this->status_id,
-            'user_id' => $this->employe_id,
-        ]);
+        // $proces->update([
+        //     'status_id' => $this->status_id,
+        //     'user_id' => $this->employe_id,
+        // ]);
 
-
+        if (Proces::find($this->proces_id)->update($validate)) {
+            $this->dispatch('notify', type: 'success', message: 'data successfull updated!');
+            $this->fresh();
+            $this->dispatch('closeButton');
+        }
         session()->flash('message', 'Data successfully updated!');
         $this->reset(['status_id', 'employe_id']);
     }
