@@ -26,7 +26,6 @@ export default {
             "coffee",
             "synthwave",
             "cyberpunk",
-            "coffee",
         ],
     },
 
