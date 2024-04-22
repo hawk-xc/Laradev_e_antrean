@@ -6,9 +6,13 @@ use \App\Models\Device as DeviceModel;
 use App\Rules\YearValidation;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
 
 class Device extends Component
 {
+    use WithPagination, WithoutUrlPagination;
+
     public $device_name, $device_year, $device_id, $delete_id;
 
     public $action = 'create';
