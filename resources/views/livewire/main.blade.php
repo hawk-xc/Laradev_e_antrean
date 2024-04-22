@@ -1,6 +1,6 @@
 <div>
     Hello {{ Auth::user()->name }}
-    <div class="container">
+    <div class="container flex justify-center w-full p-5 align-middle">
         <div>
             <ul class="steps">
                 <li class="step">Register and Login</li>
@@ -9,34 +9,32 @@
                 <li class="step">Notification</li>
             </ul>
         </div>
-        <div>
-            <div class="collapse collapse-plus bg-base-200">
-                <input type="radio" name="my-accordion-3" checked="checked" />
-                <div class="text-xl font-medium collapse-title">
-                    Click to open this one and close others
-                </div>
-                <div class="collapse-content">
-                    <p>hello</p>
-                </div>
-            </div>
-            <div class="collapse collapse-plus bg-base-200">
-                <input type="radio" name="my-accordion-3" />
-                <div class="text-xl font-medium collapse-title">
-                    Click to open this one and close others
-                </div>
-                <div class="collapse-content">
-                    <p>hello</p>
-                </div>
-            </div>
-            <div class="collapse collapse-plus bg-base-200">
-                <input type="radio" name="my-accordion-3" />
-                <div class="text-xl font-medium collapse-title">
-                    Click to open this one and close others
-                </div>
-                <div class="collapse-content">
-                    <p>hello</p>
-                </div>
-            </div>
+    </div>
+    <div id="my-accordion" class="collapse collapse-arrow bg-base-200">
+        <input type="radio" name="my-accordion-2" checked="checked" />
+        <div class="text-xl font-medium collapse-title">
+            Click to open this one and close others
+        </div>
+        <div class="collapse-content">
+            <p>hello</p>
+        </div>
+    </div>
+    <div id="my-accordion" class="collapse collapse-arrow bg-base-200">
+        <input type="radio" name="my-accordion-2" />
+        <div class="text-xl font-medium collapse-title">
+            Click to open this one and close others
+        </div>
+        <div class="collapse-content">
+            <p>hello</p>
+        </div>
+    </div>
+    <div id="my-accordion" class="collapse collapse-arrow bg-base-200">
+        <input type="radio" name="my-accordion-2" />
+        <div class="text-xl font-medium collapse-title">
+            Click to open this one and close others
+        </div>
+        <div class="collapse-content">
+            <p>hello</p>
         </div>
     </div>
     {{-- <iframe
