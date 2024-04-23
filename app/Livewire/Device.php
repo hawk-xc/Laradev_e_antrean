@@ -37,6 +37,7 @@ class Device extends Component
         $device = DeviceModel::find($this->delete_id);
         if ($device->delete()) {
             $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
+            event(new \App\Events\UserInteraction(Auth::user(), "Device => delete device " . $device->device_name . " with id " . $device->id));
             $this->fresh();
         }
     }
@@ -58,9 +59,11 @@ class Device extends Component
 
         $validate['user_id'] = Auth::user()->id;
 
-        if (DeviceModel::create($validate)) {
+        $create = DeviceModel::create($validate);
+        if ($create) {
             $this->dispatch('closeButton');
             $this->dispatch('notify', type: 'success', message: 'data successfully created!');
+            event(new \App\Events\UserInteraction(Auth::user(), "Device => create new device " . $create->device_name . " with id " . $create->id));
             $this->fresh();
         }
     }
@@ -88,9 +91,11 @@ class Device extends Component
 
         $validate['user_id'] = Auth::user()->id;
         $device = DeviceModel::find($this->device_id);
-        if ($device->update($validate)) {
+        $created = $device->update($validate);
+        if ($created) {
             $this->dispatch('closeButton');
             $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
+            event(new \App\Events\UserInteraction(Auth::user(), "Device => update device {$device->device_name} with id " . $device->id));
             $this->fresh();
         }
     }

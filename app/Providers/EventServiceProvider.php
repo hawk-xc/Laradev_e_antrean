@@ -17,6 +17,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+            // \App\Events\UserInteraction::class => [
+            //     \App\Listeners\Logger::class
+            // ]
         ],
     ];
 
@@ -33,6 +36,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function shouldDiscoverEvents(): bool
     {
-        return false;
+        return true;
     }
 }

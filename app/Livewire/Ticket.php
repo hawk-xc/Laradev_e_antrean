@@ -52,8 +52,10 @@ class Ticket extends Component
                 'user_id' => Auth::user()->id
             ];
 
-            if (Proces::create($data)) {
+            $create = Proces::create($data);
+            if ($create) {
                 $this->dispatch('notify', type: 'success', message: 'data successfully created!');
+                event(new \App\Events\UserInteraction(Auth::user(), "Ticket => create ticket " . $create->id));
                 $this->fresh();
             }
             $this->dispatch('closeButton');
@@ -82,8 +84,12 @@ class Ticket extends Component
             'description' => 'required|min:3'
         ]);
 
-        if (TicketModel::find($this->ticket_id)->update($validate)) {
+        $ticket = TicketModel::find($this->ticket_id);
+        event(new \App\Events\UserInteraction(Auth::user(), "Ticket => update ticket " . $ticket->id));
+
+        if ($create = $ticket->update($validate)) {
             $this->dispatch('notify', type: 'success', message: 'data successfull updated!');
+
             $this->fresh();
             $this->dispatch('closeButton');
         }
@@ -101,7 +107,8 @@ class Ticket extends Component
         Proces::where('ticket_id', $this->delete_id)->delete();
         $ticket = TicketModel::find($this->delete_id);
 
-        if ($ticket->delete()) {
+        event(new \App\Events\UserInteraction(Auth::user(), "Ticket => delete ticket " . $ticket->id));
+        if ($create = $ticket->delete()) {
             $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
             $this->fresh();
         }
