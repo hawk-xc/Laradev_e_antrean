@@ -25,8 +25,7 @@
                             <th>
                                 @if ($ticket->proces->status_id == 1)
                                     <div class="lg:tooltip" data-tip="currently registered">
-                                        <button
-                                            class="max-sm:btn-xs sm:btn-xs max-sm:text-[10px] md:w-32 btn btn-secondary btn-sm"><i
+                                        <button class="w-32 btn btn-secondary btn-sm"><i
                                                 class="ri-flag-line max-sm:hidden"></i>
                                             registered</button>
                                     </div>

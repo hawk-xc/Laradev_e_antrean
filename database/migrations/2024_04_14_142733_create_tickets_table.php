@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
             $table->integer('device_id')->nullable(false);
-            $table->text('description')->default('null');
+            $table->text('description')->default(null);
             $table->timestamps();
-            $table->dateTime('closed_at')->default(now());
+            // $table->dateTime('closed_at')->default(now());
+            $table->dateTime('closed_at');
         });
     }
 

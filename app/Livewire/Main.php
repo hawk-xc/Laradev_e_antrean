@@ -12,9 +12,12 @@ class Main extends Component
 {
     public function render()
     {
-        $devices = DeviceModel::where('user_id', Auth::user()->id)->get();
+        $devices = DeviceModel::where('user_id', Auth::user()->id);
         $tickets = TicketModel::whereIn('device_id', $devices->pluck('id'))->orderBy('created_at', 'asc')->get();
 
-        return view('livewire.main', ['tickets' => $tickets]);
+        return view('livewire.main', [
+            'tickets' => $tickets,
+            'devices' => $devices
+        ]);
     }
 }

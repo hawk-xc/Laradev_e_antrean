@@ -44,6 +44,8 @@ class Ticket extends Component
             'description' => 'required|min:3'
         ]);
 
+        $validate['closed_at'] = now()->addDay(3)->format('Y-m-d H:i:s');
+
         if ($validate) :
             $ticket = TicketModel::create($validate);
             $data = [

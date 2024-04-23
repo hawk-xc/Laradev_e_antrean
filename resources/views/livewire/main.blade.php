@@ -5,7 +5,9 @@
         <div class="container flex justify-center w-full p-5 align-middle max-sm:flex-col max-sm:gap-5 md:flex-row">
             <ul class="flex flex-col items-center justify-center flex-1 align-middle timeline timeline-vertical">
                 <li>
-                    <div class="timeline-start timeline-box">Register and Login</div>
+                    <div
+                        class="transition-all duration-150 shadow-lg cursor-pointer active:bg-slate-800 active:text-white timeline-start timeline-box hover:bg-slate-50">
+                        Register and Login</div>
                     <div class="timeline-middle">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                             <path fill-rule="evenodd"
@@ -24,12 +26,17 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </div>
-                    <div class="timeline-end timeline-box">Add your device</div>
+                    <a href="{{ route('device') }}"
+                        class="transition-all duration-150 shadow-lg cursor-pointer active:bg-slate-800 active:text-white timeline-end timeline-box hover:bg-slate-50">
+                        Add your device</a>
                     <hr />
                 </li>
                 <li>
                     <hr />
-                    <div class="timeline-start timeline-box">Registering new ticket</div>
+                    <a href="{{ route('ticket') }}"
+                        class="transition-all duration-150 shadow-lg cursor-pointer active:bg-slate-800 active:text-white timeline-start timeline-box hover:bg-slate-50">
+                        Registering new
+                        ticket</a>
                     <div class="timeline-middle">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                             <path fill-rule="evenodd"
@@ -41,7 +48,9 @@
                 </li>
                 <li>
                     <hr />
-                    <div class="timeline-end timeline-box">Get notification</div>
+                    <div
+                        class="transition-all duration-150 shadow-lg cursor-pointer active:bg-slate-800 active:text-white timeline-end timeline-box hover:bg-slate-50">
+                        Get notification</div>
                     <div class="timeline-middle">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
                             <path fill-rule="evenodd"
@@ -107,6 +116,46 @@
                         </p>
                     </div>
                 </div>
+            </div>
+        </div>
+    @else
+        <div class="w-full my-5 shadow stats">
+            <div class="stat">
+                <div class="stat-figure text-secondary">
+                    <i class="text-3xl ri-macbook-line"></i>
+                </div>
+                <div class="stat-title">Device</div>
+                <div class="stat-value">{{ $devices->count() }}</div>
+                <div class="stat-desc">Jan 1st - Feb 1st</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-figure text-secondary">
+                    <i class="text-3xl ri-coupon-3-line"></i>
+                </div>
+                <div class="stat-title">All Tickets</div>
+                <div class="stat-value">{{ $tickets->count() }}</div>
+                <div class="stat-desc">↗︎ 400 (22%)</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-figure text-secondary">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        class="inline-block w-8 h-8 stroke-current">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4">
+                        </path>
+                    </svg>
+                </div>
+                <div class="stat-title">New Registers</div>
+                <div class="stat-value">1,200</div>
+                <div class="stat-desc">↘︎ 90 (14%)</div>
+            </div>
+            <div class="border mockup-browser border-base-300">
+                <div class="mockup-browser-toolbar">
+                    <div class="border input border-base-300">https://daisyui.com</div>
+                </div>
+                <div class="flex justify-center px-4 py-16 border-t border-base-300">Hello!</div>
             </div>
         </div>
     @endif
