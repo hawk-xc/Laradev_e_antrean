@@ -1,5 +1,5 @@
 <div>
-    <h2 class="text-xl font-semibold">Hello {{ Auth::user()->name }}</h2>
+    {{-- <h2 class="text-xl font-semibold">Hello {{ Auth::user()->name }}</h2> --}}
 
     @if ($tickets->isEmpty())
         <div class="container flex justify-center w-full p-5 align-middle max-sm:flex-col max-sm:gap-5 md:flex-row">
@@ -119,48 +119,207 @@
             </div>
         </div>
     @else
-        <div class="w-full my-5 shadow stats">
-            <div class="stat">
-                <div class="stat-figure text-secondary">
-                    <i class="text-3xl ri-macbook-line"></i>
+        <div class="flex flex-row w-full gap-3 p-5 mt-2 shadow border-slate-400">
+            <div
+                class="flex items-center justify-center h-10 text-white align-middle rounded-full aspect-square bg-slate-900">
+                {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+            </div>
+            <div class="flex justify-between w-full px-3">
+                <div class="flex flex-col text-sm">
+                    <span class="font-bold">Welcome</span>
+                    <span>{{ Auth::user()->name }}</span>
                 </div>
-                <div class="stat-title">Device</div>
-                <div class="stat-value">{{ $devices->count() }}</div>
-                <div class="stat-desc">Jan 1st - Feb 1st</div>
+                <div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button class="btn btn-outline btn-sm">Logout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        @if ($process->count() > 1)
+            <div class="my-3">
+                @if (!$isVisible)
+                    <button wire:click.live='hideAllData' wire:loading.attr="disabled" id="showallbutton"
+                        class="btn btn-xs btn-outline"><i class="ri-stack-line"></i>
+                        total
+                        {{ $process->count() }} proces :
+                        hide</button>
+                @else
+                    <button wire:click.live='showAllData' wire:loading.attr="disabled" id="showallbutton"
+                        class="btn btn-xs btn-outline"><i class="ri-stack-line"></i>
+                        total
+                        {{ $process->count() }} proces :
+                        show all</button>
+                @endif
+            </div>
+        @endif
+
+        @php
+            $now = Illuminate\Support\Carbon::now();
+        @endphp
+
+        <div id="singleCard" class="w-full my-5 shadow border-slate-400 stats">
+            <div class="flex items-center justify-center align-middle stat">
+                @if ($process->first()->status_id == 1)
+                    <div class="lg:tooltip" data-tip="currently registered">
+                        <button class="w-32 btn btn-secondary btn-sm"><i class="ri-flag-line max-sm:hidden"></i>
+                            registered</button>
+                    </div>
+                @elseif ($process->first()->status_id == 2)
+                    <div class="lg:tooltip" data-tip="vertified your ticket">
+                        <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
+                            vertified</button>
+                    </div>
+                @elseif ($process->first()->status_id == 3)
+                    <div class="lg:tooltip" data-tip="process by team">
+                        <button class="w-32 btn btn-info btn-sm"><i class="ri-flag-line"></i>
+                            process</button>
+                    </div>
+                @elseif ($process->first()->status_id == 4)
+                    <div class="lg:tooltip" data-tip="done">
+                        <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
+                            done</button>
+                    </div>
+                @endif
             </div>
 
             <div class="stat">
                 <div class="stat-figure text-secondary">
                     <i class="text-3xl ri-coupon-3-line"></i>
                 </div>
-                <div class="stat-title">All Tickets</div>
-                <div class="stat-value">{{ $tickets->count() }}</div>
-                <div class="stat-desc">↗︎ 400 (22%)</div>
+                <div class="stat-title">Ticket</div>
+                <div class="text-2xl font-semibold">ticket#{{ $tickets->first()->id }}</div>
+                <div class="stat-desc">added {{ $tickets->first()->created_at->diffForHumans() }}</div>
             </div>
 
             <div class="stat">
                 <div class="stat-figure text-secondary">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        class="inline-block w-8 h-8 stroke-current">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4">
-                        </path>
-                    </svg>
+                    <i class="text-3xl ri-macbook-line"></i>
                 </div>
-                <div class="stat-title">New Registers</div>
-                <div class="stat-value">1,200</div>
-                <div class="stat-desc">↘︎ 90 (14%)</div>
+                <div class="stat-title">Device</div>
+                <div class="text-2xl">{{ $tickets->first()->device->device_name }}</div>
+                <div class="stat-desc">added {{ $tickets->first()->device->created_at->diffForHumans() }}</div>
             </div>
-            <div class="border mockup-browser border-base-300">
-                <div class="mockup-browser-toolbar">
-                    <div class="border input border-base-300">https://daisyui.com</div>
+
+            <div class="stat">
+                <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
+                    <div class="flex flex-col">
+                        <span class="font-mono text-5xl countdown">
+                            <span
+                                style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->d }};"
+                                wire:poll></span>
+                        </span>
+                        days
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-mono text-5xl countdown">
+                            <span
+                                style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->h }};"
+                                wire:poll></span>
+                        </span>
+                        hours
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-mono text-5xl countdown">
+                            <span
+                                style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->i }};"
+                                wire:poll.1s></span>
+                        </span>
+                        min
+                    </div>
                 </div>
-                <div class="flex justify-center px-4 py-16 border-t border-base-300">Hello!</div>
+            </div>
+        </div>
+
+        {{-- <div class="allItem" class="hidden"> --}}
+        @if (!$isVisible)
+            @foreach ($process->skip(1) as $proces)
+                <div id="allItem" wire:after='hidden' class="w-full my-5 shadow border-slate-400 stats">
+                    <div class="flex items-center justify-center align-middle stat">
+                        @if ($proces->status_id == 1)
+                            <div class="lg:tooltip" data-tip="currently registered">
+                                <button class="w-32 btn btn-secondary btn-sm"><i
+                                        class="ri-flag-line max-sm:hidden"></i>
+                                    registered</button>
+                            </div>
+                        @elseif ($proces->status_id == 2)
+                            <div class="lg:tooltip" data-tip="vertified your ticket">
+                                <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
+                                    vertified</button>
+                            </div>
+                        @elseif ($proces->status_id == 3)
+                            <div class="lg:tooltip" data-tip="process by team">
+                                <button class="w-32 btn btn-info btn-sm"><i class="ri-flag-line"></i>
+                                    process</button>
+                            </div>
+                        @elseif ($proces->status_id == 4)
+                            <div class="lg:tooltip" data-tip="done">
+                                <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
+                                    done</button>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="stat">
+                        <div class="stat-figure text-secondary">
+                            <i class="text-3xl ri-coupon-3-line"></i>
+                        </div>
+                        <div class="stat-title">Ticket</div>
+                        <div class="text-2xl font-semibold">ticket#{{ $proces->ticket->id }}</div>
+                        <div class="stat-desc">added {{ $proces->ticket->created_at->diffForHumans() }}</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-figure text-secondary">
+                            <i class="text-3xl ri-macbook-line"></i>
+                        </div>
+                        <div class="stat-title">Device</div>
+                        <div class="text-2xl">{{ $proces->ticket->device->device_name }}</div>
+                        <div class="stat-desc">added {{ $proces->ticket->device->created_at->diffForHumans() }}</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
+                            <div class="flex flex-col">
+                                <span class="font-mono text-5xl countdown">
+                                    <span
+                                        style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->d }};"
+                                        wire:poll></span>
+                                </span>
+                                days
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-mono text-5xl countdown">
+                                    <span
+                                        style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->h }};"
+                                        wire:poll></span>
+                                </span>
+                                hours
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-mono text-5xl countdown">
+                                    <span
+                                        style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->i }};"
+                                        wire:poll.1s></span>
+                                </span>
+                                min
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        @endif
+        <div class="border rounded-lg border-base-300">
+            <div class="p-5 text-xl border border-base-300"><i class="ri-discuss-line"></i> Notification</div>
+            <div class="flex justify-center px-5 py-20 border border-base-300">
+                you don't have notification yet!
             </div>
         </div>
     @endif
     {{-- <iframe
         src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTitle=0&showNav=0&showTabs=0&src=d2FoeXV0cmljYWh5b25vNzc3QGdtYWlsLmNvbQ&src=Y2xhc3Nyb29tMTA4NjA1MTUzOTMwNzcxODEwMjk2QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23039BE5&color=%230047a8"
         style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe> --}}
+
 
 </div>
