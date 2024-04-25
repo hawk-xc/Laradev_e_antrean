@@ -9,9 +9,13 @@ use App\Models\Ticket; // Import model Ticket
 use Clockwork\Request\Request;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
 
 class Process extends Component
 {
+    use WithPagination, WithoutUrlPagination;
+
     public $openModal = false;
     public $action = 'create';
     public $status_id;
@@ -32,9 +36,10 @@ class Process extends Component
         $statuses = Status::get();
         $process = Proces::orderBy('created_at', 'asc')->paginate(5);
         $employees = User::where('role_id', '2')->get();
+        $user = Auth::user();
         // dd($statuses);
 
-        return view('livewire.process', compact('process', 'employees', 'statuses'));
+        return view('livewire.process', compact('process', 'employees', 'statuses', 'user'));
     }
 
     public function create(): void
@@ -59,27 +64,29 @@ class Process extends Component
 
     public function processed($id)
     {
-        Proces::find($id)->update(['status_id' => 4]);
-        $this->dispatch('notify', type: 'success', message: 'Has Been Final!');
+        Proces::find($id)->update(['status_id' => 3]);
+        $this->dispatch('notify', type: 'success', message: 'data successfull updated! ');
         $this->fresh();
         $this->dispatch('closeButton');
     }
 
     public function done($id)
     {
-        Proces::find($id)->update(['status_id' => 3]);
-        $this->dispatch('notify', type: 'success', message: 'data successfull updated!');
+        Proces::find($id)->update(['status_id' => 4]);
+        $this->dispatch('notify', type: 'success', message: 'Device Has Been Final!');
         $this->fresh();
         $this->dispatch('closeButton');
     }
 
     public function store()
     {
+
         // Lakukan validasi sesuai kebutuhan Anda
         $validate = $this->validate([
             'status_id' => 'required',
             'employe_id' => 'required',
         ]);
+        // dd($validate);
 
         // $proces = Proces::findOrFail($this->status_id);
         $proces = Proces::findOrFail($this->proces_id);
@@ -90,11 +97,25 @@ class Process extends Component
         //     'user_id' => $this->employe_id,
         // ]);
 
-        if (Proces::find($this->proces_id)->update($validate)) {
-            $this->dispatch('notify', type: 'success', message: 'data successfull updated!');
-            $this->fresh();
-            $this->dispatch('closeButton');
-        }
+        // if (Proces::find($this->proces_id)->update($validate)) {
+        // if (Proces::find($proces)->update([
+        //     'status_id' => $validate['status_id'],
+        //     'user_id' => $validate['employe_id']
+        // ])) {
+        //     $this->dispatch('notify', type: 'success', message: 'data successfull updated!');
+        //     $this->fresh();
+        //     $this->dispatch('closeButton');
+        // }
+        $proces->update([
+            'status_id' => $validate['status_id'],
+            'user_id' => $validate['employe_id'],
+        ]);
+
+        // Jika proses update berhasil
+        $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
+        $this->fresh();
+        $this->dispatch('closeButton');
+
         session()->flash('message', 'Data successfully updated!');
         $this->reset(['status_id', 'employe_id']);
     }

@@ -25,7 +25,9 @@
                     @foreach ($process as $proces)
                         <tr class="cursor-pointer hover:bg-gray-50">
                             <th>
-
+                                @if ($user->role_id === 1 && $proces->user->name === $user->name)
+                                    
+                                
                                 @if ($proces->status_id == 1)
                                     <div class="lg:tooltip" data-tip="currently registered">
                                         <button class="w-32 btn btn-secondary btn-sm"><i class="ri-flag-line"></i>
@@ -62,11 +64,17 @@
 
                             <td>{{ $proces->created_at->diffForHumans() }}</td>
                             <td>
+                                @if ($proces->status_id == 1 && $user->role_id == 1)
+                                    
+                               
                                 <button class="btn btn-warning" onclick="my_modal_4.showModal()"
                                     wire:click="edit({{ $proces->id }})">update</button>
+                                     @endif
+                                    @if ($proces->status_id == 2 && $user->role_id == 2)
                                     <button class="btn btn-warning" onclick="my_modal_4.showModal()"
                                     wire:click="processed({{ $proces->id }})">processed</button>
-                                    @if ($proces->status_id == 3)
+                                    @endif
+                                    @if ($proces->status_id == 3 && $user->role_id == 2)
                                          <button class="btn btn-warning" onclick="my_modal_4.showModal()"
                                     wire:click="done({{ $proces->id }})">Selesai</button>
                                     @endif
@@ -75,7 +83,9 @@
                                 {{-- <button type="button" class="btn btn-error"
                                     wire:click.prevent='deleteConfirmation({{ $proces->id }})'>delete</button> --}}
                             </td>
+                            </th>
                         </tr>
+                        @endif
                     @endforeach
                 </tbody>
             </table>
