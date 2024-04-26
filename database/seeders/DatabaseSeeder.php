@@ -28,7 +28,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\Role::create([
-            'name' => 'employe'
+            'name' => 'helpdesk'
+        ]);
+
+        \App\Models\Role::create([
+            'name' => 'technician'
         ]);
 
         \App\Models\Role::create([
