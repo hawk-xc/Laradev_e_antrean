@@ -30,11 +30,10 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/device', fn () => view('Device'))->name('device');
-    Route::get('/ticket', fn () => view('Ticket'))->name('ticket');
-    Route::get('/process', fn () => view('Process'))->name('process');
+    Route::get('/device', fn () => view('Device'))->name('device')->middleware('is_user');
+    Route::get('/ticket', fn () => view('Ticket'))->name('ticket')->middleware('is_user');
+    Route::get('/process', fn () => view('Process'))->name('process')->middleware('process');
 });
-
 
 Route::get('/', function () {
     // route('dashboard');
