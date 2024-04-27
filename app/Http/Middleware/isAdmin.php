@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class process
+class isAdmin
 {
     /**
      * Handle an incoming request.
@@ -16,12 +16,7 @@ class process
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (
-            Auth::check() &&
-            Auth::user()->role_id == 1 ||
-            Auth::user()->role_id == 2 ||
-            Auth::user()->role_id == 3
-        ) {
+        if (Auth::check() && Auth::user()->role_id == 1) {
             return $next($request);
         } else {
             abort(403);

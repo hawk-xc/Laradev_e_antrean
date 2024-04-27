@@ -43,7 +43,10 @@
                 @endif
 
                 <!-- Process Links -->
-                @if (\App\Helpers\RoleHelper::isTechnician() || \App\Helpers\RoleHelper::isHelpdesk())
+                @if (
+                    \App\Helpers\RoleHelper::isAdmin() ||
+                        \App\Helpers\RoleHelper::isTechnician() ||
+                        \App\Helpers\RoleHelper::isHelpdesk())
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('process')" :active="request()->routeIs('process')" class="gap-2">
                             <i class="ri-stack-line"></i>
