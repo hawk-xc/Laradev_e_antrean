@@ -42,20 +42,36 @@ class ManageUser extends Component
     public function deleteUser(): void
     {
         $user = UserModel::find($this->delete_id);
-        $device = DeviceModel::where('user_id', $user->id);
-        $ticket = TicketModel::where('device_id', $device->pluck('id'));
-        $proces = ProcesModel::where('ticket_id', $ticket->pluck('id'));
+        // $user = \App\Models\User::find(4);
+
+
+        $device = DeviceModel::whereIn('user_id', $user->pluck('id'))->get();
+        // $device = \App\Models\Device::whereIn('user_id', $user->pluck('id'))->get();
+
+
+        $ticket = TicketModel::whereIn('device_id', $device->pluck('id'))->get();
+        // $ticket = \App\Models\Ticket::whereIn('device_id', $device->pluck('id'))->get();
+
+
+        $proces = ProcesModel::whereIn('ticket_id', $ticket->pluck('id'))->get();
+        // $proces = \App\Models\Proces::whereIn('ticket_id', $ticket->pluck('id'))->get();
 
         if (!$proces->isEmpty()) {
-            $proces->delete();
+            foreach ($proces as $data) {
+                $data->delete();
+            }
         }
 
         if (!$ticket->isEmpty()) {
-            $ticket->delete();
+            foreach ($ticket as $data) {
+                $data->delete();
+            }
         }
 
         if (!$device->isEmpty()) {
-            $device->delete();
+            foreach ($device as $data) {
+                $data->delete();
+            }
         }
 
         if ($user->delete()) {
