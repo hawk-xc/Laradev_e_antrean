@@ -31,8 +31,10 @@
                 <!-- head -->
                 <thead>
                     <tr class="p-2 rounded-md bg-slate-200">
-                        <th>Client Name</th>
-                        <th>Joined</th>
+                        <th class="cursor-pointer hover:underline" wire:click='sortname'>Client Name <i
+                                class="ri-expand-up-down-line"></i></th>
+                        <th class="cursor-pointer hover:underline" wire:click='sortdate'>Joined <i
+                                class="ri-expand-up-down-line"></i></th>
                         <th>Option</th>
                     </tr>
                 </thead>
