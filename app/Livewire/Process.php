@@ -2,10 +2,12 @@
 
 namespace App\Livewire;
 
+use App\Models\Device as ModelsDevice;
 use App\Models\Proces;
 use App\Models\User;
 use App\Models\Status;
 use App\Models\Ticket; // Import model Ticket
+use App\View\Components\device;
 use Clockwork\Request\Request;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -34,12 +36,24 @@ class Process extends Component
     {
         // $statuses = Status::get();
         $statuses = Status::get();
-        $process = Proces::orderBy('created_at', 'asc')->paginate(5);
-        $employees = User::where('role_id', '2')->get();
         $user = Auth::user();
+
+        // $process = Proces::orderBy('id', 'asc')->paginate(5);
+        if ($user->role_id === 1) {
+
+            // $process = Proces::orderBy('id', 'asc')->latest()->paginate(5);
+            $process = Proces::latest()->paginate(5);
+        } else {
+
+            $process = Proces::where('user_id', Auth::user()->id)->orderBy('id', 'asc')->latest()->paginate(5);
+        }
+        $employees = User::where('role_id', '2')->get();
+        $task = Proces::where('user_id', Auth::user()->id)->get();
+
+
         // dd($statuses);
 
-        return view('livewire.process', compact('process', 'employees', 'statuses', 'user'));
+        return view('livewire.process', compact('process', 'employees', 'user', 'statuses', 'task'));
     }
 
     public function create(): void
