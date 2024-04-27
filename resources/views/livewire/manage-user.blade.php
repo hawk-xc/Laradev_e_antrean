@@ -99,8 +99,20 @@
     </div>
     <dialog id="my_modal_5" wire:ignore.self class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
-            <h3 class="text-lg font-bold">{{ $name }}</h3>
-            <p class="py-4">Press ESC key or click the button below to close</p>
+            <div class="flex items-center justify-center w-full mt-10 align-middle">
+                <div class="flex flex-row gap-7">
+                    <div>
+                        <img class="w-32 mask mask-squircle" src="{{ asset('images/computercat.jpeg') }}"
+                            alt="">
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-lg font-semibold">{{ $name }}</span>
+                        <span>{{ '@' . $username }}</span>
+                        <span>{{ $mail }}</span>
+                        <span>joined {{ $date }}</span>
+                    </div>
+                </div>
+            </div>
             <div class="modal-action">
                 <form method="dialog">
                     <!-- if there is a button in form, it will close the modal -->

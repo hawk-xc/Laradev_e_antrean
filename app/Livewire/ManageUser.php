@@ -20,13 +20,16 @@ class ManageUser extends Component
     public $search = '';
     public $sortby = 'username';
     public $delete_id;
-    public $name = '';
+    public $name = '', $date = '', $mail = '', $username = '';
 
     protected $listeners = ['confirmDelete' => 'deleteUser'];
 
     public function detail(int $id): void
     {
         $this->name = UserModel::find($id)->name;
+        $this->date = UserModel::find($id)->created_at->diffForHumans();
+        $this->mail = UserModel::find($id)->email;
+        $this->username = UserModel::find($id)->username;
         // $this->user_data['name'] = UserModel::find($id)->name;
         // $this->user_data['username'] = UserModel::find($id)->username;
     }
