@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-use function Laravel\Prompts\error;
-
-class isUser
+class process
 {
     /**
      * Handle an incoming request.
@@ -18,7 +16,12 @@ class isUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role_id == 4) {
+        if (
+            Auth::check() &&
+            Auth::user()->role_id == 1 ||
+            Auth::user()->role_id == 2 ||
+            Auth::user()->role_id == 3
+        ) {
             return $next($request);
         } else {
             abort(403);

@@ -12,39 +12,57 @@
 
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="gap-2">
-                        <i class="ri-dashboard-line"></i>
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('device')" :active="request()->routeIs('device')" class="gap-2">
-                        <i class="ri-macbook-line"></i>
-                        {{ __('Devices') }}
-                    </x-nav-link>
-                </div>
+                @if (Auth::check())
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="gap-2">
+                            <i class="ri-dashboard-line"></i>
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+
+                <!-- Device Links -->
+                @if (\App\Helpers\RoleHelper::isUser())
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('device')" :active="request()->routeIs('device')" class="gap-2">
+                            <i class="ri-macbook-line"></i>
+                            {{ __('Devices') }}
+                        </x-nav-link>
+                    </div>
+                @endif
 
 
+                <!-- Ticket Links -->
+                @if (\App\Helpers\RoleHelper::isUser())
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('ticket')" :active="request()->routeIs('ticket')" class="gap-2">
+                            <i class="ri-coupon-3-line"></i>
+                            {{ __('Tickets') }}
+                        </x-nav-link>
+                    </div>
+                @endif
 
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('ticket')" :active="request()->routeIs('ticket')" class="gap-2">
-                        <i class="ri-coupon-3-line"></i>
-                        {{ __('Tickets') }}
-                    </x-nav-link>
-                </div>
+                <!-- Process Links -->
+                @if (
+                    \App\Helpers\RoleHelper::isAdmin() ||
+                        \App\Helpers\RoleHelper::isTechnician() ||
+                        \App\Helpers\RoleHelper::isHelpdesk())
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('process')" :active="request()->routeIs('process')" class="gap-2">
+                            <i class="ri-stack-line"></i>
+                            {{ __('Process') }}
+                        </x-nav-link>
+                    </div>
+                @endif
 
-                {{-- @if (\App\Helpers\RoleHelper::isHelpdesk()) --}}
-                @if (\App\Helpers\RoleHelper::isAdmin() || \App\Helpers\RoleHelper::isHelpdesk())
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('process')" :active="request()->routeIs('process')" class="gap-2">
-                        <i class="ri-stack-line"></i>
-                        {{ __('Process') }}
-                    </x-nav-link>
-                </div>
+                @if (\App\Helpers\RoleHelper::isAdmin())
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('manageuser')" :active="request()->routeIs('manageuser')" class="gap-2">
+                            <i class="ri-user-settings-line"></i>
+                            {{ __('Manage User') }}
+                        </x-nav-link>
+                    </div>
                 @endif
             </div>
 
@@ -111,24 +129,6 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
-
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('device')" :active="request()->routeIs('device')">
-                {{ __('Device') }}
-            </x-responsive-nav-link>
-        </div>
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('ticket')" :active="request()->routeIs('ticket')">
-                {{ __('Ticket') }}
-            </x-responsive-nav-link>
-        </div>
-        @if (\App\Helpers\RoleHelper::isAdmin() || \App\Helpers\RoleHelper::isHelpdesk())
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('process')" :active="request()->routeIs('process')">
-                {{ __('Process') }}
-            </x-responsive-nav-link>
-        </div>
-        @endif
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">

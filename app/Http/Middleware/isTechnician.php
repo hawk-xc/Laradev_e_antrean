@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class isSuperUser
+class isTechnician
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class isSuperUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->user_id == 1) {
+        if (Auth::check() && Auth::user()->role_id == 3) {
             return $next($request);
         } else {
             abort(403);

@@ -22,12 +22,18 @@ class RoleHelper
     public static function isHelpdesk()
     {
         $user = Auth::user();
-        return $user && $user->role_id == 2; // Sesuaikan dengan role_id helpdesk Anda
+        return $user && $user->role_id == 2; // Sesuaikan dengan role_id admin Anda
+    }
+
+    public static function isTechnician()
+    {
+        $user = Auth::user();
+        return $user && $user->role_id == 3; // Sesuaikan dengan role_id helpdesk Anda
     }
 
     public static function isUser()
     {
         $user = Auth::user();
-        return $user && $user->role_id == 3; // Sesuaikan dengan role_id user Anda
+        return $user && $user->role_id == 4; // Sesuaikan dengan role_id user Anda
     }
 }
