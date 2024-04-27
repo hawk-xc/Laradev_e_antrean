@@ -54,6 +54,15 @@
                         </x-nav-link>
                     </div>
                 @endif
+
+                @if (\App\Helpers\RoleHelper::isAdmin())
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('manageuser')" :active="request()->routeIs('manageuser')" class="gap-2">
+                            <i class="ri-user-settings-line"></i>
+                            {{ __('Manage User') }}
+                        </x-nav-link>
+                    </div>
+                @endif
             </div>
 
 
@@ -143,6 +152,14 @@
             <div class="pt-2 pb-3 space-y-1">
                 <x-responsive-nav-link :href="route('process')" :active="request()->routeIs('proces')">
                     {{ __('Proces') }}
+                </x-responsive-nav-link>
+            </div>
+        @endif
+
+        @if (\App\Helpers\RoleHelper::isAdmin())
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link :href="route('manageuser')" :active="request()->routeIs('manageuser')">
+                    {{ __('Manage User') }}
                 </x-responsive-nav-link>
             </div>
         @endif
