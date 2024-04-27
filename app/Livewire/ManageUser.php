@@ -20,8 +20,16 @@ class ManageUser extends Component
     public $search = '';
     public $sortby = 'username';
     public $delete_id;
+    public $name = '';
 
     protected $listeners = ['confirmDelete' => 'deleteUser'];
+
+    public function detail(int $id): void
+    {
+        $this->name = UserModel::find($id)->name;
+        // $this->user_data['name'] = UserModel::find($id)->name;
+        // $this->user_data['username'] = UserModel::find($id)->username;
+    }
 
     public function sortname()
     {

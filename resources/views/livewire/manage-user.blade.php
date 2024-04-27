@@ -65,7 +65,8 @@
                                 <span class="badge badge-ghost badge-sm">{{ $user->created_at->format('d M Y') }}</span>
                             </td>
                             <th>
-                                <button class="btn btn-ghost btn-xs">
+                                <button class="btn btn-ghost btn-xs" wire:click='detail({{ $user->id }})'
+                                    onclick="my_modal_5.showModal()">
                                     <i class="ri-search-2-line"></i>
                                     details
                                 </button>
@@ -96,6 +97,18 @@
             </div>
         </div>
     </div>
+    <dialog id="my_modal_5" wire:ignore.self class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold">{{ $name }}</h3>
+            <p class="py-4">Press ESC key or click the button below to close</p>
+            <div class="modal-action">
+                <form method="dialog">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button class="btn">Close</button>
+                </form>
+            </div>
+        </div>
+    </dialog>
     @script
         <script type="text/javascript">
             $(document).ready(function() {
