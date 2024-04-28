@@ -4,7 +4,6 @@
     @if (session('notify'))
         <x-notification-laravel :message="session('notify')" />
     @endif
-
     <div class="w-4/12 py-5 border rounded-md shadow-md px-7 border-slate-200">
         <span class="font-semibold text-md">Our Team</span>
         <div class="divider"></div>
@@ -31,10 +30,11 @@
         </ul>
     </div>
 
+    <!-- Pengguna Klien -->
     <div class="w-full p-5 border rounded-md shadow-md border-slate-200">
         <div class="overflow-x-auto">
             <table class="table">
-                <!-- head -->
+                <!-- kepala -->
                 <thead>
                     <tr class="p-2 rounded-md bg-slate-200">
                         <th class="cursor-pointer hover:underline" wire:click='sortname'>Client Name <i
@@ -75,10 +75,12 @@
                                     <i class="ri-delete-bin-line"></i>
                                     delete
                                 </button>
-                            </th>
+                            </td>
                         </tr>
                     @empty
-                        <span>tidak ada data</span>
+                        <tr>
+                            <td colspan="3">tidak ada data</td>
+                        </tr>
                     @endforelse
             </table>
         </div>

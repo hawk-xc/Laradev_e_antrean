@@ -18,7 +18,10 @@
                         <option selected value="null">Pick one</option>
                         
                         @foreach ($statuses as $status)
-                            <option value="{{ $status->id }}">{{ $status->name }}</option>
+                            {{-- <option value="{{ $status->id }}">{{ $status->name }}</option> --}}
+                            @if ($status->id === 1 || $status->id === 2)
+                            <option value="{{ $status->id }}">{{ $status->name }}</option>      
+                            @endif
                         @endforeach
                     </select>
                 </label>
