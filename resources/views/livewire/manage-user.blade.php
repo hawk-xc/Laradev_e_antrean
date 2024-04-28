@@ -1,4 +1,6 @@
 <div class="flex flex-row gap-5 m-4">
+    <!-- Pengguna Inti -->
+    <x-notification-laravel />
     <div class="w-4/12 py-5 border rounded-md shadow-md px-7 border-slate-200">
         <span class="font-semibold text-md">Our Team</span>
         <div class="divider"></div>
@@ -25,10 +27,11 @@
         </ul>
     </div>
 
+    <!-- Pengguna Klien -->
     <div class="w-full p-5 border rounded-md shadow-md border-slate-200">
         <div class="overflow-x-auto">
             <table class="table">
-                <!-- head -->
+                <!-- kepala -->
                 <thead>
                     <tr class="p-2 rounded-md bg-slate-200">
                         <th class="cursor-pointer hover:underline" wire:click='sortname'>Client Name <i
@@ -58,19 +61,21 @@
                             <td>
                                 <span class="badge badge-ghost badge-sm">{{ $user->created_at->format('d M Y') }}</span>
                             </td>
-                            <th>
+                            <td>
                                 <button class="btn btn-ghost btn-xs">
                                     <i class="ri-search-2-line"></i>
                                     details
                                 </button>
-                                <button class="btn btn-warning btn-xs">
+                                <button wire:click.prevent='deleteConfirmation({{ $user->id }})' class="btn btn-warning btn-xs">
                                     <i class="ri-delete-bin-line"></i>
                                     delete
                                 </button>
-                            </th>
+                            </td>
                         </tr>
                     @empty
-                        <span>tidak ada data</span>
+                        <tr>
+                            <td colspan="3">tidak ada data</td>
+                        </tr>
                     @endforelse
             </table>
         </div>
@@ -88,4 +93,8 @@
             </div>
         </div>
     </div>
+    <!-- Notifikasi -->
+    @if (session('notify'))
+        <x-notification-laravel :message="session('notify')" />
+    @endif
 </div>
