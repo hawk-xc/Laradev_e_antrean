@@ -34,16 +34,19 @@
     <div class="w-full p-5 border rounded-md shadow-md border-slate-200">
         <div class="overflow-x-auto">
             <table class="table">
-                <!-- kepala -->
-                <thead>
-                    <tr class="p-2 rounded-md bg-slate-200">
-                        <th class="cursor-pointer hover:underline" wire:click='sortname'>Client Name <i
-                                class="ri-expand-up-down-line"></i></th>
-                        <th class="cursor-pointer hover:underline" wire:click='sortdate'>Joined <i
-                                class="ri-expand-up-down-line"></i></th>
-                        <th>Option</th>
-                    </tr>
-                </thead>
+
+                <!-- head -->
+                @if (!$clientUsers->isEmpty())
+                    <thead>
+                        <tr class="p-2 rounded-md bg-slate-200">
+                            <th class="cursor-pointer hover:underline" wire:click='sortname'>Client Name <i
+                                    class="ri-expand-up-down-line"></i></th>
+                            <th class="cursor-pointer hover:underline" wire:click='sortdate'>Joined <i
+                                    class="ri-expand-up-down-line"></i></th>
+                            <th>Option</th>
+                        </tr>
+                    </thead>
+                @endif
                 <tbody>
                     @forelse ($clientUsers as $user)
                         <tr>
@@ -51,8 +54,8 @@
                                 <div class="flex items-center gap-3">
                                     <div class="avatar">
                                         <div class="w-12 h-12 mask mask-squircle">
-                                            <img src="{{ asset('images/user-guest.png') }}  "
-                                                alt="Avatar Tailwind CSS Component" />
+                                            <img src="{{ asset($user->user_image) }}"
+                                                alt="{{ $user->name . ' image' }}" />
                                         </div>
                                     </div>
                                     <div>
@@ -75,12 +78,18 @@
                                     <i class="ri-delete-bin-line"></i>
                                     delete
                                 </button>
-                            </td>
+                                </td>
                         </tr>
                     @empty
-                        <tr>
-                            <td colspan="3">tidak ada data</td>
-                        </tr>
+                        <div class="py-20 hero">
+                            <div class="text-center hero-content">
+                                <div class="max-w-md">
+                                    <h1 class="text-5xl font-bold">Hello there</h1>
+                                    <p class="py-6">Currently the data is still empty!
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     @endforelse
             </table>
         </div>
@@ -101,26 +110,35 @@
     </div>
     <dialog id="my_modal_5" wire:ignore.self class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
+            <span class="font-semibold text-md">User profile</span>
             <div class="flex items-center justify-center w-full mt-10 align-middle">
                 <div class="flex flex-row gap-7">
                     <div>
-                        <img class="w-32 mask mask-squircle" src="{{ asset('images/computercat.jpeg') }}"
-                            alt="">
+                        <img class="w-32 mask mask-squircle" src="{{ asset($user_image) }}" alt="">
                     </div>
                     <div class="flex flex-col">
                         <span class="text-lg font-semibold">{{ $name }}</span>
-                        <span>{{ '@' . $username }}</span>
-                        <span>{{ $mail }}</span>
-                        <span>joined {{ $date }}</span>
+                        <span><i class="ri-at-line"></i> {{ $username }}</span>
+                        <span><i class="ri-phone-line"></i> {{ $phone }}</span>
+                        <span><i class="ri-mail-line"></i> {{ $mail }}</span>
+                        <span class="text-sm badge badge-ghost">joined {{ $date }}</span>
                     </div>
                 </div>
             </div>
-            <div class="modal-action">
+            <div class="flex flex-row justify-between mt-16 modal-action">
+                <div>
+                    <button class="btn btn-sm btn-ghost" wire:click.prevent='makeTechnician'>make technician</button>
+                    <button class="btn btn-sm btn-ghost" wire:click.prevent='makeHelpdesk'>make helpdesk</button>
+                </div>
                 <form method="dialog">
                     <!-- if there is a button in form, it will close the modal -->
-                    <button class="btn">Close</button>
+                    <button id="closeButton" class="btn btn-sm">Close</button>
                 </form>
             </div>
+        </div>
+        <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg align-middle text-slate-800">
+            <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
+            <span class="block mx-auto mb-10">please wait a moment...</span>
         </div>
     </dialog>
     @script

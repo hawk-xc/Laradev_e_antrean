@@ -20,18 +20,63 @@ class ManageUser extends Component
     public $search = '';
     public $sortby = 'username';
     public $delete_id;
-    public $name = '', $date = '', $mail = '', $username = '';
+    public $user_id = '', $name = '', $date = '', $mail = '', $username = '', $phone = '', $user_image = '';
 
-    protected $listeners = ['confirmDelete' => 'deleteUser'];
+    protected $listeners = [
+        'confirmDelete' => 'deleteUser',
+        'updateToTechnician' => 'userTechnician',
+        'updateToHelpdesk' => 'userHelpdesk',
+    ];
+
+    public function userTechnician()
+    {
+        $user = UserModel::find($this->user_id);
+        if ($user->update(['role_id' => 2])) {
+            $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
+            event(new \App\Events\UserInteraction(Auth::user(), "User => update user " . $user->name . " with id " . $user->id . " to Technician"));
+        }
+    }
+
+    public function userHelpdesk()
+    {
+        $user = UserModel::find($this->user_id);
+        if ($user->update(['role_id' => 3])) {
+            $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
+            event(new \App\Events\UserInteraction(Auth::user(), "User => update user " . $user->name . " with id " . $user->id . " to Helpdesk"));
+        }
+    }
+
+    public function redirecting()
+    {
+        return redirect()->to('/register');
+    }
 
     public function detail(int $id): void
     {
-        $this->name = UserModel::find($id)->name;
-        $this->date = UserModel::find($id)->created_at->diffForHumans();
-        $this->mail = UserModel::find($id)->email;
-        $this->username = UserModel::find($id)->username;
+        $user = UserModel::find($id);
+        $this->user_id = $user->id;
+        $this->name = $user->name;
+        $this->date = $user->created_at->diffForHumans();
+        $this->mail = $user->email;
+        $this->phone = $user->phone;
+        $this->user_image = $user->user_image;
+        $this->username = $user->username;
         // $this->user_data['name'] = UserModel::find($id)->name;
         // $this->user_data['username'] = UserModel::find($id)->username;
+    }
+
+    public function makeTechnician(): void
+    {
+        $user = UserModel::find($this->user_id);
+        $this->dispatch('closeButton');
+        $this->dispatch('confirmation', ['user' => $user, 'type' => 'Technician', 'message' => 'Technician can update process and cancel process', 'response' => 'updateToTechnician']);
+    }
+
+    public function makeHelpdesk(): void
+    {
+        $user = UserModel::find($this->user_id);
+        $this->dispatch('closeButton');
+        $this->dispatch('confirmation', ['user' => $user, 'type' => 'Helpdesk', 'message' => 'The helpdesk can schedule processes, update processes and reject processes', 'response' => 'updateToHelpdesk']);
     }
 
     public function sortname()
