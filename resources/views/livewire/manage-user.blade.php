@@ -1,11 +1,12 @@
-<div class="flex flex-row gap-5 m-4">
+<div class="flex gap-5 m-4 md:flex-row max-sm:flex-col">
     {{-- notification pack --}}
     <x-notification-laravel />
     @if (session('notify'))
         <x-notification-laravel :message="session('notify')" />
     @endif
 
-    <div class="w-4/12 py-5 overflow-y-scroll border rounded-md shadow-md h-[27rem] px-7 border-slate-200">
+    <div
+        class="max-sm:w-full max-sm:text-xs md:w-4/12 py-5 overflow-y-scroll border rounded-md shadow-md h-[27rem] px-7 border-slate-200">
         <span class="font-semibold text-md">Our Team</span>
         <div class="divider"></div>
         <ul class="flex flex-col gap-2">
@@ -32,8 +33,16 @@
     </div>
 
     <div class="w-full p-5 border rounded-md shadow-md border-slate-200">
+        <label class="flex items-center gap-2 mb-4 md:hidden input input-sm input-bordered">
+            <input wire:model.live='search' type="text" class="grow" placeholder="Search" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70">
+                <path fill-rule="evenodd"
+                    d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                    clip-rule="evenodd" />
+            </svg>
+        </label>
         <div class="overflow-x-auto">
-            <table class="table">
+            <table class="table max-sm:text-xs">
                 <!-- head -->
                 @if (!$clientUsers->isEmpty())
                     <thead>
@@ -93,7 +102,7 @@
             </table>
         </div>
         <div class="flex flex-col items-center justify-center w-full gap-3 mt-4 align-middle lg:flex-row">
-            <div class="w-3/4">
+            <div class="w-3/4 max-sm:hidden">
                 <label class="flex items-center gap-2 input input-bordered">
                     <input wire:model.live='search' id="searchquery" type="text" class="grow"
                         placeholder="Search" />
