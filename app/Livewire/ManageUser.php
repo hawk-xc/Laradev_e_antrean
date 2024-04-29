@@ -28,22 +28,9 @@ class ManageUser extends Component
         'updateToHelpdesk' => 'userHelpdesk',
     ];
 
-    public function userTechnician()
+    public function fresh()
     {
-        $user = UserModel::find($this->user_id);
-        if ($user->update(['role_id' => 2])) {
-            $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
-            event(new \App\Events\UserInteraction(Auth::user(), "User => update user " . $user->name . " with id " . $user->id . " to Technician"));
-        }
-    }
-
-    public function userHelpdesk()
-    {
-        $user = UserModel::find($this->user_id);
-        if ($user->update(['role_id' => 3])) {
-            $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
-            event(new \App\Events\UserInteraction(Auth::user(), "User => update user " . $user->name . " with id " . $user->id . " to Helpdesk"));
-        }
+        $this->reset('user_id', 'name', 'date', 'mail', 'username', 'phone', 'user_image');
     }
 
     public function redirecting()
@@ -53,6 +40,7 @@ class ManageUser extends Component
 
     public function detail(int $id): void
     {
+        $this->fresh();
         $user = UserModel::find($id);
         $this->user_id = $user->id;
         $this->name = $user->name;
@@ -63,6 +51,26 @@ class ManageUser extends Component
         $this->username = $user->username;
         // $this->user_data['name'] = UserModel::find($id)->name;
         // $this->user_data['username'] = UserModel::find($id)->username;
+    }
+
+    public function userTechnician()
+    {
+        $user = UserModel::find($this->user_id);
+        if ($user->update(['role_id' => 2])) {
+            $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
+            event(new \App\Events\UserInteraction(Auth::user(), "User => update user " . $user->name . " with id " . $user->id . " to Technician"));
+        }
+        $this->fresh();
+    }
+
+    public function userHelpdesk()
+    {
+        $user = UserModel::find($this->user_id);
+        if ($user->update(['role_id' => 3])) {
+            $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
+            event(new \App\Events\UserInteraction(Auth::user(), "User => update user " . $user->name . " with id " . $user->id . " to Helpdesk"));
+        }
+        $this->fresh();
     }
 
     public function makeTechnician(): void
@@ -95,32 +103,6 @@ class ManageUser extends Component
         $this->dispatch('closeButton');
     }
 
-    public function deleteUser(): void
-    {
-        // dd("Delete confirmation called with ID: " . $this->delete_id);
-        $user = UserModel::find($this->delete_id);
-
-        if (!$user) {
-            $this->dispatch('notify', type: 'error', message: 'User not found!');
-            return;
-        }
-
-        $deleted = $user->delete();
-        if ($deleted) {
-            $this->dispatch('notify', type: 'success', message: 'User successfully deleted!');
-            // $this->fresh();
-        } else {
-            $this->dispatch('notify', type: 'error', message: 'Failed to delete user!');
-        }
-    }
-
-
-
-    public function deleteConfirmation(int $id): void
-    {
-        $this->delete_id = $id;
-        $this->dispatch('show-delete');
-    }
 
     public function deleteUser(): void
     {

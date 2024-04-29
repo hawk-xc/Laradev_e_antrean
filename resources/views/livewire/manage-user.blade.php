@@ -4,7 +4,8 @@
     @if (session('notify'))
         <x-notification-laravel :message="session('notify')" />
     @endif
-    <div class="w-4/12 py-5 border rounded-md shadow-md px-7 border-slate-200">
+
+    <div class="w-4/12 py-5 overflow-y-scroll border rounded-md shadow-md h-[27rem] px-7 border-slate-200">
         <span class="font-semibold text-md">Our Team</span>
         <div class="divider"></div>
         <ul class="flex flex-col gap-2">
@@ -30,11 +31,9 @@
         </ul>
     </div>
 
-    <!-- Pengguna Klien -->
     <div class="w-full p-5 border rounded-md shadow-md border-slate-200">
         <div class="overflow-x-auto">
             <table class="table">
-
                 <!-- head -->
                 @if (!$clientUsers->isEmpty())
                     <thead>
@@ -78,7 +77,7 @@
                                     <i class="ri-delete-bin-line"></i>
                                     delete
                                 </button>
-                                </td>
+                            </th>
                         </tr>
                     @empty
                         <div class="py-20 hero">
