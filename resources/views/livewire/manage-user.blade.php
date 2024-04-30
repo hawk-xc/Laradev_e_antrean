@@ -49,8 +49,9 @@
                         <tr class="p-2 rounded-md bg-slate-200">
                             <th class="cursor-pointer hover:underline" wire:click='sortname'>Client Name <i
                                     class="ri-expand-up-down-line"></i></th>
-                            <th class="cursor-pointer hover:underline" wire:click='sortdate'>Joined <i
-                                    class="ri-expand-up-down-line"></i></th>
+                            <th class="hidden cursor-pointer hover:underline sm:table-cell" wire:click='sortdate'>Joined
+                                <i class="ri-expand-up-down-line"></i>
+                            </th>
                             <th>Option</th>
                         </tr>
                     </thead>
@@ -72,19 +73,14 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td class="hidden sm:table-cell">
                                 <span class="badge badge-ghost badge-sm">{{ $user->created_at->format('d M Y') }}</span>
                             </td>
                             <th>
-                                <button class="btn btn-ghost btn-xs" wire:click='detail({{ $user->id }})'
+                                <button class="btn btn-warning btn-xs" wire:click='detail({{ $user->id }})'
                                     onclick="my_modal_5.showModal()">
                                     <i class="ri-search-2-line"></i>
                                     details
-                                </button>
-                                <button wire:click.prevent='deleteConfirmation({{ $user->id }})'
-                                    class="btn btn-warning btn-xs">
-                                    <i class="ri-delete-bin-line"></i>
-                                    delete
                                 </button>
                             </th>
                         </tr>
