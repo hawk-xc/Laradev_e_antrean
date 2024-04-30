@@ -20,7 +20,7 @@ class ManageUser extends Component
     public $search = '';
     public $sortby = 'username';
     public $delete_id;
-    public $user_id = '', $name = '', $date = '', $mail = '', $username = '', $phone = '', $user_image = '';
+    public $role_id = '', $user_id = '', $name = '', $date = '', $mail = '', $username = '', $phone = '', $user_image = '';
 
     protected $listeners = [
         'confirmDelete' => 'deleteUser',
@@ -43,6 +43,7 @@ class ManageUser extends Component
         $this->fresh();
         $user = UserModel::find($id);
         $this->user_id = $user->id;
+        $this->role_id = $user->role_id;
         $this->name = $user->name;
         $this->date = $user->created_at->diffForHumans();
         $this->mail = $user->email;

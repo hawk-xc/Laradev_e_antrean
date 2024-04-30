@@ -34,6 +34,9 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Livewire.dispatch('confirmDelete')
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 4000);
                     }
                 });
             })
@@ -53,6 +56,9 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Livewire.dispatch(data[0].response)
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 4000);
                     }
                 });
             })

@@ -6,12 +6,12 @@
     @endif
 
     <div
-        class="max-sm:w-full max-sm:text-xs md:w-4/12 py-5 overflow-y-scroll border rounded-md shadow-md h-[27rem] px-7 border-slate-200">
+        class="max-sm:w-full text-xs md:w-4/12 py-5 overflow-y-scroll border rounded-md shadow-md h-[32rem] px-7 border-slate-200">
         <span class="font-semibold text-md">Our Team</span>
         <div class="divider"></div>
         <ul class="flex flex-col gap-2">
             @foreach ($coreUsers as $user)
-                <div
+                <div wire:click='detail({{ $user->id }})' onclick="my_modal_5.showModal()"
                     class="flex items-center gap-5 p-2 transition-all duration-150 rounded-md cursor-pointer hover:bg-slate-100">
                     <div class="avatar">
                         <div class="w-12 h-12 shadow-sm mask mask-squircle">
@@ -20,7 +20,7 @@
                     </div>
                     <div>
                         <div class="font-semibold text-md">{{ $user->name }}</div>
-                        <div class="text-sm opacity-90">
+                        <div class="mt-2 text-xs opacity-90">
                             <div
                                 class="flex items-center justify-center gap-2 align-middle badge badge-accent badge-outline">
                                 <i class="ri-heart-2-line"></i> {{ $user->role->name }}
@@ -42,7 +42,7 @@
             </svg>
         </label>
         <div class="overflow-x-auto">
-            <table class="table max-sm:text-xs">
+            <table class="table text-xs">
                 <!-- head -->
                 @if (!$clientUsers->isEmpty())
                     <thead>
@@ -121,26 +121,41 @@
             <span class="font-semibold text-md">User profile</span>
             <div class="flex items-center justify-center w-full mt-10 align-middle">
                 <div class="flex flex-row gap-7">
-                    <div>
+                    <div class="">
                         <img class="w-32 mask mask-squircle" src="{{ asset($user_image) }}" alt="">
                     </div>
                     <div class="flex flex-col">
+                        <span>{{ $role_id }}</span>
                         <span class="text-lg font-semibold">{{ $name }}</span>
                         <span><i class="ri-at-line"></i> {{ $username }}</span>
-                        <span><i class="ri-phone-line"></i> {{ $phone }}</span>
+                        <span><i class="ri-phone-line"></i> {{ $phone ?? '-' }}</span>
                         <span><i class="ri-mail-line"></i> {{ $mail }}</span>
                         <span class="text-sm badge badge-ghost">joined {{ $date }}</span>
                     </div>
                 </div>
             </div>
             <div class="flex flex-row justify-between mt-16 modal-action">
-                <div>
-                    <button class="btn btn-sm btn-ghost" wire:click.prevent='makeTechnician'>make technician</button>
-                    <button class="btn btn-sm btn-ghost" wire:click.prevent='makeHelpdesk'>make helpdesk</button>
-                </div>
+                @if (!($role_id === 1))
+                    <div>
+                        @if ($role_id == 2 || $role_id == 4)
+                            <button class="btn btn-sm btn-ghost max-sm:btn-xs" wire:click.prevent='makeTechnician'
+                                wire:loading.attr='disabled'><i class="ri-exchange-2-line"></i> make technician</button>
+                        @elseif ($role_id == 3 || $role_id == 4)
+                            <button class="btn btn-sm btn-ghost max-sm:btn-xs" wire:click.prevent='makeHelpdesk'
+                                wire:loading.attr='disabled'><i class="ri-exchange-2-line"></i> make helpdesk</button>
+                        @endif
+                        @if ($role_id == 2 || $role_id == 3 || $role_id == 4)
+                            <button class="btn btn-sm btn-error max-sm:btn-xs"
+                                wire:click.prevent='deleteConfirmation({{ $user_id }})'
+                                wire:loading.attr='disabled'>
+                                <i class="ri-delete-bin-line"></i> delete
+                            </button>
+                        @endif
+                    </div>
+                @endif
                 <form method="dialog">
                     <!-- if there is a button in form, it will close the modal -->
-                    <button id="closeButton" class="btn btn-sm">Close</button>
+                    <button id="closeButton" class="btn btn-sm" wire:loading.attr='disabled'>Close</button>
                 </form>
             </div>
         </div>
