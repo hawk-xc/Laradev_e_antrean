@@ -125,7 +125,6 @@
                         <img class="w-32 mask mask-squircle" src="{{ asset($user_image) }}" alt="">
                     </div>
                     <div class="flex flex-col">
-                        <span>{{ $role_id }}</span>
                         <span class="text-lg font-semibold">{{ $name }}</span>
                         <span><i class="ri-at-line"></i> {{ $username }}</span>
                         <span><i class="ri-phone-line"></i> {{ $phone ?? '-' }}</span>
