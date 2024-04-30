@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/ticket', fn () => view('Ticket'))->name('ticket')->middleware('is_user');
     Route::get('/process', fn () => view('Process'))->name('process')->middleware('process');
     Route::get('/manageuser', fn () => view('ManageUser'))->name('manageuser')->middleware('is_admin');
+    Route::get('/weblog', fn () => view('WebLog'))->name('log')->middleware('is_admin');
 });
 
 Route::get('/', function () {

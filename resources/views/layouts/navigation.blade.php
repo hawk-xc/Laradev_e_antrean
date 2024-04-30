@@ -64,6 +64,15 @@
                         </x-nav-link>
                     </div>
                 @endif
+
+                @if (\App\Helpers\RoleHelper::isAdmin())
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('log')" :active="request()->routeIs('log')" class="gap-2">
+                            <i class="ri-alarm-warning-line"></i>
+                            {{ __('Web Log') }}
+                        </x-nav-link>
+                    </div>
+                @endif
             </div>
 
 
@@ -124,11 +133,57 @@
 
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
+
+        @if (Auth::check())
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+            </div>
+        @endif
+
+        @if (\App\Helpers\RoleHelper::isUser())
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link :href="route('device')" :active="request()->routeIs('device')">
+                    {{ __('Devices') }}
+                </x-responsive-nav-link>
+            </div>
+        @endif
+
+        @if (\App\Helpers\RoleHelper::isUser())
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link :href="route('ticket')" :active="request()->routeIs('ticket')">
+                    {{ __('Tickets') }}
+                </x-responsive-nav-link>
+            </div>
+        @endif
+
+        @if (
+            \App\Helpers\RoleHelper::isAdmin() ||
+                \App\Helpers\RoleHelper::isTechnician() ||
+                \App\Helpers\RoleHelper::isHelpdesk())
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link :href="route('process')" :active="request()->routeIs('process')">
+                    {{ __('Process') }}
+                </x-responsive-nav-link>
+            </div>
+        @endif
+
+        @if (\App\Helpers\RoleHelper::isAdmin())
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link :href="route('manageuser')" :active="request()->routeIs('manageuser')">
+                    {{ __('Manage User') }}
+                </x-responsive-nav-link>
+            </div>
+        @endif
+
+        @if (\App\Helpers\RoleHelper::isAdmin())
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link :href="route('log')" :active="request()->routeIs('log')">
+                    {{ __('Web Log') }}
+                </x-responsive-nav-link>
+            </div>
+        @endif
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
