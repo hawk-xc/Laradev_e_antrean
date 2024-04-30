@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile', [ProfileController::class, 'updatephone'])->name('profile.updatephone');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
@@ -36,6 +38,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/manageuser', fn () => view('ManageUser'))->name('manageuser')->middleware('is_admin');
     Route::get('/weblog', fn () => view('WebLog'))->name('log')->middleware('is_admin');
 });
+
+Route::get('/auth/{provider}/redirect', [GoogleAuthController::class, 'redirect']);
+Route::get('/auth/{provider}/callback', [GoogleAuthController::class, 'callback']);
 
 Route::get('/', function () {
     // route('dashboard');
