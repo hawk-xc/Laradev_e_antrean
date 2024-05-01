@@ -39,7 +39,8 @@
         <div class="flex flex-row justify-center w-48 gap-2 mx-auto ">
             <a href="auth/google/redirect" class="w-full btn btn-neutral btn-outline"><i class="ri-google-fill"></i>
                 Google</a>
-            <a class="w-full btn btn-neutral btn-outline"><i class="ri-github-fill"></i> Github</a>
+            <a href="auth/github/redirect" class="w-full btn btn-neutral btn-outline"><i class="ri-github-fill"></i>
+                Github</a>
         </div>
 
         <div class="flex items-center justify-end mt-4">

@@ -15,7 +15,7 @@
                     class="flex items-center gap-5 p-2 transition-all duration-150 rounded-md cursor-pointer hover:bg-slate-100">
                     <div class="avatar">
                         <div class="w-12 h-12 shadow-sm mask mask-squircle">
-                            <img src="{{ asset('images/computercat.jpeg') }}" alt="{{ $user->username . 'image' }}" />
+                            <img src="{{ $user->user_image }}" alt="{{ $user->username . 'image' }}" />
                         </div>
                     </div>
                     <div>
@@ -118,7 +118,7 @@
             <div class="flex items-center justify-center w-full mt-10 align-middle">
                 <div class="flex flex-row gap-7">
                     <div class="">
-                        <img class="w-32 mask mask-squircle" src="{{ asset($user_image) }}" alt="">
+                        <img class="w-32 mask mask-squircle" src="{{ $user_image }}" alt="">
                     </div>
                     <div class="flex flex-col">
                         <span class="text-lg font-semibold">{{ $name }}</span>
