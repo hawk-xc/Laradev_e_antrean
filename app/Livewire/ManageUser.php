@@ -97,37 +97,13 @@ class ManageUser extends Component
     {
         $this->sortby = 'created_at';
     }
-
-<<<<<<< HEAD
-
-    // public function deleteUser(): void
-    // {
-    //     // dd("Delete confirmation called with ID: " . $this->delete_id);
-    //     $user = UserModel::find($this->delete_id);
-
-    //     if (!$user) {
-    //         $this->dispatch('notify', type: 'error', message: 'User not found!');
-    //         return;
-    //     }
-
-    //     $deleted = $user->delete();
-    //     if ($deleted) {
-    //         $this->dispatch('notify', type: 'success', message: 'User successfully deleted!');
-    //         // $this->fresh();
-    //     } else {
-    //         $this->dispatch('notify', type: 'error', message: 'Failed to delete user!');
-    //     }
-    // }
-
-
-
     public function deleteConfirmation(int $id): void
     {
         $this->delete_id = $id;
         $this->dispatch('show-delete');
+        $this->dispatch('closeButton');
     }
-=======
->>>>>>> c3ab963fdc4c96462cfa05dd7553cb28b0dee6aa
+
 
     public function deleteUser(): void
     {
@@ -168,12 +144,6 @@ class ManageUser extends Component
             $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
             event(new \App\Events\UserInteraction(Auth::user(), "User => delete user " . $user->name . " with id " . $user->id));
         }
-    }
-    public function toEmployee(int $id): void
-    {
-        $user = UserModel::where('id', $id);
-        $user->update(['role_id' => 2]);
-        $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
     }
 
     public function render()

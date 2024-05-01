@@ -20,61 +20,10 @@
                     </div>
                     <div>
                         <div class="font-semibold text-md">{{ $user->name }}</div>
-<<<<<<< HEAD
-                        <div class="flex flex-row text-sm opacity-90" >
-=======
                         <div class="mt-2 text-xs opacity-90">
->>>>>>> c3ab963fdc4c96462cfa05dd7553cb28b0dee6aa
                             <div
-                                class="items-center justify-center gap-2 align-middle badge badge-accent badge-outline">
+                                class="flex items-center justify-center gap-2 align-middle badge badge-accent badge-outline">
                                 <i class="ri-heart-2-line"></i> {{ $user->role->name }}
-                            </div>
-                            <div class="items-center justify-center gap-2 ml-6 align-middle">
-                                <a class="badge badge-accent badge-outline" onclick="my_modal_1.showModal()"><i class="mr-2 ri-edit-2-line"></i>Edit</a>
-        <input type="checkbox" id="my_modal_1" class="modal-toggle" />
-        <div class="modal" role="dialog" wire:ignore.self>
-            <div class="modal-box" wire:loading.remove>
-                <h3 class="text-lg font-bold">Edit Role Account</h3>
-                <div class="flex gap-2 md:flex-row max-sm:flex-col">
-                    <label class="w-full max-w-xs form-control">
-                        <div class="label">
-                            <span class="label-text">Role name?</span>
-                        </div>
-                        <input type="text" placeholder="Type here" class="w-full max-w-xs input input-bordered"
-                            wire:model="role_name" />
-                        @error('role')
-                            <div class="label">
-                                <span class="label-text-alt">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="w-full max-w-xs form-control">
-                        <div class="label">
-                            <span class="label-text">Role Account?</span>
-                        </div>
-                        <input type="number" min="1980" max="{{ now()->year }}" placeholder="Type here"
-                            class="w-full max-w-xs input input-bordered" wire:model="device_year" />
-                        @error('device_year')
-                            <div class="label">
-                                <span class="label-text-alt">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                </div>
-                <div class="modal-action">
-                    @if ($action == 'create')
-                        <button wire:click="create" class="btn btn-neutral">save!</button>
-                    @elseif($action == 'update')
-                        <button wire:click="store" class="btn btn-neutral">update!</button>
-                    @endif
-                    <label wire:click='close' id="closeButton" for="my_modal_6" class="btn">Close!</label>
-                </div>
-            </div>
-            <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
-                <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
-                <span class="block mx-auto mb-10">please wait a moment...</span>
-            </div>
-        </div>
                             </div>
                         </div>
                     </div>
@@ -133,21 +82,7 @@
                                     <i class="ri-search-2-line"></i>
                                     details
                                 </button>
-<<<<<<< HEAD
-                                <button wire:click.prevent='deleteConfirmation({{ $user->id }})'
-                                    class="btn btn-warning btn-xs">
-                                    <i class="ri-delete-bin-line"></i>
-                                    delete
-                                </button>
-                                <button wire:click.prevent='toEmployee({{ $user->id }})'
-                                    class="btn btn-warning btn-xs">
-                                    <i class="ri-account-pin-box-line"></i>
-                                    To Employee
-                                </button>
-                            </td>
-=======
                             </th>
->>>>>>> c3ab963fdc4c96462cfa05dd7553cb28b0dee6aa
                         </tr>
                     @empty
                         <div class="py-20 hero">
@@ -243,9 +178,7 @@
                         $('#searchquery').focus();
                     }
                 });
- 
             })
         </script>
     @endscript
- 
 </div>
