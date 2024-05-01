@@ -37,10 +37,15 @@
         <div class="divider">OR</div>
 
         <div class="flex flex-row justify-center w-48 gap-2 mx-auto ">
-            <a href="auth/google/redirect" class="w-full btn btn-neutral btn-outline"><i class="ri-google-fill"></i>
+            <a href="auth/google/redirect" class="w-full text-xl btn btn-info"><i class="ri-google-fill"></i>
                 Google</a>
-            <a href="auth/github/redirect" class="w-full btn btn-neutral btn-outline"><i class="ri-github-fill"></i>
+            <a href="auth/github/redirect" class="w-full text-xl btn"><i class="ri-github-fill"></i>
                 Github</a>
+        </div>
+
+        <div class="flex items-center justify-center w-full py-5 align-middle">
+            <span class="text-sm">create an new account <a class="font-semibold text-sky-600 hover:underline"
+                    href="{{ route('register') }}">here</a></span>
         </div>
 
         <div class="flex items-center justify-end mt-4">
