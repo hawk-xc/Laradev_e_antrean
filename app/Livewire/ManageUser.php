@@ -57,7 +57,7 @@ class ManageUser extends Component
     public function userTechnician()
     {
         $user = UserModel::find($this->user_id);
-        if ($user->update(['role_id' => 2])) {
+        if ($user->update(['role_id' => 3])) {
             $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
             event(new \App\Events\UserInteraction(Auth::user(), "User => update user " . $user->name . " with id " . $user->id . " to Technician"));
         }
@@ -67,7 +67,7 @@ class ManageUser extends Component
     public function userHelpdesk()
     {
         $user = UserModel::find($this->user_id);
-        if ($user->update(['role_id' => 3])) {
+        if ($user->update(['role_id' => 2])) {
             $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
             event(new \App\Events\UserInteraction(Auth::user(), "User => update user " . $user->name . " with id " . $user->id . " to Helpdesk"));
         }
