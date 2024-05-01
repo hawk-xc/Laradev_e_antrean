@@ -54,7 +54,7 @@
                             @else
                                 <td>No device</td>
                             @endif
-                            <td>{{ $proces->user->name }}</td>
+                            <td>{{ $proces->user->name ?? "Is Null" }}</td>
                             <td>{{ $proces->created_at->diffForHumans() }}</td>
                             <td>
                                 @if ($proces->status_id == 1 && $user->role_id == 1)
