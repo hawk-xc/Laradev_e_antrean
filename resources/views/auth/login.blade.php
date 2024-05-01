@@ -34,12 +34,17 @@
             </label>
         </div>
 
-        <div class="divider">OR</div>
+        <div class="divider">
+            OR
+        </div>
 
         <div class="flex flex-row justify-center w-48 gap-2 mx-auto ">
-            <a href="auth/google/redirect" class="w-full text-xl btn btn-info"><i class="ri-google-fill"></i>
-                Google</a>
-            <a href="auth/github/redirect" class="w-full text-xl btn"><i class="ri-github-fill"></i>
+
+            <a href="auth/google/redirect" class="w-full text-xl btn btn-outline hover:bg-blue-600">
+                <img src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg" alt="Google Logo" class="w-max h-7">
+            </a>
+
+            <a href="auth/github/redirect" class="w-full text-xl btn btn-neutral hover:bg-white hover:text-neutral"><i class="ri-github-fill"></i>
                 Github</a>
         </div>
 
