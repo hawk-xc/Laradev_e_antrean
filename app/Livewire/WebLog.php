@@ -1,9 +1,7 @@
 <?php
 
 namespace App\Livewire;
-
 use Livewire\Component;
-
 class WebLog extends Component
 {
     public function render()
