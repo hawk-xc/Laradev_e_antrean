@@ -2,6 +2,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
@@ -31,8 +32,20 @@
                 <input id="remember_me" type="checkbox" name="remember" class="checkbox checkbox-sm" />
                 <span class="text-sm text-gray-600 ms-2">{{ __('Remember me') }}</span>
             </label>
-            <span class="left-0 text-sm">Create an new account <a class="font-semibold text-blue-400 underline"
-                    href="{{ route('register') }}">here!</a></span>
+        </div>
+
+        <div class="divider">OR</div>
+
+        <div class="flex flex-row justify-center w-48 gap-2 mx-auto ">
+            <a href="auth/google/redirect" class="w-full text-xl btn btn-info"><i class="ri-google-fill"></i>
+                Google</a>
+            <a href="auth/github/redirect" class="w-full text-xl btn"><i class="ri-github-fill"></i>
+                Github</a>
+        </div>
+
+        <div class="flex items-center justify-center w-full py-5 align-middle">
+            <span class="text-sm">create an new account <a class="font-semibold text-sky-600 hover:underline"
+                    href="{{ route('register') }}">here</a></span>
         </div>
 
         <div class="flex items-center justify-end mt-4">

@@ -34,6 +34,31 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Livewire.dispatch('confirmDelete')
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 4000);
+                    }
+                });
+            })
+
+            $wire.on('confirmation', (data) => {
+                console.log(data[0].user.username);
+                var button = $('#closeButton');
+                button[0].click();
+                Swal.fire({
+                    title: data[0].user.username + " to " + data[0].type,
+                    text: data[0].message,
+                    icon: "info",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, update this user!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Livewire.dispatch(data[0].response)
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 4000);
                     }
                 });
             })

@@ -12,7 +12,10 @@
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            <label class="flex items-center gap-2 mt-2 bg-white text-slate-800 input-bordered input input-sm">
+                <x-text-input id="email" class="block w-full mt-1" type="email" name="email" required
+                    autocomplete="email" />
+            </label>
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
@@ -22,4 +25,12 @@
             </x-primary-button>
         </div>
     </form>
+    <script>
+        input: -webkit - autofill {
+            /* Override default styles */
+            -webkit - box - shadow: 0 0 0 30 px white inset!important; /* Change box shadow color */
+            background - color: inherit; /* Set your desired background color */
+            color: inherit; /* Inherit text color */
+        }
+    </script>
 </x-guest-layout>
