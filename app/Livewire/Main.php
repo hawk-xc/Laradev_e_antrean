@@ -2,10 +2,13 @@
 
 namespace App\Livewire;
 
-use \App\Models\Device as DeviceModel;
-use \App\Models\Proces as ProcesModel;
-use \App\Models\Ticket as TicketModel;
-use Illuminate\Support\Carbon;
+use \App\Models\{
+    Device as DeviceModel,
+    Proces as ProcesModel,
+    Ticket as TicketModel,
+    User as UserModel
+};
+
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -28,11 +31,13 @@ class Main extends Component
         $devices = DeviceModel::where('user_id', Auth::user()->id);
         $tickets = TicketModel::whereIn('device_id', $devices->pluck('id'))->orderBy('created_at', 'asc')->get();
         $process =  ProcesModel::whereIn('ticket_id', $tickets->pluck('id'))->orderBy('created_at', 'asc')->get();
+        $users = UserModel::all();
 
         return view('livewire.main', [
             'tickets' => $tickets,
             'devices' => $devices,
             'process' => $process,
+            'users' => $users
         ]);
     }
 }
