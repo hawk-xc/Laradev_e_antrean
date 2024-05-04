@@ -6,6 +6,13 @@
                 ticket</button>
         @endif
 
+        <div class="overflow-x-auto" wire:loading>
+            <div class="absolute inset-0 flex items-center justify-center bg-gray-200 bg-opacity-75">
+                <div class="text-lg text-gray-800 loading loading-infinity loading-lg"></div>
+                <div class="text-lg text-gray-800">please wait a moment Loading...</div>
+            </div>
+        </div>
+
         <x-notification-laravel />
         @if (!$tickets->isEmpty())
             <table class="table">
@@ -131,10 +138,4 @@
             });
         </script>
     @endpush
-        <div class="overflow-x-auto" wire:loading>
-        <div class="absolute inset-0 flex items-center justify-center bg-gray-200 bg-opacity-75">
-            <div class="text-lg text-gray-800 loading loading-infinity loading-lg"></div>
-            <div class="text-lg text-gray-800">please wait a moment Loading...</div>
-        </div>
-    </div>
 </div>
