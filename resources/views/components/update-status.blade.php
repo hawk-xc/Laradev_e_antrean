@@ -1,6 +1,6 @@
 <dialog id="my_modal_4" class="modal" wire:ignore.self>
     <div class="w-11/12 max-w-5xl modal-box">
-        <h3 class="text-lg font-bold">Hello!</h3>
+        <h3 class="text-lg font-bold">Hello, input update process!</h3>
         <div class="flex flex-col gap-2">
             <form wire:submit='testing'>
                 <label class="max-w-xs w-96 form-control">
@@ -20,7 +20,9 @@
                         @foreach ($statuses as $status)
                             {{-- <option value="{{ $status->id }}">{{ $status->name }}</option> --}}
                             @if ($status->id === 1 || $status->id === 2)
-                            <option value="{{ $status->id }}">{{ $status->name }}</option>      
+                            <option value="{{ $status->id }}">{{ $status->name }}</option>     
+                            @else
+                            <option value="{{ $status->id }}">{{ $status->name }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -45,18 +47,6 @@
                     </select>
                 </label>
                 <label class="form-control">
-                    {{-- <div class="label">
-                        <span class="label-text">Description</span>
-                        @error('description')
-                            <span class="label-text-alt">{{ $message }}</span>
-                        @enderror
-                    </div> --}}
-                    {{-- <textarea wire:model="description"
-                        class="h-36 textarea textarea-bordered @error('description')
-textarea-warning
-@enderror" rows="3"
-                        placeholder="Description..."></textarea> --}}
-                    {{-- <input type="text" @if ($isEdit) value="{{ $description }}" @endif> --}}
                 </label>
             </form>
         </div>
