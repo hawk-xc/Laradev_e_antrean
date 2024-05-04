@@ -51,7 +51,8 @@ class Ticket extends Component
             $data = [
                 'status_id' => 1,
                 'ticket_id' => $ticket->id,
-                'user_id' => Auth::user()->id
+                // 'user_id' => Auth::user()->id
+                // 'user_id' => null,
             ];
 
             $create = Proces::create($data);

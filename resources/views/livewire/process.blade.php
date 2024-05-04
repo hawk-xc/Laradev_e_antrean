@@ -57,13 +57,16 @@
                             <td>{{ $proces->user->name ?? "Is Null" }}</td>
                             <td>{{ $proces->created_at->diffForHumans() }}</td>
                             <td>
-                                @if ($proces->status_id == 1 && $user->role_id == 1)
+                                @if ($user->role_id == 1)
+                                    <button class="btn btn-neutral" onclick="my_modal_4.showModal()"  wire:click="edit({{ $proces->id }})">update</button>
+                                @endif
+                                @if ($proces->status_id == 1 && $user->role_id == 2)
                                     <button class="btn btn-warning" onclick="my_modal_4.showModal()" wire:click="edit({{ $proces->id }})">update</button>
                                 @endif
-                                @if ($proces->status_id == 2 && $user->role_id == 2)
+                                @if ($proces->status_id == 2 && $user->role_id == 3)
                                     <button class="btn btn-secondary" onclick="my_modal_4.showModal()" wire:click="processed({{ $proces->id }})">Process</button>
                                 @endif
-                                @if ($proces->status_id == 3 && $user->role_id == 2)
+                                @if ($proces->status_id == 3 && $user->role_id == 3)
                                     <button class="btn btn-primary" onclick="my_modal_4.showModal()" wire:click="done({{ $proces->id }})">Done</button>
                                 @endif
                             </td>
@@ -75,11 +78,7 @@
         @endif
 
         @if ($openModal)
-            @if ($action == 'edit')
-                <x-update-status :process="$process" :employees="$employees" :statuses="$statuses" />
-            @elseif ($action == 'create')
-                {{-- <x-create-form-modal :process="$process" :employees="$employees" :devices="$devices" /> --}}
-            @endif
+            <x-update-status :process="$process" :employees="$employees" :statuses="$statuses" />
         @endif
     </div>
 
@@ -110,7 +109,14 @@
 
                     notification.hide();
                 });
+                
             });
         </script>
     @endpush
+            <div class="overflow-x-auto" wire:loading>
+        <div class="absolute inset-0 flex items-center justify-center bg-gray-200 bg-opacity-75">
+            <div class="text-lg text-gray-800 loading loading-infinity loading-lg"></div>
+            <div class="text-lg text-gray-800">please wait a moment Loading...</div>
+        </div>
+    </div>
 </div>

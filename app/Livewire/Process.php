@@ -17,7 +17,6 @@ use Livewire\WithPagination;
 class Process extends Component
 {
     use WithPagination, WithoutUrlPagination;
-
     public $openModal = false;
     public $action = 'create';
     public $status_id;
@@ -44,15 +43,11 @@ class Process extends Component
             // $process = Proces::orderBy('id', 'asc')->latest()->paginate(5);
             $process = Proces::latest()->paginate(5);
         } else {
-
             $process = Proces::where('user_id', Auth::user()->id)->orderBy('id', 'asc')->latest()->paginate(5);
         }
-        $employees = User::where('role_id', '2')->get();
+        $employees = User::where('role_id', '3')->get();
         $task = Proces::where('user_id', Auth::user()->id)->get();
-
-
         // dd($statuses);
-
         return view('livewire.process', compact('process', 'employees', 'user', 'statuses', 'task'));
     }
 
@@ -78,8 +73,12 @@ class Process extends Component
 
     public function processed($id)
     {
+
         Proces::find($id)->update(['status_id' => 3]);
+        // find($this->device_id);
+        $proces = Proces::find($id);
         $this->dispatch('notify', type: 'success', message: 'data successfull updated! ');
+        event(new \App\Events\UserInteraction(Auth::user(), "Proces => update proces {$proces->ticket->device->device_name} with id " . $proces->id));
         $this->fresh();
         $this->dispatch('closeButton');
     }
