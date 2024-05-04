@@ -37,7 +37,10 @@ class Main extends Component
             'tickets' => $tickets,
             'devices' => $devices,
             'process' => $process,
-            'users' => $users
+            'users' => $users,
+            'userJson' => json_encode($users),
+            'procesJson' => json_encode($process),
+            'ticketJson' => json_encode($tickets),
         ]);
     }
 }

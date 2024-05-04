@@ -1,6 +1,8 @@
 <div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     {{-- <h2 class="text-xl font-semibold">Hello {{ Auth::user()->name }}</h2> --}}
-
     @if (\App\Helpers\RoleHelper::isAdmin())
         <div class="flex flex-row justify-evenly">
             <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
@@ -31,6 +33,37 @@
                     </div>
                 </div>
             </div>
+            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
+                style="background-image: url({{ asset('images/card-background.png') }})">
+                <!-- Content goes here -->
+                <div class="stat">
+                    <div class="text-white translate-x-3 stat-figure">
+                        <i class="text-4xl shadow-sm ri-team-fill"></i>
+                    </div>
+                    <div class="stat-title">All Clients</div>
+                    <div class="stat-value">{{ $users->where('role_id', '==', 4)->count() }}</div>
+                    <div class="stat-desc">
+                        stats from {{ date_format($users->first()->created_at, 'd M') }}
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
+                style="background-image: url({{ asset('images/card-background.png') }})">
+                <!-- Content goes here -->
+                <div class="stat">
+                    <div class="text-white translate-x-3 stat-figure">
+                        <i class="text-4xl shadow-sm ri-team-fill"></i>
+                    </div>
+                    <div class="stat-title">Processed Ticket</div>
+                    <div class="stat-value">{{ $process->where('status_id', '==', 3)->count() }}</div>
+                    <div class="stat-desc">
+                        stats from {{ date_format($users->first()->created_at, 'd M') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="position: relative; height:40vh; width:80vw" class="flex justify-center">
+            <canvas id="myChart"></canvas>
         </div>
     @endif
     @if (\App\Helpers\RoleHelper::isUser())
@@ -361,9 +394,86 @@
             </div>
         @endif
     @endif
-    {{-- <iframe
-        src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=Asia%2FJakarta&bgcolor=%23ffffff&showTitle=0&showNav=0&showTabs=0&src=d2FoeXV0cmljYWh5b25vNzc3QGdtYWlsLmNvbQ&src=Y2xhc3Nyb29tMTA4NjA1MTUzOTMwNzcxODEwMjk2QGdyb3VwLmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23039BE5&color=%230047a8"
-        style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe> --}}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            const users = {!! $userJson !!};
+            const tickets = {!! $ticketJson !!};
+            const process = {!! $procesJson !!};
 
 
+            const ctx = $('#myChart');
+
+            const label = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
+                'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'monday',
+                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
+                'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'
+            ];
+            const value = [10, 11, 12, 11, 12, 13, 11, 10, 11, 12, 11, 12, 13, 11, 10, 11, 12, 11, 12, 13, 11, 10,
+                11, 12, 11, 12, 13, 12
+            ];
+            const value2 = [12, 11, 12, 13, 15, 11, 10, 10, 11, 12, 11, 12, 13, 11, 10, 11, 12, 11, 12, 13, 11, 10,
+                11, 12, 11, 12, 13, 11
+            ]
+
+
+            new Chart(ctx, {
+                data: {
+                    labels: label,
+                    datasets: [{
+                        type: 'line',
+                        label: 'fitri',
+                        data: value,
+                        borderColor: '#7F56D9',
+                        borderWidth: 2,
+                        // tension: 0.5,
+                        backgroundColor: (ctx) => {
+                            const canvas = ctx.chart.ctx;
+                            const gradient = canvas.createLinearGradient(0, -160, 0, 120);
+
+                            gradient.addColorStop(0, '#8E24AA');
+                            gradient.addColorStop(1, 'rgba(187, 222, 251, 0.15)');
+
+                            return gradient;
+                        },
+                        fill: 'start',
+                    }, {
+                        type: 'line',
+                        label: 'wahyu',
+                        data: value2,
+                        borderColor: '#7F56D9',
+                        borderWidth: 2,
+                        // tension: 0.5,
+                        backgroundColor: (ctx) => {
+                            const canvas = ctx.chart.ctx;
+                            const gradient = canvas.createLinearGradient(0, -160, 0, 120);
+
+                            gradient.addColorStop(0, '#F44336');
+                            gradient.addColorStop(1, '#fff');
+
+                            return gradient;
+                        },
+                        fill: true,
+                    }],
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true, // Mulai sumbu y dari 0
+                            suggestedMin: 0, // Nilai minimum yang direkomendasikan
+                            suggestedMax: 10, // Nilai maksimum yang direkomendasikan
+                            // Atur jarak (gap) pada sumbu y secara manual
+                            ticks: {
+                                stepSize: 1 // Langkah (step) antar nilai sumbu y
+                            }
+                        }
+                    },
+                    layout: {
+                        padding: 20
+                    }
+                }
+            })
+
+            // console.log(data.map((data) => data.username))
+        })
+    </script>
 </div>
