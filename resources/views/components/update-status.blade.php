@@ -10,19 +10,15 @@
                             <span class="label-text-alt">{{ $message }}</span>
                         @enderror
                     </div>
-                    <select
-                        class="select select-bordered @error('status_id')
-                select-error
-                @enderror"
-                        wire:model="status_id">
+                    <select class="select select-bordered @error('status_id') select-error @enderror" wire:model="status_id">
                         <option selected value="null">Pick one</option>
-                        
                         @foreach ($statuses as $status)
                             {{-- <option value="{{ $status->id }}">{{ $status->name }}</option> --}}
-                            @if ($status->id === 1 || $status->id === 2)
-                            <option value="{{ $status->id }}">{{ $status->name }}</option>     
-                            @else
+                            @if (\App\Helpers\RoleHelper::isAdmin() )
                             <option value="{{ $status->id }}">{{ $status->name }}</option>
+
+                            @elseif ($status->id === 1 || $status->id === 2)
+
                             @endif
                         @endforeach
                     </select>
@@ -35,11 +31,7 @@
                             <span class="label-text-alt">{{ $message }}</span>
                         @enderror
                     </div>
-                    <select
-                        class="select select-bordered @error('employe_id')
-                select-error
-                @enderror"
-                        wire:model="employe_id">
+                    <select class="select select-bordered @error('employe_id') select-error @enderror" wire:model="employe_id">
                         <option selected value="null">Pick one</option>
                         @foreach ($employees as $employee)
                             <option value="{{ $employee->id }}">{{ $employee->username }}</option>
@@ -59,3 +51,4 @@
         </div>
     </div>
 </dialog>
+
