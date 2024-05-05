@@ -18,18 +18,30 @@ class Process extends Component
 {
     use WithPagination, WithoutUrlPagination;
     public $openModal = false;
-    public $action = 'create';
+    // public $action = '';
     public $status_id;
     public $description;
     public $proces_id;
     public $device_id;
     public $employe_id;
+    public $sortBy = 'status';
+    public $sortDirection = 'asc';
+
+    public function sortByDate($direction)
+    {
+        $this->sortBy = 'date';
+        $this->sortDirection = $direction;
+    }
+
 
     public function fresh()
     {
-        $this->device_id = '';
-        $this->description = '';
-        $this->action = 'create';
+        $this->reset(['status_id', 'employe_id', 'proces_id']);
+        $this->reset('status_id');
+        // $this->reset('employe_id');
+        // $this->reset('proces_id');
+        $this->openModal = false;
+        // $this->action = '';
     }
     public function render()
     {
@@ -37,11 +49,12 @@ class Process extends Component
         $statuses = Status::get();
         $user = Auth::user();
 
-        // $process = Proces::orderBy('id', 'asc')->paginate(5);
         if ($user->role_id === 1) {
-
-            // $process = Proces::orderBy('id', 'asc')->latest()->paginate(5);
-            $process = Proces::latest()->paginate(5);
+            if ($this->sortBy === 'date') {
+                $process = Proces::orderBy('created_at', $this->sortDirection)->paginate(5);
+            } else {
+                $process = Proces::latest()->paginate(5);
+            }
         } else {
             $process = Proces::where('user_id', Auth::user()->id)->orderBy('id', 'asc')->latest()->paginate(5);
         }
@@ -61,9 +74,9 @@ class Process extends Component
         $employee = User::findOrFail($this->id);
     }
 
-    public function edit($id)
+    public function edit(int $id)
     {
-        $this->action = 'edit';
+        // $this->action = 'edit';
         $this->openModal = true;
         $process = Proces::find($id);
         $this->proces_id = $process->id;
@@ -94,42 +107,22 @@ class Process extends Component
     public function store()
     {
 
-        // Lakukan validasi sesuai kebutuhan Anda
-        $validate = $this->validate([
+        $data = $this->validate([
             'status_id' => 'required',
-            'employe_id' => 'required',
         ]);
-        // dd($validate);
-
-        // $proces = Proces::findOrFail($this->status_id);
-        $proces = Proces::findOrFail($this->proces_id);
-        // $employee = User::findOrFail($this->employe_id);
-
-        // $proces->update([
-        //     'status_id' => $this->status_id,
-        //     'user_id' => $this->employe_id,
-        // ]);
-
-        // if (Proces::find($this->proces_id)->update($validate)) {
-        // if (Proces::find($proces)->update([
-        //     'status_id' => $validate['status_id'],
-        //     'user_id' => $validate['employe_id']
-        // ])) {
-        //     $this->dispatch('notify', type: 'success', message: 'data successfull updated!');
-        //     $this->fresh();
-        //     $this->dispatch('closeButton');
-        // }
-        $proces->update([
-            'status_id' => $validate['status_id'],
-            'user_id' => $validate['employe_id'],
-        ]);
-
-        // Jika proses update berhasil
-        $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
-        $this->fresh();
-        $this->dispatch('closeButton');
-
-        session()->flash('message', 'Data successfully updated!');
-        $this->reset(['status_id', 'employe_id']);
+        $data['user_id'] = $this->employe_id;
+        $proces = Proces::find($this->proces_id);
+        if ($proces->update($data)) {
+            $this->fresh();
+            $this->dispatch('closeButton');
+            $this->dispatch('notify', type: 'success', message: 'Data successfully updated!');
+            // redirect('/process')->dispatch('notify', type: 'success', message: 'Data successfully updated!'));
+            // session()->flash('message', 'Data successfully updated broww!');
+            redirect('/process');
+            // redirect('/process')->with('message', 'Data successfully updated broww!');
+            // redirect('/process');
+            // $this->dispatch('notify', type: 'success', message: 'Data successfully updated!');
+            // $this->dispatch('closeButton');
+        }
     }
 }

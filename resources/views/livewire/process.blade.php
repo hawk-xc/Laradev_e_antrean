@@ -1,4 +1,60 @@
 <div>
+    {{-- modal --}}
+<dialog id="my_modal_4" class="modal" wire:ignore.self>
+    <div class="w-11/12 max-w-5xl modal-box">
+        <h3 class="text-lg font-bold">Hello, input update process!</h3>
+        <div class="flex flex-col gap-2">
+            <form wire:submit='testing'>
+                <label class="max-w-xs w-96 form-control">
+                    <div class="label">
+                        <span class="label-text">Select Status</span>
+                        @error('status_id')
+                            <span class="label-text-alt">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <select class="select select-bordered @error('status_id') select-error @enderror" wire:model="status_id">
+                        <option selected value="null">Pick one</option>
+                        @foreach ($statuses as $status)
+                            @if ($status->id === $status_id && \App\Helpers\RoleHelper::isAdmin() )
+                            <option selected value="{{ $status_id }}">{{ $status->name }}</option>
+                            @else
+                            <option value="{{ $status->id }}">{{ $status->name }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </label>
+                
+                <label class="max-w-xs w-96 form-control">
+                    <div class="label">
+                        <span class="label-text">Select Employee</span>
+                        @error('employe_id')
+                            <span class="label-text-alt">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <select class="select select-bordered @error('employe_id') select-error @enderror" wire:model="employe_id">
+                        <option selected value="null">Pick one</option>
+                        @foreach ($employees as $employee)
+                            @if ($employee->id === $employe_id && \App\Helpers\RoleHelper::isAdmin() )
+                                <option selected value="{{ $employee->id }}">{{ $employee->username }}</option>
+                            @else
+                                <option value="{{ $employee->id }}">{{ $employee->username }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </label>
+                <label class="form-control">
+                </label>
+            </form>
+        </div>
+        <div class="modal-action">
+            <button type="button" class="btn btn-neutral" wire:click='store'>update</button>
+            <form method="dialog" class="flex gap-3">
+                <!-- if there is a button, it will close the modal -->
+                <button class="btn" wire:click="fresh">Close</button>
+            </form>
+        </div>
+    </div>
+</dialog>
     {{-- In work, do what you enjoy. --}}
     <div class="overflow-x-auto">
         @if ($process->isEmpty())
@@ -16,7 +72,17 @@
         @else
             <x-notification-laravel />
             <table class="table">
+                {{-- dropdown sorted data --}}
+                <details id="dropdown" class=" dropdown">
+                    <summary id="sumy" class="m-1 btn"><i class="ri-database-line"></i></i>Sort By </summary>
+                    <ul class="p-2 shadow-lg menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                        <li><a wire:click='sortByDate("desc")'><i class="ri-sort-asc"></i>Newest Process</a></li>
+                        <li><a wire:click='sortByDate("asc")'><i class="ri-sort-desc"></i>Oldest Process</a></li>
+                    </ul>
+                </details>
+                
                 <thead>
+                    
                     <tr class="text-lg">
                         <th><i class="ri-bubble-chart-line"></i> Status</th>
                         <th>Customer name</th>
@@ -58,7 +124,7 @@
                             <td>{{ $proces->created_at->diffForHumans() }}</td>
                             <td>
                                 @if ($user->role_id == 1)
-                                    <button class="btn btn-neutral" onclick="my_modal_4.showModal()"  wire:click="edit({{ $proces->id }})">update</button>
+                                    <button class="btn btn-neutral" onclick="my_modal_4.showModal()" wire:click="edit({{ $proces->id }})" >update</button>
                                 @endif
                                 @if ($proces->status_id == 1 && $user->role_id == 2)
                                     <button class="btn btn-warning" onclick="my_modal_4.showModal()" wire:click="edit({{ $proces->id }})">update</button>
@@ -77,18 +143,32 @@
             <span>{{ $process->links() }}</span>
         @endif
 
-        @if ($openModal)
+        {{-- @if ($openModal)
             <x-update-status :process="$process" :employees="$employees" :statuses="$statuses" />
-        @endif
+        @endif --}}
+        
+
+
+
     </div>
 
     @if (session('notify'))
         <x-notification-laravel :message="session('notify')" />
     @endif
 
+    <script>
+                const dropdown = document.querySelector("#dropdown");
+                const summary = dropdown.querySelector("summary");
+
+                summary.addEventListener("click", () => {
+                    dropdown.classList.toggle("mb-20");
+                });
+        </script>
     @push('scripts')
+        
         <script>
             document.addEventListener('livewire:load', function() {
+
                 // Eksekusi JavaScript setelah Livewire selesai dimuat
                 Livewire.on('messageReceived', function(message) {
                     // Tampilkan pesan notifikasi
@@ -109,8 +189,9 @@
 
                     notification.hide();
                 });
-                
+
             });
+            
         </script>
     @endpush
             <div class="overflow-x-auto" wire:loading>
