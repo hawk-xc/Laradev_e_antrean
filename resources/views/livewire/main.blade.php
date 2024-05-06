@@ -201,7 +201,7 @@
                 </div>
                 <div class="flex justify-between w-full px-3">
                     <div class="flex flex-col text-sm">
-                        <span class="font-bold">Welcome</span>
+                        <span class="font-bold">Selamat datang</span>
                         <span>{{ Auth::user()->name }}</span>
                     </div>
                     <div>
@@ -219,14 +219,14 @@
                         <button wire:click='hideAllData' wire:loading.attr="disabled" id="showallbutton"
                             class="btn btn-xs btn-outline"><i class="ri-stack-line"></i>
                             total
-                            {{ $process->count() }} proces :
-                            hide</button>
+                            {{ $process->count() }} proses :
+                            sembunyikan</button>
                     @else
                         <button wire:click.live='showAllData' wire:loading.attr="disabled" id="showallbutton"
                             class="btn btn-xs btn-outline"><i class="ri-stack-line"></i>
                             total
-                            {{ $process->count() }} proces :
-                            show all</button>
+                            {{ $process->count() }} proses :
+                            tampilkan semua</button>
                     @endif
                 </div>
             @endif
@@ -240,27 +240,27 @@
                     @if ($process->first()->status_id == 1)
                         <div class="lg:tooltip" data-tip="currently registered">
                             <button class="w-32 btn btn-secondary btn-sm"><i class="ri-flag-line max-sm:hidden"></i>
-                                registered</button>
+                                registrasi</button>
                         </div>
                     @elseif ($process->first()->status_id == 2)
                         <div class="lg:tooltip" data-tip="vertified your ticket">
                             <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
-                                vertified</button>
+                                vertifikasi</button>
                         </div>
                     @elseif ($process->first()->status_id == 3)
                         <div class="lg:tooltip" data-tip="process by team">
                             <button class="w-32 btn btn-info btn-sm"><i class="ri-flag-line"></i>
-                                process</button>
+                                pengerjaan</button>
                         </div>
                     @elseif ($process->first()->status_id == 4)
                         <div class="lg:tooltip" data-tip="done">
                             <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
-                                done</button>
+                                selesai</button>
                         </div>
                     @elseif ($process->first()->status_id == 5)
                         <div class="lg:tooltip" data-tip="rejected">
                             <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i>
-                                reject</button>
+                                ditolak</button>
                         </div>
                     @endif
                 </div>
@@ -269,23 +269,24 @@
                     <div class="stat-figure text-secondary">
                         <i class="text-3xl ri-coupon-3-line"></i>
                     </div>
-                    <div class="stat-title">Ticket</div>
-                    <div class="text-2xl font-semibold">ticket#{{ $tickets->first()->id }}</div>
-                    <div class="stat-desc">added {{ $tickets->first()->created_at->diffForHumans() }}</div>
+                    <div class="stat-title">Tiket</div>
+                    <div class="text-2xl font-semibold">tiket#{{ $tickets->first()->id }}</div>
+                    <div class="stat-desc">ditambahkan {{ $tickets->first()->created_at->diffForHumans() }}</div>
                 </div>
 
                 <div class="stat">
                     <div class="stat-figure text-secondary">
                         <i class="text-3xl ri-macbook-line"></i>
                     </div>
-                    <div class="stat-title">Device</div>
+                    <div class="stat-title">Perangkat</div>
                     <div class="text-2xl">{{ $tickets->first()->device->device_name }}</div>
-                    <div class="stat-desc">added {{ $tickets->first()->device->created_at->diffForHumans() }}</div>
+                    <div class="stat-desc">ditambahkan {{ $tickets->first()->device->created_at->diffForHumans() }}
+                    </div>
                 </div>
 
                 @if ($process->first()->status_id == 5)
                     <div class="flex flex-row items-center justify-center w-full align-middle">
-                        <span class="font-light text-red-700">rejected</span>
+                        <span class="font-light text-red-700">ditolak</span>
                     </div>
                 @else
                     <div class="flex items-center justify-center align-middle stat">
@@ -296,7 +297,7 @@
                                         style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->d }};"
                                         wire:poll></span>
                                 </span>
-                                days
+                                hari
                             </div>
                             <div class="flex flex-col">
                                 <span class="font-mono text-5xl countdown">
@@ -304,7 +305,7 @@
                                         style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->h }};"
                                         wire:poll></span>
                                 </span>
-                                hours
+                                jam
                             </div>
                             <div class="flex flex-col">
                                 <span class="font-mono text-5xl countdown">
@@ -312,7 +313,7 @@
                                         style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->i }};"
                                         wire:poll.1s></span>
                                 </span>
-                                min
+                                menit
                             </div>
                         </div>
                     </div>
@@ -328,27 +329,27 @@
                                 <div class="lg:tooltip" data-tip="currently registered">
                                     <button class="w-32 btn btn-secondary btn-sm"><i
                                             class="ri-flag-line max-sm:hidden"></i>
-                                        registered</button>
+                                        registrasi</button>
                                 </div>
                             @elseif ($proces->status_id == 2)
                                 <div class="lg:tooltip" data-tip="vertified your ticket">
                                     <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
-                                        vertified</button>
+                                        vertifikasi</button>
                                 </div>
                             @elseif ($proces->status_id == 3)
                                 <div class="lg:tooltip" data-tip="process by team">
                                     <button class="w-32 btn btn-info btn-sm"><i class="ri-flag-line"></i>
-                                        process</button>
+                                        proses</button>
                                 </div>
                             @elseif ($proces->status_id == 4)
                                 <div class="lg:tooltip" data-tip="done">
                                     <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
-                                        done</button>
+                                        selesai</button>
                                 </div>
                             @elseif ($proces->status_id == 5)
                                 <div class="lg:tooltip" data-tip="rejected">
                                     <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i>
-                                        reject</button>
+                                        ditolak</button>
                                 </div>
                             @endif
                         </div>
@@ -356,24 +357,26 @@
                             <div class="stat-figure text-secondary">
                                 <i class="text-3xl ri-coupon-3-line"></i>
                             </div>
-                            <div class="stat-title">Ticket</div>
+                            <div class="stat-title">Tiket</div>
                             <div class="text-2xl font-semibold">ticket#{{ $proces->ticket->id }}</div>
-                            <div class="stat-desc">added {{ $proces->ticket->created_at->diffForHumans() }}</div>
+                            <div class="stat-desc">ditambahkan {{ $proces->ticket->created_at->diffForHumans() }}
+                            </div>
                         </div>
 
                         <div class="stat">
                             <div class="stat-figure text-secondary">
                                 <i class="text-3xl ri-macbook-line"></i>
                             </div>
-                            <div class="stat-title">Device</div>
+                            <div class="stat-title">Perangkat</div>
                             <div class="text-2xl">{{ $proces->ticket->device->device_name }}</div>
-                            <div class="stat-desc">added {{ $proces->ticket->device->created_at->diffForHumans() }}
+                            <div class="stat-desc">ditambahkan
+                                {{ $proces->ticket->device->created_at->diffForHumans() }}
                             </div>
                         </div>
 
                         @if ($proces->status_id == 5)
                             <div class="flex flex-row items-center justify-center w-full align-middle">
-                                <span class="font-light text-red-700">rejected</span>
+                                <span class="font-light text-red-700">ditolak</span>
                             </div>
                         @else
                             <div class="flex items-center justify-center align-middle stat">
@@ -384,7 +387,7 @@
                                                 style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->d }};"
                                                 wire:poll></span>
                                         </span>
-                                        days
+                                        hari
                                     </div>
                                     <div class="flex flex-col">
                                         <span class="font-mono text-5xl countdown">
@@ -392,7 +395,7 @@
                                                 style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->h }};"
                                                 wire:poll></span>
                                         </span>
-                                        hours
+                                        jam
                                     </div>
                                     <div class="flex flex-col">
                                         <span class="font-mono text-5xl countdown">
@@ -400,7 +403,7 @@
                                                 style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->i }};"
                                                 wire:poll.1s></span>
                                         </span>
-                                        min
+                                        menit
                                     </div>
                                 </div>
                             </div>
@@ -409,9 +412,9 @@
                 @endforeach
             @endif
             <div class="border rounded-lg border-base-300">
-                <div class="p-5 text-xl border border-base-300"><i class="ri-discuss-line"></i> Notification</div>
+                <div class="p-5 text-xl border border-base-300"><i class="ri-discuss-line"></i> Notifikasi</div>
                 <div class="flex justify-center px-5 py-20 border border-base-300">
-                    you don't have notification yet!
+                    belum ada notifikasi untuk saat ini!
                 </div>
             </div>
         @endif
