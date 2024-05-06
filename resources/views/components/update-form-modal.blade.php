@@ -36,15 +36,13 @@
             </form>
         </div>
         <div class="modal-action">
-            <button type="button" class="btn btn-neutral" wire:click='store'>update</button>
+            <button type="button" class="btn btn-neutral" wire:click='store'
+                wire:loading.attr="disabled">update</button>
             <form method="dialog" class="flex gap-3">
                 <!-- if there is a button, it will close the modal -->
-                <button id="closeButton" class="btn" wire:click='close'>Close</button>
+                <button id="closeButton" class="btn" wire:click='close' wire:loading.attr="disabled">Close</button>
             </form>
         </div>
     </div>
-    <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
-        <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
-        <span class="block mx-auto mb-10">please wait a moment...</span>
-    </div>
+
 </dialog>

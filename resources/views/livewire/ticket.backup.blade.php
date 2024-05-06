@@ -66,18 +66,14 @@
                                     wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>delete</button>
                             </td>
                             <td class="sm:table-cell md:hidden">
-                                @if ($ticket->proces->status_id == 3)
-                                    <span>hilang</span>
-                                @else
-                                    <button class="btn btn-sm" onclick="my_modal_4.showModal()"
-                                        wire:click="edit({{ $ticket->id }})">
-                                        <i class="ri-edit-box-fill"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm"
-                                        wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>
-                                        <i class="ri-delete-bin-fill"></i>
-                                    </button>
-                                @endif
+                                <button class="btn btn-sm" onclick="my_modal_4.showModal()"
+                                    wire:click="edit({{ $ticket->id }})">
+                                    <i class="ri-edit-box-fill"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm"
+                                    wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>
+                                    <i class="ri-delete-bin-fill"></i>
+                                </button>
                             </td>
                         </tr>
                     @endforeach

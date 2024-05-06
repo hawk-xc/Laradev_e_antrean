@@ -36,15 +36,11 @@ textarea-warning
             </label>
         </div>
         <div class="modal-action">
-            <button class="btn btn-neutral" wire:click="create">create</button>
+            <button class="btn btn-neutral" wire:click="create" wire:loading.attr="disabled">create</button>
             <form method="dialog" class="flex gap-3">
                 <!-- if there is a button, it will close the modal -->
-                <button id="closeButton" class="btn" wire:click="fresh">Close</button>
+                <button id="closeButton" class="btn" wire:click="fresh" wire:loading.attr="disabled">Close</button>
             </form>
         </div>
-    </div>
-    <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
-        <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
-        <span class="block mx-auto mb-10">please wait a moment...</span>
     </div>
 </dialog>
