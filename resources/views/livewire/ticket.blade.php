@@ -2,14 +2,14 @@
     {{-- In work, do what you enjoy. --}}
     <div class="overflow-x-auto">
         @if (!$tickets->isEmpty())
-            <button onclick="my_modal_4.showModal()" wire:click='create' class="btn btn-sm"><i class="ri-add-line"></i> Add
-                ticket</button>
+            <button onclick="my_modal_4.showModal()" wire:click='create' class="btn btn-sm"><i class="ri-add-line"></i>
+                Tambah Ticket</button>
         @endif
 
         <div class="overflow-x-auto" wire:loading>
             <div class="absolute inset-0 flex items-center justify-center bg-gray-200 bg-opacity-75">
                 <div class="text-lg text-gray-800 loading loading-infinity loading-lg"></div>
-                <div class="text-lg text-gray-800">please wait a moment Loading...</div>
+                <div class="text-lg text-gray-800">mohon ditunggu...</div>
             </div>
         </div>
 
@@ -20,10 +20,10 @@
                 <thead>
                     <tr class="text-lg">
                         <th><i class="ri-bubble-chart-line"></i></i></th>
-                        <th>Device name</th>
-                        <th class="hidden sm:table-cell">Description</th>
-                        <th class="hidden sm:table-cell">added on</th>
-                        <th>option</th>
+                        <th>Nama Perangkat</th>
+                        <th class="hidden sm:table-cell">Deskripsi</th>
+                        <th class="hidden sm:table-cell">Ditambahkan</th>
+                        <th>Opsi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,27 +34,27 @@
                                     <div class="lg:tooltip" data-tip="currently registered">
                                         <button class="w-32 btn btn-secondary btn-sm"><i
                                                 class="ri-flag-line max-sm:hidden"></i>
-                                            registered</button>
+                                            registrasi</button>
                                     </div>
                                 @elseif ($ticket->proces->status_id == 2)
                                     <div class="lg:tooltip" data-tip="vertified your ticket">
                                         <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
-                                            vertified</button>
+                                            vertifikasi</button>
                                     </div>
                                 @elseif ($ticket->proces->status_id == 3)
                                     <div class="lg:tooltip" data-tip="process by team">
                                         <button class="w-32 btn btn-info btn-sm"><i class="ri-flag-line"></i>
-                                            process</button>
+                                            proses</button>
                                     </div>
                                 @elseif ($ticket->proces->status_id == 4)
                                     <div class="lg:tooltip" data-tip="done">
                                         <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
-                                            done</button>
+                                            selesai</button>
                                     </div>
                                 @elseif ($ticket->proces->status_id == 5)
                                     <div class="lg:tooltip" data-tip="rejected">
                                         <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i>
-                                            reject</button>
+                                            ditolak</button>
                                     </div>
                                 @endif
                             </th>
@@ -64,14 +64,14 @@
                             </td>
                             <td class="hidden sm:table-cell">
                                 @if ($ticket->proces->status_id < 2)
-                                    <button class="px-6 btn btn-neutral" onclick="my_modal_4.showModal()"
-                                        wire:click="edit({{ $ticket->id }})">edit</button>
+                                    <button class="px-4 btn btn-neutral" onclick="my_modal_4.showModal()"
+                                        wire:click="edit({{ $ticket->id }})">ubah</button>
                                     <button type="button" class="btn btn-error"
                                         wire:click.prevent='deleteConfirmation({{ $ticket->id }})'
-                                        {{ $ticket->proces->status_id >= 2 ? 'disabled' : false }}>delete</button>
+                                        {{ $ticket->proces->status_id >= 2 ? 'disabled' : false }}>hapus</button>
                                 @else
-                                    <button class="btn btn-secondary"><i class="ri-hourglass-line"></i> Ticket on
-                                        team</button>
+                                    <button class="btn btn-secondary"><i class="ri-hourglass-line"></i> Tiket
+                                        diproses</button>
                                 @endif
                             </td>
                             <td class="sm:table-cell md:hidden">
