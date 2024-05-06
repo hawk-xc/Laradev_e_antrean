@@ -334,6 +334,11 @@
                                     <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
                                         done</button>
                                 </div>
+                            @elseif ($proces->status_id == 5)
+                                <div class="lg:tooltip" data-tip="done">
+                                    <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i>
+                                        reject</button>
+                                </div>
                             @endif
                         </div>
                         <div class="stat">

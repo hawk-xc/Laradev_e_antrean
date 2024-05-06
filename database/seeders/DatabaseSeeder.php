@@ -59,6 +59,11 @@ class DatabaseSeeder extends Seeder
             'description' => 'status ticket sudah selesai'
         ]);
 
+        \App\Models\Status::create([
+            'name' => 'reject',
+            'description' => 'status ticket sudah ditolak'
+        ]);
+
         // \App\Models\Device::factory(10)->create();
 
         // \App\Models\Ticket::factory(10)->create();
