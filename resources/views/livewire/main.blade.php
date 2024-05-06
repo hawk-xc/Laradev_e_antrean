@@ -288,7 +288,7 @@
                         <span class="font-light text-red-700">rejected</span>
                     </div>
                 @else
-                    <div class="stat">
+                    <div class="flex items-center justify-center align-middle stat">
                         <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
                             <div class="flex flex-col">
                                 <span class="font-mono text-5xl countdown">
@@ -371,34 +371,40 @@
                             </div>
                         </div>
 
-                        <div class="stat">
-                            <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
-                                <div class="flex flex-col">
-                                    <span class="font-mono text-5xl countdown">
-                                        <span
-                                            style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->d }};"
-                                            wire:poll></span>
-                                    </span>
-                                    days
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="font-mono text-5xl countdown">
-                                        <span
-                                            style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->h }};"
-                                            wire:poll></span>
-                                    </span>
-                                    hours
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="font-mono text-5xl countdown">
-                                        <span
-                                            style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->i }};"
-                                            wire:poll.1s></span>
-                                    </span>
-                                    min
+                        @if ($proces->status_id == 5)
+                            <div class="flex flex-row items-center justify-center w-full align-middle">
+                                <span class="font-light text-red-700">rejected</span>
+                            </div>
+                        @else
+                            <div class="flex items-center justify-center align-middle stat">
+                                <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
+                                    <div class="flex flex-col">
+                                        <span class="font-mono text-5xl countdown">
+                                            <span
+                                                style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->d }};"
+                                                wire:poll></span>
+                                        </span>
+                                        days
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="font-mono text-5xl countdown">
+                                            <span
+                                                style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->h }};"
+                                                wire:poll></span>
+                                        </span>
+                                        hours
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="font-mono text-5xl countdown">
+                                            <span
+                                                style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->i }};"
+                                                wire:poll.1s></span>
+                                        </span>
+                                        min
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 @endforeach
             @endif
