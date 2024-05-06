@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # project_ETicket
 online queue program on a web-based computer repair shop information system, built using Laravel 10
 =======
@@ -68,4 +68,4 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
->>>>>>> 51a0ef5 (add laravel 10 e-service app)
+
