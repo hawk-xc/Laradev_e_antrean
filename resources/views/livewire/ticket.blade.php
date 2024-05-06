@@ -51,6 +51,11 @@
                                         <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
                                             done</button>
                                     </div>
+                                @elseif ($ticket->proces->status_id == 5)
+                                    <div class="lg:tooltip" data-tip="rejected">
+                                        <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i>
+                                            reject</button>
+                                    </div>
                                 @endif
                             </th>
                             <td>{{ $ticket->device->device_name }}</td>

@@ -257,6 +257,11 @@
                             <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
                                 done</button>
                         </div>
+                    @elseif ($process->first()->status_id == 5)
+                        <div class="lg:tooltip" data-tip="rejected">
+                            <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i>
+                                reject</button>
+                        </div>
                     @endif
                 </div>
 
@@ -278,34 +283,40 @@
                     <div class="stat-desc">added {{ $tickets->first()->device->created_at->diffForHumans() }}</div>
                 </div>
 
-                <div class="stat">
-                    <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
-                        <div class="flex flex-col">
-                            <span class="font-mono text-5xl countdown">
-                                <span
-                                    style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->d }};"
-                                    wire:poll></span>
-                            </span>
-                            days
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="font-mono text-5xl countdown">
-                                <span
-                                    style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->h }};"
-                                    wire:poll></span>
-                            </span>
-                            hours
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="font-mono text-5xl countdown">
-                                <span
-                                    style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->i }};"
-                                    wire:poll.1s></span>
-                            </span>
-                            min
+                @if ($process->first()->status_id == 5)
+                    <div class="flex flex-row items-center justify-center w-full align-middle">
+                        <span class="font-light text-red-700">rejected</span>
+                    </div>
+                @else
+                    <div class="stat">
+                        <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
+                            <div class="flex flex-col">
+                                <span class="font-mono text-5xl countdown">
+                                    <span
+                                        style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->d }};"
+                                        wire:poll></span>
+                                </span>
+                                days
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-mono text-5xl countdown">
+                                    <span
+                                        style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->h }};"
+                                        wire:poll></span>
+                                </span>
+                                hours
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="font-mono text-5xl countdown">
+                                    <span
+                                        style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->i }};"
+                                        wire:poll.1s></span>
+                                </span>
+                                min
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
 
             {{-- <div class="allItem" class="hidden"> --}}
@@ -335,7 +346,7 @@
                                         done</button>
                                 </div>
                             @elseif ($proces->status_id == 5)
-                                <div class="lg:tooltip" data-tip="done">
+                                <div class="lg:tooltip" data-tip="rejected">
                                     <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i>
                                         reject</button>
                                 </div>
