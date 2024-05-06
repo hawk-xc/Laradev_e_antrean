@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use \App\Models\Device as DeviceModel;
+use \App\Models\Ticket as TicketModel;
 use App\Rules\YearValidation;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -35,10 +36,14 @@ class Device extends Component
     public function deleteTicket(): void
     {
         $device = DeviceModel::find($this->delete_id);
-        if ($device->delete()) {
-            $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
-            event(new \App\Events\UserInteraction(Auth::user(), "Device => delete device " . $device->device_name . " with id " . $device->id));
-            $this->fresh();
+        if (TicketModel::where('device_id', $device->id)->exists()) {
+            $this->dispatch('notify', type: 'error', message: 'Data cannot be deleted!');
+        } else {
+            if ($device->delete()) {
+                $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
+                event(new \App\Events\UserInteraction(Auth::user(), "Device => delete device " . $device->device_name . " with id " . $device->id));
+                $this->fresh();
+            }
         }
     }
 
@@ -98,13 +103,6 @@ class Device extends Component
             event(new \App\Events\UserInteraction(Auth::user(), "Device => update device {$device->device_name} with id " . $device->id));
             $this->fresh();
         }
-    }
-
-    public function delete($id)
-    {
-        $device = DeviceModel::find($id);
-        $device->delete();
-        $this->fresh();
     }
 
     public function render()

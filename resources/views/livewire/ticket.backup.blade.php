@@ -51,11 +51,6 @@
                                         <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
                                             done</button>
                                     </div>
-                                @elseif ($ticket->proces->status_id == 5)
-                                    <div class="lg:tooltip" data-tip="rejected">
-                                        <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i>
-                                            reject</button>
-                                    </div>
                                 @endif
                             </th>
                             <td>{{ $ticket->device->device_name }}</td>
@@ -63,30 +58,22 @@
                             <td class="hidden sm:table-cell">{{ $ticket->created_at->diffForHumans() }}
                             </td>
                             <td class="hidden sm:table-cell">
-                                @if ($ticket->proces->status_id < 2)
-                                    <button class="px-6 btn btn-neutral" onclick="my_modal_4.showModal()"
-                                        wire:click="edit({{ $ticket->id }})">edit</button>
-                                    <button type="button" class="btn btn-error"
-                                        wire:click.prevent='deleteConfirmation({{ $ticket->id }})'
-                                        {{ $ticket->proces->status_id >= 2 ? 'disabled' : false }}>delete</button>
-                                @else
-                                    <button class="btn btn-secondary"><i class="ri-hourglass-line"></i> Ticket on
-                                        team</button>
-                                @endif
+                                <button class="btn btn-neutral" onclick="my_modal_4.showModal()"
+                                    wire:click="edit({{ $ticket->id }})">edit</button>
+
+                                {{-- this is delete example --}}
+                                <button type="button" class="btn btn-error"
+                                    wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>delete</button>
                             </td>
                             <td class="sm:table-cell md:hidden">
-                                @if ($ticket->proces->status_id < 2)
-                                    <button class="px-5 btn" onclick="my_modal_4.showModal()"
-                                        wire:click="edit({{ $ticket->id }})">
-                                        <i class="ri-edit-box-fill"></i>
-                                    </button>
-                                    <button type="button" class="px-5 btn"
-                                        wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>
-                                        <i class="ri-delete-bin-fill"></i>
-                                    </button>
-                                @else
-                                    <button class="btn btn-secondary"><i class="ri-hourglass-line"></i> Ticket on
-                                @endif
+                                <button class="btn btn-sm" onclick="my_modal_4.showModal()"
+                                    wire:click="edit({{ $ticket->id }})">
+                                    <i class="ri-edit-box-fill"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm"
+                                    wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>
+                                    <i class="ri-delete-bin-fill"></i>
+                                </button>
                             </td>
                         </tr>
                     @endforeach
