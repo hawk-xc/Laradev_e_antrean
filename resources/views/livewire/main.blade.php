@@ -216,7 +216,7 @@
             @if ($process->count() > 1)
                 <div class="my-3">
                     @if (!$isVisible)
-                        <button wire:click.live='hideAllData' wire:loading.attr="disabled" id="showallbutton"
+                        <button wire:click='hideAllData' wire:loading.attr="disabled" id="showallbutton"
                             class="btn btn-xs btn-outline"><i class="ri-stack-line"></i>
                             total
                             {{ $process->count() }} proces :
