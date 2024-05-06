@@ -116,6 +116,7 @@ class Process extends Component
             $this->fresh();
             $this->dispatch('closeButton');
             $this->dispatch('notify', type: 'success', message: 'Data successfully updated!');
+            event(new \App\Events\UserInteraction(Auth::user(), "Process => update proces from customer {$proces->ticket->device->user->name} with id " . $proces->id));
             // redirect('/process')->dispatch('notify', type: 'success', message: 'Data successfully updated!'));
             // session()->flash('message', 'Data successfully updated broww!');
             redirect('/process');
