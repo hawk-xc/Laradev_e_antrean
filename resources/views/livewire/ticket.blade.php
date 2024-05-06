@@ -58,25 +58,29 @@
                             <td class="hidden sm:table-cell">{{ $ticket->created_at->diffForHumans() }}
                             </td>
                             <td class="hidden sm:table-cell">
-                                <button class="btn btn-neutral" onclick="my_modal_4.showModal()"
-                                    wire:click="edit({{ $ticket->id }})">edit</button>
-
-                                {{-- this is delete example --}}
-                                <button type="button" class="btn btn-error"
-                                    wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>delete</button>
+                                @if ($ticket->proces->status_id < 2)
+                                    <button class="px-6 btn btn-neutral" onclick="my_modal_4.showModal()"
+                                        wire:click="edit({{ $ticket->id }})">edit</button>
+                                    <button type="button" class="btn btn-error"
+                                        wire:click.prevent='deleteConfirmation({{ $ticket->id }})'
+                                        {{ $ticket->proces->status_id >= 2 ? 'disabled' : false }}>delete</button>
+                                @else
+                                    <button class="btn btn-secondary"><i class="ri-hourglass-line"></i> Ticket on
+                                        team</button>
+                                @endif
                             </td>
                             <td class="sm:table-cell md:hidden">
-                                @if ($ticket->proces->status_id == 3)
-                                    <span>hilang</span>
-                                @else
-                                    <button class="btn btn-sm" onclick="my_modal_4.showModal()"
+                                @if ($ticket->proces->status_id < 2)
+                                    <button class="px-5 btn" onclick="my_modal_4.showModal()"
                                         wire:click="edit({{ $ticket->id }})">
                                         <i class="ri-edit-box-fill"></i>
                                     </button>
-                                    <button type="button" class="btn btn-sm"
+                                    <button type="button" class="px-5 btn"
                                         wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>
                                         <i class="ri-delete-bin-fill"></i>
                                     </button>
+                                @else
+                                    <button class="btn btn-secondary"><i class="ri-hourglass-line"></i> Ticket on
                                 @endif
                             </td>
                         </tr>
