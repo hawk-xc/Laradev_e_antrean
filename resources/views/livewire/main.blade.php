@@ -65,7 +65,7 @@
             </div>
         </div>
         <div style="position: relative; height:40vh; width:90vw"
-            class="flex items-center justify-center max-sm:flex-col md:-translate-x-20 max-sm:mt-40 max-sm:mb-40 max-sm:gap-5">
+            class="flex items-center justify-center mb-11 max-sm:flex-col md:-translate-x-20 max-sm:mt-40 max-sm:mb-40 max-sm:gap-5">
             <canvas id="myChart" class="flex"></canvas>
             <canvas id="myDoughnut" class="flex"></canvas>
         </div>
