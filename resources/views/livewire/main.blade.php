@@ -4,68 +4,70 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     {{-- <h2 class="text-xl font-semibold">Hello {{ Auth::user()->name }}</h2> --}}
     @if (\App\Helpers\RoleHelper::isAdmin())
-        <div class="flex flex-row p-10 justify-evenly">
-            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
+        <div class="flex flex-row w-full p-10 max-sm:p-0 justify-evenly max-sm:flex-wrap max-sm:gap-3 max-sm:text-xs">
+            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52 max-sm:w-full max-sm:p-3 max-sm:h-20"
                 style="background-image: url({{ asset('images/card-background.png') }})">
                 <!-- Content goes here -->
                 <div class="stat">
                     <div class="text-white translate-x-3 stat-figure">
                         <i class="text-4xl shadow-sm ri-team-fill"></i>
                     </div>
-                    <div class="stat-title">Our Team</div>
+                    <div class="stat-title">Total Team</div>
                     <div class="stat-value">{{ $users->where('role_id', '<=', 3)->count() }}</div>
                     <div class="stat-desc">
-                        stats from {{ date_format($users->first()->created_at, 'd M') }}
+                        pengguna khusus
                     </div>
                 </div>
             </div>
-            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
+            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52 max-sm:w-full max-sm:p-3 max-sm:h-20"
                 style="background-image: url({{ asset('images/card-background.png') }})">
                 <!-- Content goes here -->
                 <div class="stat">
                     <div class="text-white translate-x-3 stat-figure">
-                        <i class="text-4xl shadow-sm ri-team-fill"></i>
+                        <i class="text-4xl shadow-sm ri-coupon-line"></i>
                     </div>
-                    <div class="stat-title">All Tickets</div>
-                    <div class="stat-value">{{ $tickets->count() }}</div>
+                    <div class="stat-title">Total tiket</div>
+                    <div class="stat-value">{{ \App\Models\Ticket::all()->count() }}</div>
                     <div class="stat-desc">
-                        solved {{ $tickets->count() . $tickets->where('status_id', 4)->count() . '%' }}
+                        selesai
+                        {{ ceil((\App\Models\Proces::where('status_id', '4')->count() / \App\Models\Ticket::count()) * 100) }}%
                     </div>
                 </div>
             </div>
-            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
+            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52 max-sm:w-full max-sm:p-3 max-sm:h-20"
                 style="background-image: url({{ asset('images/card-background.png') }})">
                 <!-- Content goes here -->
                 <div class="stat">
                     <div class="text-white translate-x-3 stat-figure">
-                        <i class="text-4xl shadow-sm ri-team-fill"></i>
+                        <i class="text-4xl shadow-sm ri-user-5-line"></i>
                     </div>
-                    <div class="stat-title">All Clients</div>
+                    <div class="stat-title">Total pelanggan</div>
                     <div class="stat-value">{{ $users->where('role_id', '==', 4)->count() }}</div>
                     <div class="stat-desc">
-                        stats from {{ date_format($users->first()->created_at, 'd M') }}
+                        pengguna reguler
                     </div>
                 </div>
             </div>
-            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
+            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52 max-sm:w-full max-sm:p-3 max-sm:h-20"
                 style="background-image: url({{ asset('images/card-background.png') }})">
                 <!-- Content goes here -->
                 <div class="stat">
                     <div class="text-white translate-x-3 stat-figure">
                         <i class="text-4xl shadow-sm ri-team-fill"></i>
                     </div>
-                    <div class="stat-title">Processed Ticket</div>
-                    <div class="stat-value">{{ $process->where('status_id', '==', 3)->count() }}</div>
+                    <div class="stat-title">Tiket diproses</div>
+                    <div class="stat-value">{{ \App\Models\Proces::count() }}</div>
                     <div class="stat-desc">
-                        stats from {{ date_format($users->first()->created_at, 'd M') }}
+                        telah diproses
+                        {{ ceil((\App\Models\Proces::where('status_id', '3')->count() / \App\Models\Ticket::count()) * 100) }}%
                     </div>
                 </div>
             </div>
         </div>
-        <div style="position: relative; height:40vh; width:80vw"
-            class="flex items-center justify-center max-sm:flex-col">
-            <canvas id="myChart"></canvas>
-            <canvas id="myDoughnut"></canvas>
+        <div style="position: relative; height:40vh; width:90vw"
+            class="flex items-center justify-center max-sm:flex-col md:-translate-x-20 max-sm:mt-40 max-sm:mb-40 max-sm:gap-5">
+            <canvas id="myChart" class="flex"></canvas>
+            <canvas id="myDoughnut" class="flex"></canvas>
         </div>
     @endif
     @if (\App\Helpers\RoleHelper::isUser())
