@@ -199,9 +199,14 @@
             </div>
         @else
             <div class="flex flex-row w-full gap-3 p-5 mt-2 shadow border-slate-400">
-                <div
-                    class="flex items-center justify-center h-10 text-white align-middle rounded-full aspect-square bg-slate-900">
-                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                <div class="avatar online placeholder">
+                    <div class="h-10 text-white rounded-full shadow-sm aspect-square bg-neutral">
+                        @if (Auth::user()->user_image)
+                            <img src="{{ Auth::user()->user_image }}" />
+                        @else
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        @endif
+                    </div>
                 </div>
                 <div class="flex justify-between w-full px-3">
                     <div class="flex flex-col text-sm">

@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Auth\GoogleAuthController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -46,5 +48,10 @@ Route::get('/', function () {
     // route('dashboard');
     return view('landing-page');
 });
+
+Route::get('/sendmailer', function () {
+    event(new \App\Events\sendNotification('wahyutricahyono777@gmail.com', 'suradin', 'suradinlothok@gmail.com', 'done', \App\Models\Ticket::first()));
+});
+
 
 require __DIR__ . '/auth.php';
