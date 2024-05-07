@@ -4,7 +4,7 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     {{-- <h2 class="text-xl font-semibold">Hello {{ Auth::user()->name }}</h2> --}}
     @if (\App\Helpers\RoleHelper::isAdmin())
-        <div class="flex flex-row justify-evenly">
+        <div class="flex flex-row p-10 justify-evenly">
             <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
                 style="background-image: url({{ asset('images/card-background.png') }})">
                 <!-- Content goes here -->
@@ -62,8 +62,10 @@
                 </div>
             </div>
         </div>
-        <div style="position: relative; height:40vh; width:80vw" class="flex justify-center">
+        <div style="position: relative; height:40vh; width:80vw"
+            class="flex items-center justify-center max-sm:flex-col">
             <canvas id="myChart"></canvas>
+            <canvas id="myDoughnut"></canvas>
         </div>
     @endif
     @if (\App\Helpers\RoleHelper::isUser())
@@ -419,38 +421,48 @@
             </div>
         @endif
     @endif
+    @php
+        $jumlahDataUserPerBulan = array_fill(0, 12, 0);
+        $jumlahDataTicketPerBulan = array_fill(0, 12, 0);
+        $totalTicket = \App\Models\Ticket::count();
+        $totalProces = \App\Models\Proces::count();
+        $totalSelesai = \App\Models\Proces::where('status_id', 4)->count();
+
+        foreach (\App\Models\User::all() as $user) {
+            $bulanPembuatan = Carbon\Carbon::parse($user->created_at)->month; // Ambil nomor bulan (1 untuk Januari, 2 untuk Februari, dst.)
+            $jumlahDataUserPerBulan[$bulanPembuatan - 1]++; // Tambahkan jumlah data pada bulan yang sesuai (indeks dimulai dari 0)
+        }
+
+        foreach (\App\Models\Ticket::all() as $ticket) {
+            $bulanPembuatan = Carbon\Carbon::parse($ticket->created_at)->month; // Ambil nomor bulan (1 untuk Januari, 2 untuk Februari, dst.)
+            $jumlahDataTicketPerBulan[$bulanPembuatan - 1]++; // Tambahkan jumlah data pada bulan yang sesuai (indeks dimulai dari 0)
+        }
+
+        $jumlahDataUserPerBulan = json_encode($jumlahDataUserPerBulan);
+
+        $jumlahDataTicketPerBulan = json_encode($jumlahDataTicketPerBulan);
+    @endphp
     <script type="text/javascript">
         $(document).ready(function() {
-            const users = {!! $userJson !!};
-            const tickets = {!! $ticketJson !!};
-            const process = {!! $procesJson !!};
+            const week = ['senin', 'selasa', 'rabu', 'kamis', 'jum\'at', 'sabtu', 'minggu'];
 
+            const month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus',
+                'September', 'Oktober', 'November', 'Desember'
+            ];
 
             const ctx = $('#myChart');
-
-            const label = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
-                'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'monday',
-                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
-                'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'
-            ];
-            const value = [10, 11, 12, 11, 12, 13, 11, 10, 11, 12, 11, 12, 13, 11, 10, 11, 12, 11, 12, 13, 11, 10,
-                11, 12, 11, 12, 13, 12
-            ];
-            const value2 = [12, 11, 12, 13, 15, 11, 10, 10, 11, 12, 11, 12, 13, 11, 10, 11, 12, 11, 12, 13, 11, 10,
-                11, 12, 11, 12, 13, 11
-            ]
-
+            const doughnut = $('#myDoughnut');
 
             new Chart(ctx, {
                 data: {
-                    labels: label,
+                    labels: month,
                     datasets: [{
                         type: 'line',
-                        label: 'fitri',
-                        data: value,
-                        borderColor: '#7F56D9',
+                        label: 'statistik pengguna',
+                        data: {!! $jumlahDataUserPerBulan !!},
+                        borderColor: 'lightgreen',
                         borderWidth: 2,
-                        // tension: 0.5,
+                        tension: 0.5,
                         backgroundColor: (ctx) => {
                             const canvas = ctx.chart.ctx;
                             const gradient = canvas.createLinearGradient(0, -160, 0, 120);
@@ -463,11 +475,11 @@
                         fill: 'start',
                     }, {
                         type: 'line',
-                        label: 'wahyu',
-                        data: value2,
+                        label: 'statistik tiket',
+                        data: {!! $jumlahDataTicketPerBulan !!},
                         borderColor: '#7F56D9',
                         borderWidth: 2,
-                        // tension: 0.5,
+                        tension: 0.5,
                         backgroundColor: (ctx) => {
                             const canvas = ctx.chart.ctx;
                             const gradient = canvas.createLinearGradient(0, -160, 0, 120);
@@ -482,23 +494,40 @@
                 },
                 options: {
                     scales: {
-                        y: {
-                            beginAtZero: true, // Mulai sumbu y dari 0
-                            suggestedMin: 0, // Nilai minimum yang direkomendasikan
-                            suggestedMax: 10, // Nilai maksimum yang direkomendasikan
-                            // Atur jarak (gap) pada sumbu y secara manual
-                            ticks: {
-                                stepSize: 1 // Langkah (step) antar nilai sumbu y
-                            }
-                        }
+                        // y: {
+                        //     beginAtZero: true, // Mulai sumbu y dari 0
+                        //     suggestedMin: 0, // Nilai minimum yang direkomendasikan
+                        //     suggestedMax: 10, // Nilai maksimum yang direkomendasikan
+                        //     // Atur jarak (gap) pada sumbu y secara manual
+                        //     ticks: {
+                        //         stepSize: 1 // Langkah (step) antar nilai sumbu y
+                        //     }
+                        // }
                     },
                     layout: {
-                        padding: 20
+                        // padding: 20
                     }
                 }
             })
 
-            // console.log(data.map((data) => data.username))
+            new Chart(doughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['total tiket', 'total proses', 'total selesai'],
+                    datasets: [{
+                        data: [{!! $totalTicket !!}, {!! $totalProces !!},
+                            {!! $totalSelesai !!}
+                        ],
+                        backgroundColor: ['#BBDEFB', '#FFCDD2', '#FF9800'],
+                        fill: 'start',
+                    }]
+                },
+                options: {
+                    layout: {
+                        // padding: 20
+                    }
+                }
+            })
         })
     </script>
 </div>
