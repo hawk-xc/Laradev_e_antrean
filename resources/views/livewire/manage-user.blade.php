@@ -49,17 +49,18 @@
                         <tr class="p-2 rounded-md bg-slate-200">
                             <th class="cursor-pointer hover:underline" wire:click='sortname'>Nama Pelanggan <i
                                     class="ri-expand-up-down-line"></i></th>
+                            <th><i class="ri-phone-line"></i> Telepon</th>
                             <th class="hidden cursor-pointer hover:underline sm:table-cell" wire:click='sortdate'>
                                 Ditambahkan
                                 <i class="ri-expand-up-down-line"></i>
                             </th>
-                            <th>Opsi</th>
                         </tr>
                     </thead>
                 @endif
                 <tbody>
                     @forelse ($clientUsers as $user)
-                        <tr>
+                        <tr class="hover:bg-slate-50" wire:click='detail({{ $user->id }})'
+                            onclick="my_modal_5.showModal()">
                             <td>
                                 <div class="flex items-center gap-3">
                                     <div class="avatar">
@@ -74,16 +75,11 @@
                                     </div>
                                 </div>
                             </td>
+                            <td>{{ $user->phone ? $user->phone : '-' }}</td>
                             <td class="hidden sm:table-cell">
-                                <span class="badge badge-ghost badge-sm">{{ $user->created_at->format('d M Y') }}</span>
+                                <span
+                                    class="badge badge-ghost badge-sm">{{ $user->created_at->format('d M Y') }}</span>
                             </td>
-                            <th>
-                                <button class="btn btn-warning btn-xs" wire:click='detail({{ $user->id }})'
-                                    onclick="my_modal_5.showModal()">
-                                    <i class="ri-search-2-line"></i>
-                                    detail
-                                </button>
-                            </th>
                         </tr>
                     @empty
                         <div class="py-20 hero">
@@ -99,7 +95,7 @@
             </table>
         </div>
         <div class="flex flex-col items-center justify-center w-full gap-3 mt-4 align-middle lg:flex-row">
-            <div class="w-3/4 max-sm:hidden">
+            <div class="@if ($clientUsers->hasPages()) w-3/4 @else w-full @endif max-sm:hidden">
                 <label class="flex items-center gap-2 input input-bordered">
                     <input wire:model.live='search' id="searchquery" type="text" class="grow"
                         placeholder="Cari berdasarkan username atau nama..." />
@@ -108,9 +104,11 @@
                     <kbd class="kbd kbd-sm">K</kbd>
                 </label>
             </div>
-            <div class="w-1/4">
-                {{ $clientUsers->links(data: ['scrollTo' => false]) }}
-            </div>
+            @if ($clientUsers->hasPages())
+                <div class="w-1/4">
+                    {{ $clientUsers->links(data: ['scrollTo' => false]) }}
+                </div>
+            @endif
         </div>
     </div>
     <dialog id="my_modal_5" wire:ignore.self class="modal modal-bottom sm:modal-middle">
