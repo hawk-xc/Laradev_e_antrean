@@ -3,7 +3,10 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     {{-- <h2 class="text-xl font-semibold">Hello {{ Auth::user()->name }}</h2> --}}
-    @if (\App\Helpers\RoleHelper::isAdmin())
+    @if (
+        \App\Helpers\RoleHelper::isAdmin() ||
+            \App\Helpers\RoleHelper::isTechnician() ||
+            \App\Helpers\RoleHelper::isHelpdesk())
         <div class="flex flex-row w-full p-10 max-sm:p-0 justify-evenly max-sm:flex-wrap max-sm:gap-3 max-sm:text-xs">
             <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52 max-sm:w-full max-sm:p-3 max-sm:h-20"
                 style="background-image: url({{ asset('images/card-background.png') }})">
