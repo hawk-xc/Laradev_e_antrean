@@ -21,7 +21,6 @@ class sendNotification
     {
         $this->mailto = $mailto;
         $this->name = $name;
-        $this->email = $email;
         $this->type = $type;
         $this->ticket = $ticket;
     }

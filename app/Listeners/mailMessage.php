@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
-class mailMessage
+class mailMessage implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -22,6 +22,6 @@ class mailMessage
      */
     public function handle(sendNotification $event): void
     {
-        Mail::to($event->mailto)->send(new \App\Mail\SendMailer($event->name, $event->email, $event->type, $event->ticket));
+        Mail::to($event->mailto)->send(new \App\Mail\SendMailer($event->name, $event->mailto, $event->type, $event->ticket));
     }
 }
