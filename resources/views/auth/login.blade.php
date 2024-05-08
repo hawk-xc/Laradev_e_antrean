@@ -34,17 +34,19 @@
             </label>
         </div>
 
-        <div class="divider">
+        <div class="divider max-sm:mt-5">
             OR
         </div>
 
-        <div class="flex flex-row justify-center w-48 gap-2 mx-auto ">
+        <div class="flex flex-row justify-center w-48 gap-2 mx-auto max-sm:flex-col max-sm:w-full">
 
-            <a href="auth/google/redirect" class="w-full text-xl btn btn-outline hover:bg-blue-600">
-                <img src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg" alt="Google Logo" class="w-max h-7">
+            <a href="auth/google/redirect" class="w-full text-xl btn btn-outline hover:bg-slate-50">
+                <img src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
+                    alt="Google Logo" class="w-max h-7">
             </a>
 
-            <a href="auth/github/redirect" class="w-full text-xl btn btn-neutral hover:bg-white hover:text-neutral"><i class="ri-github-fill"></i>
+            <a href="auth/github/redirect" class="w-full text-xl btn btn-neutral hover:bg-white hover:text-neutral"><i
+                    class="ri-github-fill"></i>
                 Github</a>
         </div>
 
@@ -53,7 +55,7 @@
                     href="{{ route('register') }}">here</a></span>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="flex items-center justify-end mt-4 max-sm:mt-7">
             @if (Route::has('password.request'))
                 <a class="text-sm text-gray-600 underline rounded-md hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     href="{{ route('password.request') }}">

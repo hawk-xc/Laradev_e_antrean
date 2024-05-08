@@ -23,46 +23,46 @@ class DatabaseSeeder extends Seeder
 
         // // \App\Models\User::factory(10)->create();
 
-        \App\Models\Role::create([
-            'name' => 'admin'
-        ]);
+        // \App\Models\Role::create([
+        //     'name' => 'admin'
+        // ]);
 
-        \App\Models\Role::create([
-            'name' => 'helpdesk'
-        ]);
+        // \App\Models\Role::create([
+        //     'name' => 'helpdesk'
+        // ]);
 
-        \App\Models\Role::create([
-            'name' => 'technician'
-        ]);
+        // \App\Models\Role::create([
+        //     'name' => 'technician'
+        // ]);
 
-        \App\Models\Role::create([
-            'name' => 'user'
-        ]);
+        // \App\Models\Role::create([
+        //     'name' => 'user'
+        // ]);
 
-        \App\Models\Status::create([
-            'name' => 'open',
-            'description' => 'status ticket waiting'
-        ]);
+        // \App\Models\Status::create([
+        //     'name' => 'open',
+        //     'description' => 'status ticket waiting'
+        // ]);
 
-        \App\Models\Status::create([
-            'name' => 'queue',
-            'description' => 'status ticket masuk ke antrian'
-        ]);
+        // \App\Models\Status::create([
+        //     'name' => 'queue',
+        //     'description' => 'status ticket masuk ke antrian'
+        // ]);
 
-        \App\Models\Status::create([
-            'name' => 'proces',
-            'description' => 'status ticket sudah diset ke proces'
-        ]);
+        // \App\Models\Status::create([
+        //     'name' => 'proces',
+        //     'description' => 'status ticket sudah diset ke proces'
+        // ]);
 
-        \App\Models\Status::create([
-            'name' => 'done',
-            'description' => 'status ticket sudah selesai'
-        ]);
+        // \App\Models\Status::create([
+        //     'name' => 'done',
+        //     'description' => 'status ticket sudah selesai'
+        // ]);
 
-        \App\Models\Status::create([
-            'name' => 'reject',
-            'description' => 'status ticket sudah ditolak'
-        ]);
+        // \App\Models\Status::create([
+        //     'name' => 'reject',
+        //     'description' => 'status ticket sudah ditolak'
+        // ]);
 
         // \App\Models\Device::factory(10)->create();
 
