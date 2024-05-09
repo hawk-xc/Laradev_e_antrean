@@ -3,67 +3,74 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     {{-- <h2 class="text-xl font-semibold">Hello {{ Auth::user()->name }}</h2> --}}
-    @if (\App\Helpers\RoleHelper::isAdmin())
-        <div class="flex flex-row justify-evenly">
-            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
+    @if (
+        \App\Helpers\RoleHelper::isAdmin() ||
+            \App\Helpers\RoleHelper::isTechnician() ||
+            \App\Helpers\RoleHelper::isHelpdesk())
+        <div class="flex flex-row w-full p-10 max-sm:p-0 justify-evenly max-sm:flex-wrap max-sm:gap-3 max-sm:text-xs">
+            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52 max-sm:w-full max-sm:p-3 max-sm:h-20"
                 style="background-image: url({{ asset('images/card-background.png') }})">
                 <!-- Content goes here -->
                 <div class="stat">
                     <div class="text-white translate-x-3 stat-figure">
                         <i class="text-4xl shadow-sm ri-team-fill"></i>
                     </div>
-                    <div class="stat-title">Our Team</div>
+                    <div class="stat-title">Total Team</div>
                     <div class="stat-value">{{ $users->where('role_id', '<=', 3)->count() }}</div>
                     <div class="stat-desc">
-                        stats from {{ date_format($users->first()->created_at, 'd M') }}
+                        pengguna khusus
                     </div>
                 </div>
             </div>
-            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
+            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52 max-sm:w-full max-sm:p-3 max-sm:h-20"
                 style="background-image: url({{ asset('images/card-background.png') }})">
                 <!-- Content goes here -->
                 <div class="stat">
                     <div class="text-white translate-x-3 stat-figure">
-                        <i class="text-4xl shadow-sm ri-team-fill"></i>
+                        <i class="text-4xl shadow-sm ri-coupon-line"></i>
                     </div>
-                    <div class="stat-title">All Tickets</div>
-                    <div class="stat-value">{{ $tickets->count() }}</div>
+                    <div class="stat-title">Total tiket</div>
+                    <div class="stat-value">{{ \App\Models\Ticket::all()->count() }}</div>
                     <div class="stat-desc">
-                        solved {{ $tickets->count() . $tickets->where('status_id', 4)->count() . '%' }}
+                        selesai
+                        {{ ceil((\App\Models\Proces::where('status_id', '4')->count() / \App\Models\Ticket::count()) * 100) }}%
                     </div>
                 </div>
             </div>
-            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
+            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52 max-sm:w-full max-sm:p-3 max-sm:h-20"
                 style="background-image: url({{ asset('images/card-background.png') }})">
                 <!-- Content goes here -->
                 <div class="stat">
                     <div class="text-white translate-x-3 stat-figure">
-                        <i class="text-4xl shadow-sm ri-team-fill"></i>
+                        <i class="text-4xl shadow-sm ri-user-5-line"></i>
                     </div>
-                    <div class="stat-title">All Clients</div>
+                    <div class="stat-title">Total pelanggan</div>
                     <div class="stat-value">{{ $users->where('role_id', '==', 4)->count() }}</div>
                     <div class="stat-desc">
-                        stats from {{ date_format($users->first()->created_at, 'd M') }}
+                        pengguna reguler
                     </div>
                 </div>
             </div>
-            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52"
+            <div class="flex items-center h-32 align-middle bg-center bg-cover rounded-md shadow-md w-52 max-sm:w-full max-sm:p-3 max-sm:h-20"
                 style="background-image: url({{ asset('images/card-background.png') }})">
                 <!-- Content goes here -->
                 <div class="stat">
                     <div class="text-white translate-x-3 stat-figure">
                         <i class="text-4xl shadow-sm ri-team-fill"></i>
                     </div>
-                    <div class="stat-title">Processed Ticket</div>
-                    <div class="stat-value">{{ $process->where('status_id', '==', 3)->count() }}</div>
+                    <div class="stat-title">Tiket diproses</div>
+                    <div class="stat-value">{{ \App\Models\Proces::count() }}</div>
                     <div class="stat-desc">
-                        stats from {{ date_format($users->first()->created_at, 'd M') }}
+                        telah diproses
+                        {{ ceil((\App\Models\Proces::where('status_id', '3')->count() / \App\Models\Ticket::count()) * 100) }}%
                     </div>
                 </div>
             </div>
         </div>
-        <div style="position: relative; height:40vh; width:80vw" class="flex justify-center">
-            <canvas id="myChart"></canvas>
+        <div style="position: relative; height:40vh; width:90vw"
+            class="flex items-center justify-center mb-11 max-sm:flex-col md:-translate-x-20 max-sm:mt-40 max-sm:mb-40 max-sm:gap-5">
+            <canvas id="myChart" class="flex"></canvas>
+            <canvas id="myDoughnut" class="flex"></canvas>
         </div>
     @endif
     @if (\App\Helpers\RoleHelper::isUser())
@@ -195,13 +202,18 @@
             </div>
         @else
             <div class="flex flex-row w-full gap-3 p-5 mt-2 shadow border-slate-400">
-                <div
-                    class="flex items-center justify-center h-10 text-white align-middle rounded-full aspect-square bg-slate-900">
-                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                <div class="avatar online placeholder">
+                    <div class="h-10 text-white rounded-full shadow-sm aspect-square bg-neutral">
+                        @if (Auth::user()->user_image)
+                            <img src="{{ Auth::user()->user_image }}" />
+                        @else
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        @endif
+                    </div>
                 </div>
                 <div class="flex justify-between w-full px-3">
                     <div class="flex flex-col text-sm">
-                        <span class="font-bold">Welcome</span>
+                        <span class="font-bold">Selamat datang</span>
                         <span>{{ Auth::user()->name }}</span>
                     </div>
                     <div>
@@ -219,14 +231,14 @@
                         <button wire:click='hideAllData' wire:loading.attr="disabled" id="showallbutton"
                             class="btn btn-xs btn-outline"><i class="ri-stack-line"></i>
                             total
-                            {{ $process->count() }} proces :
-                            hide</button>
+                            {{ $process->count() }} proses :
+                            sembunyikan</button>
                     @else
                         <button wire:click.live='showAllData' wire:loading.attr="disabled" id="showallbutton"
                             class="btn btn-xs btn-outline"><i class="ri-stack-line"></i>
                             total
-                            {{ $process->count() }} proces :
-                            show all</button>
+                            {{ $process->count() }} proses :
+                            tampilkan semua</button>
                     @endif
                 </div>
             @endif
@@ -240,27 +252,27 @@
                     @if ($process->first()->status_id == 1)
                         <div class="lg:tooltip" data-tip="currently registered">
                             <button class="w-32 btn btn-secondary btn-sm"><i class="ri-flag-line max-sm:hidden"></i>
-                                registered</button>
+                                registrasi</button>
                         </div>
                     @elseif ($process->first()->status_id == 2)
                         <div class="lg:tooltip" data-tip="vertified your ticket">
                             <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
-                                vertified</button>
+                                vertifikasi</button>
                         </div>
                     @elseif ($process->first()->status_id == 3)
                         <div class="lg:tooltip" data-tip="process by team">
                             <button class="w-32 btn btn-info btn-sm"><i class="ri-flag-line"></i>
-                                process</button>
+                                pengerjaan</button>
                         </div>
                     @elseif ($process->first()->status_id == 4)
                         <div class="lg:tooltip" data-tip="done">
                             <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
-                                done</button>
+                                selesai</button>
                         </div>
                     @elseif ($process->first()->status_id == 5)
                         <div class="lg:tooltip" data-tip="rejected">
                             <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i>
-                                reject</button>
+                                ditolak</button>
                         </div>
                     @endif
                 </div>
@@ -269,23 +281,24 @@
                     <div class="stat-figure text-secondary">
                         <i class="text-3xl ri-coupon-3-line"></i>
                     </div>
-                    <div class="stat-title">Ticket</div>
-                    <div class="text-2xl font-semibold">ticket#{{ $tickets->first()->id }}</div>
-                    <div class="stat-desc">added {{ $tickets->first()->created_at->diffForHumans() }}</div>
+                    <div class="stat-title">Tiket</div>
+                    <div class="text-2xl font-semibold">tiket#{{ $tickets->first()->id }}</div>
+                    <div class="stat-desc">ditambahkan {{ $tickets->first()->created_at->diffForHumans() }}</div>
                 </div>
 
                 <div class="stat">
                     <div class="stat-figure text-secondary">
                         <i class="text-3xl ri-macbook-line"></i>
                     </div>
-                    <div class="stat-title">Device</div>
+                    <div class="stat-title">Perangkat</div>
                     <div class="text-2xl">{{ $tickets->first()->device->device_name }}</div>
-                    <div class="stat-desc">added {{ $tickets->first()->device->created_at->diffForHumans() }}</div>
+                    <div class="stat-desc">ditambahkan {{ $tickets->first()->device->created_at->diffForHumans() }}
+                    </div>
                 </div>
 
                 @if ($process->first()->status_id == 5)
                     <div class="flex flex-row items-center justify-center w-full align-middle">
-                        <span class="font-light text-red-700">rejected</span>
+                        <span class="font-light text-red-700">ditolak</span>
                     </div>
                 @else
                     <div class="flex items-center justify-center align-middle stat">
@@ -296,7 +309,7 @@
                                         style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->d }};"
                                         wire:poll></span>
                                 </span>
-                                days
+                                hari
                             </div>
                             <div class="flex flex-col">
                                 <span class="font-mono text-5xl countdown">
@@ -304,7 +317,7 @@
                                         style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->h }};"
                                         wire:poll></span>
                                 </span>
-                                hours
+                                jam
                             </div>
                             <div class="flex flex-col">
                                 <span class="font-mono text-5xl countdown">
@@ -312,7 +325,7 @@
                                         style="--value:{{ Illuminate\Support\Carbon::parse($process->first()->ticket->closed_at)->diff($now)->i }};"
                                         wire:poll.1s></span>
                                 </span>
-                                min
+                                menit
                             </div>
                         </div>
                     </div>
@@ -328,27 +341,27 @@
                                 <div class="lg:tooltip" data-tip="currently registered">
                                     <button class="w-32 btn btn-secondary btn-sm"><i
                                             class="ri-flag-line max-sm:hidden"></i>
-                                        registered</button>
+                                        registrasi</button>
                                 </div>
                             @elseif ($proces->status_id == 2)
                                 <div class="lg:tooltip" data-tip="vertified your ticket">
                                     <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
-                                        vertified</button>
+                                        vertifikasi</button>
                                 </div>
                             @elseif ($proces->status_id == 3)
                                 <div class="lg:tooltip" data-tip="process by team">
                                     <button class="w-32 btn btn-info btn-sm"><i class="ri-flag-line"></i>
-                                        process</button>
+                                        proses</button>
                                 </div>
                             @elseif ($proces->status_id == 4)
                                 <div class="lg:tooltip" data-tip="done">
                                     <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
-                                        done</button>
+                                        selesai</button>
                                 </div>
                             @elseif ($proces->status_id == 5)
                                 <div class="lg:tooltip" data-tip="rejected">
                                     <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i>
-                                        reject</button>
+                                        ditolak</button>
                                 </div>
                             @endif
                         </div>
@@ -356,24 +369,26 @@
                             <div class="stat-figure text-secondary">
                                 <i class="text-3xl ri-coupon-3-line"></i>
                             </div>
-                            <div class="stat-title">Ticket</div>
+                            <div class="stat-title">Tiket</div>
                             <div class="text-2xl font-semibold">ticket#{{ $proces->ticket->id }}</div>
-                            <div class="stat-desc">added {{ $proces->ticket->created_at->diffForHumans() }}</div>
+                            <div class="stat-desc">ditambahkan {{ $proces->ticket->created_at->diffForHumans() }}
+                            </div>
                         </div>
 
                         <div class="stat">
                             <div class="stat-figure text-secondary">
                                 <i class="text-3xl ri-macbook-line"></i>
                             </div>
-                            <div class="stat-title">Device</div>
+                            <div class="stat-title">Perangkat</div>
                             <div class="text-2xl">{{ $proces->ticket->device->device_name }}</div>
-                            <div class="stat-desc">added {{ $proces->ticket->device->created_at->diffForHumans() }}
+                            <div class="stat-desc">ditambahkan
+                                {{ $proces->ticket->device->created_at->diffForHumans() }}
                             </div>
                         </div>
 
                         @if ($proces->status_id == 5)
                             <div class="flex flex-row items-center justify-center w-full align-middle">
-                                <span class="font-light text-red-700">rejected</span>
+                                <span class="font-light text-red-700">ditolak</span>
                             </div>
                         @else
                             <div class="flex items-center justify-center align-middle stat">
@@ -384,7 +399,7 @@
                                                 style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->d }};"
                                                 wire:poll></span>
                                         </span>
-                                        days
+                                        hari
                                     </div>
                                     <div class="flex flex-col">
                                         <span class="font-mono text-5xl countdown">
@@ -392,7 +407,7 @@
                                                 style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->h }};"
                                                 wire:poll></span>
                                         </span>
-                                        hours
+                                        jam
                                     </div>
                                     <div class="flex flex-col">
                                         <span class="font-mono text-5xl countdown">
@@ -400,7 +415,7 @@
                                                 style="--value:{{ Illuminate\Support\Carbon::parse($proces->ticket->closed_at)->diff($now)->i }};"
                                                 wire:poll.1s></span>
                                         </span>
-                                        min
+                                        menit
                                     </div>
                                 </div>
                             </div>
@@ -409,45 +424,55 @@
                 @endforeach
             @endif
             <div class="border rounded-lg border-base-300">
-                <div class="p-5 text-xl border border-base-300"><i class="ri-discuss-line"></i> Notification</div>
+                <div class="p-5 text-xl border border-base-300"><i class="ri-discuss-line"></i> Notifikasi</div>
                 <div class="flex justify-center px-5 py-20 border border-base-300">
-                    you don't have notification yet!
+                    belum ada notifikasi untuk saat ini!
                 </div>
             </div>
         @endif
     @endif
+    @php
+        $jumlahDataUserPerBulan = array_fill(0, 12, 0);
+        $jumlahDataTicketPerBulan = array_fill(0, 12, 0);
+        $totalTicket = \App\Models\Ticket::count();
+        $totalProces = \App\Models\Proces::count();
+        $totalSelesai = \App\Models\Proces::where('status_id', 4)->count();
+
+        foreach (\App\Models\User::all() as $user) {
+            $bulanPembuatan = Carbon\Carbon::parse($user->created_at)->month; // Ambil nomor bulan (1 untuk Januari, 2 untuk Februari, dst.)
+            $jumlahDataUserPerBulan[$bulanPembuatan - 1]++; // Tambahkan jumlah data pada bulan yang sesuai (indeks dimulai dari 0)
+        }
+
+        foreach (\App\Models\Ticket::all() as $ticket) {
+            $bulanPembuatan = Carbon\Carbon::parse($ticket->created_at)->month; // Ambil nomor bulan (1 untuk Januari, 2 untuk Februari, dst.)
+            $jumlahDataTicketPerBulan[$bulanPembuatan - 1]++; // Tambahkan jumlah data pada bulan yang sesuai (indeks dimulai dari 0)
+        }
+
+        $jumlahDataUserPerBulan = json_encode($jumlahDataUserPerBulan);
+
+        $jumlahDataTicketPerBulan = json_encode($jumlahDataTicketPerBulan);
+    @endphp
     <script type="text/javascript">
         $(document).ready(function() {
-            const users = {!! $userJson !!};
-            const tickets = {!! $ticketJson !!};
-            const process = {!! $procesJson !!};
+            const week = ['senin', 'selasa', 'rabu', 'kamis', 'jum\'at', 'sabtu', 'minggu'];
 
+            const month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus',
+                'September', 'Oktober', 'November', 'Desember'
+            ];
 
             const ctx = $('#myChart');
-
-            const label = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
-                'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'monday',
-                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
-                'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'
-            ];
-            const value = [10, 11, 12, 11, 12, 13, 11, 10, 11, 12, 11, 12, 13, 11, 10, 11, 12, 11, 12, 13, 11, 10,
-                11, 12, 11, 12, 13, 12
-            ];
-            const value2 = [12, 11, 12, 13, 15, 11, 10, 10, 11, 12, 11, 12, 13, 11, 10, 11, 12, 11, 12, 13, 11, 10,
-                11, 12, 11, 12, 13, 11
-            ]
-
+            const doughnut = $('#myDoughnut');
 
             new Chart(ctx, {
                 data: {
-                    labels: label,
+                    labels: month,
                     datasets: [{
                         type: 'line',
-                        label: 'fitri',
-                        data: value,
-                        borderColor: '#7F56D9',
+                        label: 'statistik pengguna',
+                        data: {!! $jumlahDataUserPerBulan !!},
+                        borderColor: 'lightgreen',
                         borderWidth: 2,
-                        // tension: 0.5,
+                        tension: 0.5,
                         backgroundColor: (ctx) => {
                             const canvas = ctx.chart.ctx;
                             const gradient = canvas.createLinearGradient(0, -160, 0, 120);
@@ -460,11 +485,11 @@
                         fill: 'start',
                     }, {
                         type: 'line',
-                        label: 'wahyu',
-                        data: value2,
+                        label: 'statistik tiket',
+                        data: {!! $jumlahDataTicketPerBulan !!},
                         borderColor: '#7F56D9',
                         borderWidth: 2,
-                        // tension: 0.5,
+                        tension: 0.5,
                         backgroundColor: (ctx) => {
                             const canvas = ctx.chart.ctx;
                             const gradient = canvas.createLinearGradient(0, -160, 0, 120);
@@ -479,23 +504,40 @@
                 },
                 options: {
                     scales: {
-                        y: {
-                            beginAtZero: true, // Mulai sumbu y dari 0
-                            suggestedMin: 0, // Nilai minimum yang direkomendasikan
-                            suggestedMax: 10, // Nilai maksimum yang direkomendasikan
-                            // Atur jarak (gap) pada sumbu y secara manual
-                            ticks: {
-                                stepSize: 1 // Langkah (step) antar nilai sumbu y
-                            }
-                        }
+                        // y: {
+                        //     beginAtZero: true, // Mulai sumbu y dari 0
+                        //     suggestedMin: 0, // Nilai minimum yang direkomendasikan
+                        //     suggestedMax: 10, // Nilai maksimum yang direkomendasikan
+                        //     // Atur jarak (gap) pada sumbu y secara manual
+                        //     ticks: {
+                        //         stepSize: 1 // Langkah (step) antar nilai sumbu y
+                        //     }
+                        // }
                     },
                     layout: {
-                        padding: 20
+                        // padding: 20
                     }
                 }
             })
 
-            // console.log(data.map((data) => data.username))
+            new Chart(doughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['total tiket', 'total proses', 'total selesai'],
+                    datasets: [{
+                        data: [{!! $totalTicket !!}, {!! $totalProces !!},
+                            {!! $totalSelesai !!}
+                        ],
+                        backgroundColor: ['#BBDEFB', '#FFCDD2', '#FF9800'],
+                        fill: 'start',
+                    }]
+                },
+                options: {
+                    layout: {
+                        // padding: 20
+                    }
+                }
+            })
         })
     </script>
 </div>

@@ -1,4 +1,4 @@
-<div class="flex gap-5 m-4 md:flex-row max-sm:flex-col">
+<div class="flex gap-5 md:flex-row max-sm:flex-col">
     {{-- notification pack --}}
     <x-notification-laravel />
     @if (session('notify'))
@@ -7,7 +7,7 @@
 
     <div
         class="max-sm:w-full text-xs md:w-4/12 py-5 overflow-y-scroll border rounded-md shadow-md h-[32rem] px-7 border-slate-200">
-        <span class="font-semibold text-md">Our Team</span>
+        <span class="text-xl font-semibold">Daftar Team</span>
         <div class="divider"></div>
         <ul class="flex flex-col gap-2">
             @foreach ($coreUsers as $user)
@@ -47,18 +47,20 @@
                 @if (!$clientUsers->isEmpty())
                     <thead>
                         <tr class="p-2 rounded-md bg-slate-200">
-                            <th class="cursor-pointer hover:underline" wire:click='sortname'>Client Name <i
+                            <th class="cursor-pointer hover:underline" wire:click='sortname'>Nama Pelanggan <i
                                     class="ri-expand-up-down-line"></i></th>
-                            <th class="hidden cursor-pointer hover:underline sm:table-cell" wire:click='sortdate'>Joined
+                            <th><i class="ri-phone-line"></i> Telepon</th>
+                            <th class="hidden cursor-pointer hover:underline sm:table-cell" wire:click='sortdate'>
+                                Ditambahkan
                                 <i class="ri-expand-up-down-line"></i>
                             </th>
-                            <th>Option</th>
                         </tr>
                     </thead>
                 @endif
                 <tbody>
                     @forelse ($clientUsers as $user)
-                        <tr>
+                        <tr class="hover:bg-slate-50" wire:click='detail({{ $user->id }})'
+                            onclick="my_modal_5.showModal()">
                             <td>
                                 <div class="flex items-center gap-3">
                                     <div class="avatar">
@@ -73,23 +75,18 @@
                                     </div>
                                 </div>
                             </td>
+                            <td>{{ $user->phone ? $user->phone : '-' }}</td>
                             <td class="hidden sm:table-cell">
-                                <span class="badge badge-ghost badge-sm">{{ $user->created_at->format('d M Y') }}</span>
+                                <span
+                                    class="badge badge-ghost badge-sm">{{ $user->created_at->format('d M Y') }}</span>
                             </td>
-                            <th>
-                                <button class="btn btn-warning btn-xs" wire:click='detail({{ $user->id }})'
-                                    onclick="my_modal_5.showModal()">
-                                    <i class="ri-search-2-line"></i>
-                                    details
-                                </button>
-                            </th>
                         </tr>
                     @empty
                         <div class="py-20 hero">
                             <div class="text-center hero-content">
                                 <div class="max-w-md">
-                                    <h1 class="text-5xl font-bold">Hello there</h1>
-                                    <p class="py-6">Currently the data is still empty!
+                                    <h1 class="text-5xl font-bold">Hallo User</h1>
+                                    <p class="py-6">Untuk saat ini data kosong!
                                     </p>
                                 </div>
                             </div>
@@ -98,23 +95,25 @@
             </table>
         </div>
         <div class="flex flex-col items-center justify-center w-full gap-3 mt-4 align-middle lg:flex-row">
-            <div class="w-3/4 max-sm:hidden">
+            <div class="@if ($clientUsers->hasPages()) w-3/4 @else w-full @endif max-sm:hidden">
                 <label class="flex items-center gap-2 input input-bordered">
                     <input wire:model.live='search' id="searchquery" type="text" class="grow"
-                        placeholder="Search" />
+                        placeholder="Cari berdasarkan username atau nama..." />
                     <kbd class="kbd kbd-sm">ctrl</kbd>
                     <kbd class="kbd kbd-sm">shift</kbd>
                     <kbd class="kbd kbd-sm">K</kbd>
                 </label>
             </div>
-            <div class="w-1/4">
-                {{ $clientUsers->links(data: ['scrollTo' => false]) }}
-            </div>
+            @if ($clientUsers->hasPages())
+                <div class="w-1/4">
+                    {{ $clientUsers->links(data: ['scrollTo' => false]) }}
+                </div>
+            @endif
         </div>
     </div>
     <dialog id="my_modal_5" wire:ignore.self class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
-            <span class="font-semibold text-md">User profile</span>
+            <span class="font-semibold text-md">Profil Akun</span>
             <div class="flex items-center justify-center w-full mt-10 align-middle">
                 <div class="flex flex-row gap-7">
                     <div class="">
@@ -125,7 +124,7 @@
                         <span><i class="ri-at-line"></i> {{ $username }}</span>
                         <span><i class="ri-phone-line"></i> {{ $phone ?? '-' }}</span>
                         <span><i class="ri-mail-line"></i> {{ $mail }}</span>
-                        <span class="text-sm badge badge-ghost">joined {{ $date }}</span>
+                        <span class="text-sm badge badge-ghost">bergabung {{ $date }}</span>
                     </div>
                 </div>
             </div>
@@ -134,16 +133,17 @@
                     <div>
                         @if ($role_id == 2 || $role_id == 4)
                             <button class="btn btn-sm btn-ghost max-sm:btn-xs" wire:click.prevent='makeTechnician'
-                                wire:loading.attr='disabled'><i class="ri-exchange-2-line"></i> make technician</button>
+                                wire:loading.attr='disabled'><i class="ri-exchange-2-line"></i> jadikan teknisi</button>
                         @elseif ($role_id == 3 || $role_id == 4)
                             <button class="btn btn-sm btn-ghost max-sm:btn-xs" wire:click.prevent='makeHelpdesk'
-                                wire:loading.attr='disabled'><i class="ri-exchange-2-line"></i> make helpdesk</button>
+                                wire:loading.attr='disabled'><i class="ri-exchange-2-line"></i> jadikan
+                                helpdesk</button>
                         @endif
                         @if ($role_id == 2 || $role_id == 3 || $role_id == 4)
                             <button class="btn btn-sm btn-error max-sm:btn-xs"
                                 wire:click.prevent='deleteConfirmation({{ $user_id }})'
                                 wire:loading.attr='disabled'>
-                                <i class="ri-delete-bin-line"></i> delete
+                                <i class="ri-delete-bin-line"></i> hapus
                             </button>
                         @endif
                     </div>
@@ -156,7 +156,7 @@
         </div>
         <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg align-middle text-slate-800">
             <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
-            <span class="block mx-auto mb-10">please wait a moment...</span>
+            <span class="block mx-auto mb-10">mohon tunggu sebentar...</span>
         </div>
     </dialog>
     @script

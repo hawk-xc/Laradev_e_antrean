@@ -4,6 +4,7 @@
 /public/hot
 /public/storage
 /storage/*.key
+/storage/app/interact.log
 /vendor
 .env
 # .env.backup
