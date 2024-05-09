@@ -9,7 +9,7 @@
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <label class="flex items-center gap-2 mt-2 bg-white input input-sm input-bordered">
+            <label class="flex items-center gap-2 mt-2 bg-white shadow-sm input input-bordered border-slate-300">
                 <x-text-input id="email" class="w-full max-w-xs input-sm" type="email" name="email"
                     :value="old('email')" required autofocus autocomplete="username" />
             </label>
@@ -19,7 +19,7 @@
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-            <label class="flex items-center gap-2 mt-2 bg-white input input-sm input-bordered">
+            <label class="flex items-center gap-2 mt-2 bg-white shadow-sm input input-bordered border-slate-300">
                 <x-text-input id="password" class="w-full max-w-xs input-sm" type="password" name="password" required
                     autocomplete="current-password" />
             </label>
@@ -29,7 +29,7 @@
         <!-- Remember Me -->
         <div class="flex justify-between mt-4 align-middle ">
             <label for="remember_me" class="inline-flex">
-                <input id="remember_me" type="checkbox" name="remember" class="checkbox checkbox-sm" />
+                <input id="remember_me" type="checkbox" name="remember" class="shadow-md checkbox checkbox-sm" />
                 <span class="text-sm text-gray-600 ms-2">{{ __('Remember me') }}</span>
             </label>
         </div>

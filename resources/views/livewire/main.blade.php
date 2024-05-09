@@ -16,7 +16,9 @@
                         <i class="text-4xl shadow-sm ri-team-fill"></i>
                     </div>
                     <div class="stat-title">Total Team</div>
-                    <div class="stat-value">{{ $users->where('role_id', '<=', 3)->count() }}</div>
+                    <div class="stat-value">
+                        {{ $users->count() > 1 && $users->where('role_id', '==', 4)->count() > 1 ? $users->where('role_id', '<=', 3)->count() : 0 }}
+                    </div>
                     <div class="stat-desc">
                         pengguna khusus
                     </div>
@@ -33,7 +35,11 @@
                     <div class="stat-value">{{ \App\Models\Ticket::all()->count() }}</div>
                     <div class="stat-desc">
                         selesai
-                        {{ ceil((\App\Models\Proces::where('status_id', '4')->count() / \App\Models\Ticket::count()) * 100) }}%
+                        @if (\App\Models\Proces::count() > 0 && \App\Models\Ticket::count() > 0)
+                            {{ ceil((\App\Models\Proces::where('status_id', '4')->count() / \App\Models\Ticket::count()) * 100) }}%
+                        @else
+                            0
+                        @endif
                     </div>
                 </div>
             </div>
@@ -45,7 +51,9 @@
                         <i class="text-4xl shadow-sm ri-user-5-line"></i>
                     </div>
                     <div class="stat-title">Total pelanggan</div>
-                    <div class="stat-value">{{ $users->where('role_id', '==', 4)->count() }}</div>
+                    <div class="stat-value">
+                        {{ $users->count() > 1 && $users->where('role_id', '==', 4)->count() > 1 ? $users->where('role_id', '==', 4)->count() : 0 }}
+                    </div>
                     <div class="stat-desc">
                         pengguna reguler
                     </div>
@@ -59,10 +67,15 @@
                         <i class="text-4xl shadow-sm ri-team-fill"></i>
                     </div>
                     <div class="stat-title">Tiket diproses</div>
-                    <div class="stat-value">{{ \App\Models\Proces::count() }}</div>
+                    <div class="stat-value">{{ \App\Models\Proces::count() > 1 ? \App\Models\Proces::count() : 0 }}
+                    </div>
                     <div class="stat-desc">
                         telah diproses
-                        {{ ceil((\App\Models\Proces::where('status_id', '3')->count() / \App\Models\Ticket::count()) * 100) }}%
+                        @if (\App\Models\Proces::count() > 0 && \App\Models\Ticket::count() > 0)
+                            {{ ceil((\App\Models\Proces::where('status_id', '3')->count() / \App\Models\Ticket::count()) * 100) }}%
+                        @else
+                            0
+                        @endif
                     </div>
                 </div>
             </div>
