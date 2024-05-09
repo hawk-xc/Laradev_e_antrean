@@ -98,19 +98,23 @@
                             <td>
                                     @if ($proces->status_id == 1)
                                         <div class="lg:tooltip" data-tip="currently registered">
-                                            <button class="w-32 btn btn-secondary btn-sm"><i class="ri-flag-line"></i> registered</button>
+                                            <button class="w-32 btn btn-secondary btn-sm"><i class="ri-flag-line"></i> Registrasi</button>
                                         </div>
                                     @elseif ($proces->status_id == 2)
                                         <div class="lg:tooltip" data-tip="verified your ticket">
-                                            <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i> verified</button>
+                                            <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i> Verifikasi</button>
                                         </div>
                                     @elseif ($proces->status_id == 3)
                                         <div class="lg:tooltip" data-tip="processed by team">
-                                            <button class="w-32 btn btn-info btn-sm"><i class="ri-flag-line"></i> process</button>
+                                            <button class="w-32 btn btn-info btn-sm"><i class="ri-flag-line"></i> Pengerjaan</button>
                                         </div>
                                     @elseif ($proces->status_id == 4)
                                         <div class="lg:tooltip" data-tip="done">
-                                            <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i> done</button>
+                                            <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i> Selesai</button>
+                                        </div>
+                                    @elseif($proces->status_id==5)
+                                        <div class="lg:tooltip" data-tip="ditolak">
+                                            <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i> Ditolak</button>
                                         </div>
                                     @endif
                             </td>
@@ -124,16 +128,22 @@
                             <td>{{ $proces->created_at->diffForHumans() }}</td>
                             <td>
                                 @if ($user->role_id == 1)
-                                    <button class="btn btn-neutral" onclick="my_modal_4.showModal()" wire:click="edit({{ $proces->id }})" >update</button>
+                                    <button class="btn btn-neutral" onclick="my_modal_4.showModal()" wire:click="edit({{ $proces->id }})" >Ubah</button>
                                 @endif
                                 @if ($proces->status_id == 1 && $user->role_id == 2)
-                                    <button class="btn btn-warning" onclick="my_modal_4.showModal()" wire:click="edit({{ $proces->id }})">update</button>
+                                    <button class="btn btn-warning" onclick="my_modal_4.showModal()" wire:click="edit({{ $proces->id }})">Ubah</button>
                                 @endif
                                 @if ($proces->status_id == 2 && $user->role_id == 3)
-                                    <button class="btn btn-secondary" onclick="my_modal_4.showModal()" wire:click="processed({{ $proces->id }})">Process</button>
+                                    <button class="btn btn-secondary" wire:click="processed({{ $proces->id }})">Proses</button>
+                                    
                                 @endif
                                 @if ($proces->status_id == 3 && $user->role_id == 3)
-                                    <button class="btn btn-primary" onclick="my_modal_4.showModal()" wire:click="done({{ $proces->id }})">Done</button>
+                                    <button class="btn btn-primary" wire:click="done({{ $proces->id }})">Proses Selesai</button>
+                                    @elseif ($proces->status_id == 4 && $user->role_id == 3)
+                                    <div class="lg:tooltip" data-tip="done bang">
+                                        <button class="btn btn-success btn-sm" >Proses Kosong</button>
+                                    </div>
+
                                 @endif
                             </td>
                         </tr>

@@ -33,7 +33,6 @@ class Process extends Component
         $this->sortDirection = $direction;
     }
 
-
     public function fresh()
     {
         $this->reset(['status_id', 'employe_id', 'proces_id']);
