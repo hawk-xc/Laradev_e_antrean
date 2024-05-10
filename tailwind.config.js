@@ -13,7 +13,8 @@ export default {
         extend: {
             fontFamily: {
                 // sans: ["Figtree", ...defaultTheme.fontFamily.sans],
-                sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+                // sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+                sans: ["Montserrat", "sans-serif"],
             },
         },
     },

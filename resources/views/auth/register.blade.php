@@ -5,7 +5,7 @@
         <!-- Name -->
         <div>
             <x-input-label for="username" :value="__('Username')" />
-            <label class="flex items-center gap-2 mt-2 bg-white input-bordered input input-sm">
+            <label class="flex items-center gap-2 mt-2 bg-white shadow-sm input-bordered input border-slate-300">
                 <x-text-input id="username" class="block w-full mt-1" type="text" name="username" :value="old('username')"
                     required autofocus autocomplete="off" />
             </label>
@@ -14,7 +14,7 @@
 
         <div class="mt-4">
             <x-input-label for="name" :value="__('Name')" />
-            <label class="flex items-center gap-2 mt-2 bg-white input-bordered input input-sm">
+            <label class="flex items-center gap-2 mt-2 bg-white shadow-sm input-bordered input border-slate-300">
                 <x-text-input id="name" class="block w-full mt-1" type="text" name="name" :value="old('name')"
                     required autofocus autocomplete="name" />
             </label>
@@ -24,7 +24,7 @@
         <!-- Email Address -->
         <div class="mt-4">
             <x-input-label for="email" :value="__('Email')" />
-            <label class="flex items-center gap-2 mt-2 bg-white input-bordered input input-sm">
+            <label class="flex items-center gap-2 mt-2 bg-white shadow-sm input-bordered input border-slate-300">
                 <x-text-input id="email" class="block w-full mt-1" type="email" name="email" :value="old('email')"
                     required autocomplete="username" />
             </label>
@@ -34,7 +34,7 @@
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
-            <label class="flex items-center gap-2 mt-2 bg-white input-bordered input input-sm">
+            <label class="flex items-center gap-2 mt-2 bg-white shadow-sm input-bordered input border-slate-300">
                 <x-text-input id="password" class="block w-full mt-1" type="password" name="password" required
                     autocomplete="new-password" />
             </label>
@@ -44,7 +44,7 @@
         <!-- Confirm Password -->
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-            <label class="flex items-center gap-2 mt-2 bg-white input-bordered input input-sm">
+            <label class="flex items-center gap-2 mt-2 bg-white shadow-sm input-bordered input border-slate-300">
                 <x-text-input id="password_confirmation" class="block w-full mt-1" type="password"
                     name="password_confirmation" required autocomplete="new-password" />
             </label>
