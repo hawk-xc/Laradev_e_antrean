@@ -121,7 +121,16 @@
         <dialog id="createModal" class="modal" wire:ignore.self>
             <div class="modal-box">
                 <h3 class="text-lg font-bold">tambah data perangkat!</h3>
-
+                <div class="w-full p-5 my-3 text-xs rounded-md bg-stone-100">
+                    <span class="font-semibold text-md"><i class="ri-information-2-line"></i> perhatian</span>
+                    <ul class="pl-4 mt-2 list-disc">
+                        <li>pastikan menambahkan nama perangkat anda dengan lengkap, merk dan type</li>
+                        <li>pastikan tahun produksi laptop anda dengan benar</li>
+                        <li>data perangkat yang anda inputkan akan menjadi pertimbangan kami untuk menentukan metode
+                            perbaikan
+                        </li>
+                    </ul>
+                </div>
                 {{-- form in here --}}
                 <label class="w-full form-control">
                     <div class="label">
