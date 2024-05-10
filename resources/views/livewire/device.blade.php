@@ -3,25 +3,17 @@
 
     <div class="overflow-x-auto">
         @if (!$devices->isEmpty())
-            <label for="my_modal_6" class="btn btn-sm"><i class="ri-add-line"></i> Add device</label>
-            <span class="mx-5">
-                @if (!empty($checks))
-                    <div class="badge badge-secondary badge-outline">{{ count($checks) }} data selected!</div>
-
-                    <button wire:click="bulkDelete" wire:confirm="delete selected data?"
-                        class="ml-3 btn btn-outline btn-error btn-sm">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                @endif
-            </span>
+            <button class="btn max-sm:btn-xs" onclick="createModal.showModal()" wire:click='insert_testing'>
+                <i class="ri-menu-search-line"></i> tambah perangkat <i class="ri-add-line"></i>
+            </button>
         @endif
 
         @if (!$devices->isEmpty())
-            <table class="table">
+            <table class="table max-sm:text-xs">
                 <!-- head -->
                 <thead>
                     <tr class="text-lg">
-                        <th><i class="ri-list-check-3"></i></th>
+                        <th><i class="ri-hashtag"></i></th>
                         <th>device name</th>
                         <th class="hidden sm:table-cell">device year</th>
                         <th class="hidden sm:table-cell">added on</th>
@@ -29,33 +21,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($devices as $device)
+                    @foreach ($devices as $key => $device)
                         <tr class="cursor-pointer hover:bg-gray-50">
                             <th>
-                                <input type="checkbox" wire:key="{{ $device->id }}" value="{{ $device->id }}"
-                                    wire:model.live='checks' class="checkbox" />
+                                {{ $key + 1 }}
                             </th>
                             <td>{{ $device->device_name }}</td>
                             <td class="hidden sm:table-cell">{{ $device->device_year }}</td>
                             <td class="hidden sm:table-cell">{{ $device->created_at->diffForHumans() }}</td>
-                            <td class="hidden sm:table-cell">
+                            <td class="">
                                 {{-- <label wire:click="edit({{ $device->id }})" class="btn btn-neutral" --}}
-                                <label wire:click.live="edit({{ $device->id }})" class="btn btn-neutral"
-                                    for="my_modal_6">
-                                    Edit
-                                </label>
-                                <label class="btn btn-error"
-                                    wire:click.prevent='deleteConfirmation({{ $device->id }})'>
-                                    Delete
-                                </label>
-                            </td>
-                            <td class="sm:table-cell md:hidden">
-                                <label wire:click.live="edit({{ $device->id }})" class="btn btn-sm" for="my_modal_6">
-                                    <i class="ri-edit-box-fill"></i>
-                                </label>
-                                <label class="btn btn-sm" wire:click.prevent='deleteConfirmation({{ $device->id }})'>
-                                    <i class="ri-delete-bin-fill"></i>
-                                </label>
+                                <button class="btn max-sm:btn-xs" onclick="editModal.showModal()"
+                                    wire:click='edit_testing({{ $device->id }})'>
+                                    <i class="ri-menu-search-line"></i> lihat!
+                                </button>
                             </td>
                         </tr>
                     @endforeach
@@ -76,50 +55,118 @@
             </div>
         @endif
 
-        <!-- Open the modal using ID.showModal() method -->
-        <input type="checkbox" id="my_modal_6" class="modal-toggle" />
-        <div class="modal" role="dialog" wire:ignore.self>
-            <div class="modal-box" wire:loading.remove>
-                <h3 class="text-lg font-bold">Edit Device!</h3>
-                <div class="flex gap-2 md:flex-row max-sm:flex-col">
-                    <label class="w-full max-w-xs form-control">
+        <dialog id="editModal" class="modal" wire:ignore.self>
+            <div class="modal-box">
+                <h3 class="text-lg font-bold">Edit data perangkat!</h3>
+
+                {{-- form in here --}}
+                <label class="w-full form-control">
+                    <div class="label">
+                        <span class="label-text">Id perangkat</span>
+                    </div>
+                    <input id="deviceIdForm" disabled type="number" placeholder="Type here"
+                        class="w-full input input-bordered" />
+                </label>
+                <label class="w-full form-control">
+                    <div class="label">
+                        <span class="label-text">terakhir update</span>
+                    </div>
+                    <input id="deviceLastUpdateForm" disabled type="text" placeholder="Type here"
+                        class="w-full input input-bordered" />
+                </label>
+                <label class="w-full form-control">
+                    <div class="label">
+                        <span class="label-text">Nama perangkat</span>
+                    </div>
+                    <input id="deviceNameForm" wire:model='device_name' wire:load.attr='disabled' type="text"
+                        placeholder="Type here" class="w-full input input-bordered" />
+                    @error('device_name')
                         <div class="label">
-                            <span class="label-text">Device name?</span>
+                            <span class="text-red-500 label-text-alt">{{ $message }}</span>
                         </div>
-                        <input type="text" placeholder="Type here" class="w-full max-w-xs input input-bordered"
-                            wire:model="device_name" />
-                        @error('device_name')
-                            <div class="label">
-                                <span class="label-text-alt">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="w-full max-w-xs form-control">
+                    @enderror
+                </label>
+                <label class="w-full form-control">
+                    <div class="label">
+                        <span class="label-text">Tahun perangkat</span>
+                    </div>
+                    <input id="deviceYearForm" wire:model='device_year' type="text" placeholder="Type here"
+                        class="w-full input input-bordered" />
+                    @error('device_year')
                         <div class="label">
-                            <span class="label-text">Device year?</span>
+                            <span class="text-red-500 label-text-alt">{{ $message }}</span>
                         </div>
-                        <input type="number" min="1980" max="{{ now()->year }}" placeholder="Type here"
-                            class="w-full max-w-xs input input-bordered" wire:model="device_year" />
-                        @error('device_year')
-                            <div class="label">
-                                <span class="label-text-alt">{{ $message }}</span>
-                            </div>
-                        @enderror
+                    @enderror
+                </label>
+                {{-- form in here --}}
+
+                <div class="flex flex-row justify-between modal-action">
+                    <label class="btn btn-error max-sm:btn-xs" wire:click.prevent='deleteConfirmation'>
+                        <i class="ri-delete-bin-7-line"></i> Delete
                     </label>
-                </div>
-                <div class="modal-action">
-                    @if ($action == 'create')
-                        <button wire:click="create" class="btn btn-neutral">save!</button>
-                    @elseif($action == 'update')
-                        <button wire:click="store" class="btn btn-neutral">update!</button>
-                    @endif
-                    <label wire:click='close' id="closeButton" for="my_modal_6" class="btn">Close!</label>
+                    <span class="flex flex-row gap-3">
+                        <button class="btn btn-neutral max-sm:btn-xs" wire:click='update_testing'><i
+                                class="ri-check-line"></i>
+                            perbahrui</button>
+                        <form method="dialog" class="flex flex-row gap-3">
+                            <!-- if there is a button in form, it will close the modal -->
+                            <button id="closeButton" class="btn max-sm:btn-xs" wire:click='fresh'><i
+                                    class="ri-arrow-go-back-line"></i>
+                                Batal</button>
+                        </form>
+                    </span>
                 </div>
             </div>
-            <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
-                <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
-                <span class="block mx-auto mb-10">please wait a moment...</span>
+        </dialog>
+        <dialog id="createModal" class="modal" wire:ignore.self>
+            <div class="modal-box">
+                <h3 class="text-lg font-bold">tambah data perangkat!</h3>
+
+                {{-- form in here --}}
+                <label class="w-full form-control">
+                    <div class="label">
+                        <span class="label-text">Nama perangkat</span>
+                    </div>
+                    <input id="deviceNameForm" wire:model='device_name' wire:load.attr='disabled' type="text"
+                        placeholder="Type here" class="w-full input input-bordered" />
+                    @error('device_name')
+                        <div class="label">
+                            <span class="text-red-500 label-text-alt">{{ $message }}</span>
+                        </div>
+                    @enderror
+                </label>
+                <label class="w-full form-control">
+                    <div class="label">
+                        <span class="label-text">Tahun perangkat</span>
+                    </div>
+                    <input id="deviceYearForm" wire:model='device_year' type="text" placeholder="Type here"
+                        class="w-full input input-bordered" />
+                    @error('device_year')
+                        <div class="label">
+                            <span class="text-red-500 label-text-alt">{{ $message }}</span>
+                        </div>
+                    @enderror
+                </label>
+                {{-- form in here --}}
+
+                <div class="flex flex-row modal-action">
+                    <span class="flex flex-row gap-3">
+                        <button class="btn btn-neutral max-sm:btn-xs" wire:click='store_testing'><i
+                                class="ri-edit-line"></i>
+                            simpan</button>
+                        <form method="dialog" class="flex flex-row gap-3">
+                            <!-- if there is a button in form, it will close the modal -->
+                            <button id="closeModal" class="btn max-sm:btn-xs" wire:click='fresh'><i
+                                    class="ri-arrow-go-back-line"></i>
+                                Batal</button>
+                        </form>
+                    </span>
+                </div>
             </div>
+        </dialog>
+        <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
+            <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
+            <span class="block mx-auto mb-10">please wait a moment...</span>
         </div>
     </div>
 </div>
