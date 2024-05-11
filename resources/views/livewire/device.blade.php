@@ -1,6 +1,11 @@
 <div>
     <x-notification-laravel />
 
+    <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
+        <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
+        <span class="block mx-auto mb-10">please wait a moment...</span>
+    </div>
+
     <div class="overflow-x-auto">
         @if (!$devices->isEmpty())
             <button class="btn max-sm:btn-xs" onclick="createModal.showModal()" wire:click='insert_testing'>
@@ -58,6 +63,16 @@
         <dialog id="editModal" class="modal" wire:ignore.self>
             <div class="modal-box">
                 <h3 class="text-lg font-bold">Edit data perangkat!</h3>
+                <div class="w-full p-5 my-3 text-xs rounded-md bg-stone-100">
+                    <span class="font-semibold text-md"><i class="ri-information-2-line"></i> perhatian</span>
+                    <ul class="pl-4 mt-2 list-disc">
+                        <li>pastikan merubah nama perangkat anda dengan lengkap, merk dan type</li>
+                        <li>pastikan tahun produksi laptop anda dengan benar</li>
+                        <li>data perangkat yang anda inputkan akan menjadi pertimbangan kami untuk menentukan metode
+                            perbaikan
+                        </li>
+                    </ul>
+                </div>
 
                 {{-- form in here --}}
                 <label class="w-full form-control">
@@ -90,8 +105,8 @@
                     <div class="label">
                         <span class="label-text">Tahun perangkat</span>
                     </div>
-                    <input id="deviceYearForm" wire:model='device_year' type="text" placeholder="Type here"
-                        class="w-full input input-bordered" />
+                    <input id="deviceYearForm" wire:model='device_year' wire:loading.attr='disabled' type="text"
+                        placeholder="Type here" class="w-full input input-bordered" />
                     @error('device_year')
                         <div class="label">
                             <span class="text-red-500 label-text-alt">{{ $message }}</span>
@@ -149,7 +164,7 @@
                         <span class="label-text">Tahun perangkat</span>
                     </div>
                     <input id="deviceYearForm" wire:model='device_year' type="text" placeholder="Type here"
-                        class="w-full input input-bordered" />
+                        class="w-full input input-bordered" wire:loading.attr='disabled' />
                     @error('device_year')
                         <div class="label">
                             <span class="text-red-500 label-text-alt">{{ $message }}</span>
@@ -173,9 +188,5 @@
                 </div>
             </div>
         </dialog>
-        <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
-            <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
-            <span class="block mx-auto mb-10">please wait a moment...</span>
-        </div>
     </div>
 </div>
