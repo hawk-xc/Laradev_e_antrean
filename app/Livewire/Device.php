@@ -16,6 +16,8 @@ class Device extends Component
 
     public $device_name, $device_year, $device_id, $delete_id;
 
+    public $openModal = true;
+
     public $action = 'create';
 
     public array $checks = [];
@@ -49,9 +51,15 @@ class Device extends Component
 
     public function fresh()
     {
-        $this->device_name = '';
-        $this->device_year = '';
+        // $this->device_name = '';
+        // $this->device_year = '';
+        // $this->action = '';
+        // $this->device_id = '';
+        $this->reset('device_name');
+        $this->reset('device_year');
+        $this->reset('device_id');
         $this->action = 'create';
+        $this->openModal = false;
     }
 
     public function create()
@@ -75,11 +83,13 @@ class Device extends Component
 
     public function edit($id)
     {
-        $this->action = 'update';
-        $this->device_id = $id;
+        $this->action = 'edit';
+        // $this->device_id = $id;
+        $this->openModal = true;
         $device = DeviceModel::find($id);
         $this->device_name = $device->device_name;
         $this->device_year = $device->device_year;
+        $this->device_id = $id;
     }
 
     public function close()
@@ -99,7 +109,7 @@ class Device extends Component
         $created = $device->update($validate);
         if ($created) {
             $this->dispatch('closeButton');
-            $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
+            $this->dispatch('notify', type: 'success', message: 'data berhasil diupdate!');
             event(new \App\Events\UserInteraction(Auth::user(), "Device => update device {$device->device_name} with id " . $device->id));
             $this->fresh();
         }
@@ -109,7 +119,8 @@ class Device extends Component
     {
         $auth = Auth::user();
         $devices = DeviceModel::with('User')->where('user_id', $auth->id)->orderBy('created_at', 'asc')->paginate(5);
+        $devicess = DeviceModel::where('user_id', Auth::user()->id)->get();
         $is_empty = isset($devices);
-        return view('livewire.device')->with(['devices' => $devices]);
+        return view('livewire.device', ['devices' => $devices, 'devicess' => $devicess]);
     }
 }

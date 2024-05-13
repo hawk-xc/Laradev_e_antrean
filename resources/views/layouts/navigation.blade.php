@@ -27,7 +27,7 @@
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('device')" :active="request()->routeIs('device')" class="gap-2">
                             <i class="ri-macbook-line"></i>
-                            {{ __('Perangakat') }}
+                            {{ __('Perangkat') }}
                         </x-nav-link>
                     </div>
                 @endif

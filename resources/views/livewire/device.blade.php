@@ -1,125 +1,117 @@
-<div>
-    <x-notification-laravel />
+<?php
 
-    <div class="overflow-x-auto">
-        @if (!$devices->isEmpty())
-            <label for="my_modal_6" class="btn btn-sm"><i class="ri-add-line"></i> Add device</label>
-            <span class="mx-5">
-                @if (!empty($checks))
-                    <div class="badge badge-secondary badge-outline">{{ count($checks) }} data selected!</div>
+namespace App\Livewire;
 
-                    <button wire:click="bulkDelete" wire:confirm="delete selected data?"
-                        class="ml-3 btn btn-outline btn-error btn-sm">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                @endif
-            </span>
-        @endif
+use \App\Models\Device as DeviceModel;
+use \App\Models\Ticket as TicketModel;
+use App\Rules\YearValidation;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
 
-        @if (!$devices->isEmpty())
-            <table class="table">
-                <!-- head -->
-                <thead>
-                    <tr class="text-lg">
-                        <th><i class="ri-list-check-3"></i></th>
-                        <th>device name</th>
-                        <th class="hidden sm:table-cell">device year</th>
-                        <th class="hidden sm:table-cell">added on</th>
-                        <th>option</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($devices as $device)
-                        <tr class="cursor-pointer hover:bg-gray-50">
-                            <th>
-                                <input type="checkbox" wire:key="{{ $device->id }}" value="{{ $device->id }}"
-                                    wire:model.live='checks' class="checkbox" />
-                            </th>
-                            <td>{{ $device->device_name }}</td>
-                            <td class="hidden sm:table-cell">{{ $device->device_year }}</td>
-                            <td class="hidden sm:table-cell">{{ $device->created_at->diffForHumans() }}</td>
-                            <td class="hidden sm:table-cell">
-                                {{-- <label wire:click="edit({{ $device->id }})" class="btn btn-neutral" --}}
-                                <label wire:click.live="edit({{ $device->id }})" class="btn btn-neutral"
-                                    for="my_modal_6">
-                                    Edit
-                                </label>
-                                <label class="btn btn-error"
-                                    wire:click.prevent='deleteConfirmation({{ $device->id }})'>
-                                    Delete
-                                </label>
-                            </td>
-                            <td class="sm:table-cell md:hidden">
-                                <label wire:click.live="edit({{ $device->id }})" class="btn btn-sm" for="my_modal_6">
-                                    <i class="ri-edit-box-fill"></i>
-                                </label>
-                                <label class="btn btn-sm" wire:click.prevent='deleteConfirmation({{ $device->id }})'>
-                                    <i class="ri-delete-bin-fill"></i>
-                                </label>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <span>{{ $devices->links() }}</span>
-        @endif
-        @if ($devices->isEmpty())
-            <div class="py-20 hero">
-                <div class="text-center hero-content">
-                    <div class="max-w-md">
-                        <h1 class="text-5xl font-bold">Hello there</h1>
-                        <p class="py-6">Currently the data is still empty, you can add data via the button below!</p>
-                        <label for="my_modal_6" class="btn btn-neutral btn-sm"><i class="ri-add-line"></i> Add
-                            device</label>
-                    </div>
-                </div>
-            </div>
-        @endif
+class Device extends Component
+{
+    use WithPagination, WithoutUrlPagination;
 
-        <!-- Open the modal using ID.showModal() method -->
-        <input type="checkbox" id="my_modal_6" class="modal-toggle" />
-        <div class="modal" role="dialog" wire:ignore.self>
-            <div class="modal-box" wire:loading.remove>
-                <h3 class="text-lg font-bold">Edit Device!</h3>
-                <div class="flex gap-2 md:flex-row max-sm:flex-col">
-                    <label class="w-full max-w-xs form-control">
-                        <div class="label">
-                            <span class="label-text">Device name?</span>
-                        </div>
-                        <input type="text" placeholder="Type here" class="w-full max-w-xs input input-bordered"
-                            wire:model="device_name" />
-                        @error('device_name')
-                            <div class="label">
-                                <span class="label-text-alt">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                    <label class="w-full max-w-xs form-control">
-                        <div class="label">
-                            <span class="label-text">Device year?</span>
-                        </div>
-                        <input type="number" min="1980" max="{{ now()->year }}" placeholder="Type here"
-                            class="w-full max-w-xs input input-bordered" wire:model="device_year" />
-                        @error('device_year')
-                            <div class="label">
-                                <span class="label-text-alt">{{ $message }}</span>
-                            </div>
-                        @enderror
-                    </label>
-                </div>
-                <div class="modal-action">
-                    @if ($action == 'create')
-                        <button wire:click="create" class="btn btn-neutral">save!</button>
-                    @elseif($action == 'update')
-                        <button wire:click="store" class="btn btn-neutral">update!</button>
-                    @endif
-                    <label wire:click='close' id="closeButton" for="my_modal_6" class="btn">Close!</label>
-                </div>
-            </div>
-            <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
-                <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
-                <span class="block mx-auto mb-10">please wait a moment...</span>
-            </div>
-        </div>
-    </div>
-</div>
+    public $device_name, $device_year, $device_id, $delete_id;
+
+    public $openModal = false;
+
+    // Pertahankan nilai action menggunakan session
+    protected $listeners = ['confirmDelete' => 'deleteTicket', 'editMode' => 'setEditMode'];
+
+    public array $checks = [];
+
+    public $action = 'create'; // Default action
+
+    public function bulkDelete(): void
+    {
+        DeviceModel::whereIn('id', $this->checks)->delete();
+    }
+
+    public function deleteConfirmation(int $id): void
+    {
+        $this->delete_id = $id;
+        $this->dispatch('show-delete');
+    }
+
+    public function deleteTicket(): void
+    {
+        $device = DeviceModel::find($this->delete_id);
+        if (TicketModel::where('device_id', $device->id)->exists()) {
+            $this->dispatch('notify', type: 'error', message: 'Data cannot be deleted!');
+        } else {
+            if ($device->delete()) {
+                $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
+                event(new \App\Events\UserInteraction(Auth::user(), "Device => delete device " . $device->device_name . " with id " . $device->id));
+                $this->fresh();
+            }
+        }
+    }
+
+    public function fresh()
+    {
+        $this->reset(['device_name', 'device_year', 'device_id']);
+        $this->action = 'create';
+        $this->openModal = false;
+    }
+
+    public function create()
+    {
+        // Pengaturan action dilakukan saat membuka modal
+        $validate = $this->validate([
+            'device_name' => ['required', 'min:3'],
+            'device_year' => ['required', 'numeric', 'min:4', new YearValidation]
+        ]);
+
+        $validate['user_id'] = Auth::user()->id;
+
+        $create = DeviceModel::create($validate);
+        if ($create) {
+            $this->dispatch('closeButton');
+            $this->dispatch('notify', type: 'success', message: 'data successfully created!');
+            event(new \App\Events\UserInteraction(Auth::user(), "Device => create new device " . $create->device_name . " with id " . $create->id));
+            $this->fresh();
+        }
+    }
+
+    public function setEditMode($id)
+    {
+        // Set action ke 'edit' dan buka modal
+        $this->action = 'edit';
+        $this->openModal = true;
+        $this->device_id = $id;
+        $device = DeviceModel::find($id);
+        $this->device_name = $device->device_name;
+        $this->device_year = $device->device_year;
+    }
+
+    // Metode untuk menangani update data
+    public function store()
+    {
+        $validate = $this->validate([
+            'device_name' => 'required|min:3',
+            'device_year' => 'required|numeric|min:4'
+        ]);
+
+        $validate['user_id'] = Auth::user()->id;
+        $device = DeviceModel::find($this->device_id);
+        $created = $device->update($validate);
+        if ($created) {
+            $this->dispatch('closeButton');
+            $this->dispatch('notify', type: 'success', message: 'data berhasil diupdate!');
+            event(new \App\Events\UserInteraction(Auth::user(), "Device => update device {$device->device_name} with id " . $device->id));
+            $this->fresh();
+        }
+    }
+
+    public function render()
+    {
+        $auth = Auth::user();
+        $devices = DeviceModel::with('User')->where('user_id', $auth->id)->orderBy('created_at', 'asc')->paginate(5);
+        $devicess = DeviceModel::where('user_id', Auth::user()->id)->get();
+        $is_empty = isset($devices);
+        return view('livewire.device', compact('devices', 'devicess'));
+    }
+}

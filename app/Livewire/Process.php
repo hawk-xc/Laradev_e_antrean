@@ -54,6 +54,8 @@ class Process extends Component
             } else {
                 $process = Proces::latest()->paginate(5);
             }
+        } elseif ($user->role_id === 2) {
+            $process = Proces::orderBy('id', 'asc')->latest()->paginate(5);
         } else {
             $process = Proces::where('user_id', Auth::user()->id)->orderBy('id', 'asc')->latest()->paginate(5);
         }
