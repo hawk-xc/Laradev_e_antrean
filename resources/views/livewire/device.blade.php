@@ -45,7 +45,6 @@
                     @endforeach
                 </tbody>
             </table>
-            <span>{{ $devices->links() }}</span>
         @endif
         @if ($devices->isEmpty())
             <div class="py-20 hero">
@@ -53,12 +52,35 @@
                     <div class="max-w-md">
                         <h1 class="text-5xl font-bold">Hello there</h1>
                         <p class="py-6">Currently the data is still empty, you can add data via the button below!</p>
-                        <label for="my_modal_6" class="btn btn-neutral btn-sm"><i class="ri-add-line"></i> Add
-                            device</label>
+                            <button class="btn max-sm:btn-xs btn-neutral" onclick="createModal.showModal()" wire:click='insert_testing'>
+                                <i class="ri-menu-search-line"></i> tambah perangkat <i class="ri-add-line"></i>
+                            </button>
                     </div>
                 </div>
             </div>
         @endif
+
+        <span class="flex flex-row gap-4 align-middle items-center">
+            <p class="inline text-xs font-light">
+                menampilkan {{ $loadCount > \App\Models\Device::where('user_id', Auth::user()->id)->count() ? \App\Models\Device::where('user_id', Auth::user()->id)->count() : $loadCount }} dari {{ \App\Models\Device::where('user_id', Auth::user()->id)->count() }}
+            </p>
+            @if ($loadCount < \App\Models\Device::where('user_id', Auth::user()->id)->count())  
+                <button wire:click='loadMore(5)' class="btn btn-xs btn-neutral">+ 5 lebih</button>
+            @endif
+            @if ($loadCount > 5)
+                <button wire:click='loadLess(5)' class="btn btn-xs btn-neutral">- 5 kurang</button>
+            @endif
+            @if ($loadCount <= 5)
+                <button wire:click='loadAll({{ Auth::user()->id }})' class="btn btn-xs btn-neutral">
+                    tampilkan semua
+                </button>
+            @endif
+            @if ($loadCount >= \App\Models\Device::where('user_id', Auth::user()->id)->count())
+                <button wire:click='loadAllLess' class="btn btn-xs btn-neutral">
+                    sembunyikan semua
+                </button> 
+            @endif
+        </span>
 
         <dialog id="editModal" class="modal" wire:ignore.self>
             <div class="modal-box">

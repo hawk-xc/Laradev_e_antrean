@@ -94,6 +94,12 @@
                     deviceYearForm.val(data.data.device_year);
                     deviceLastUpdateForm.val(formattedDatetime);
                 });
+
+                $wire.on('refresh', () => {
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 3000);
+                })
             })
         </script>
     @endscript
