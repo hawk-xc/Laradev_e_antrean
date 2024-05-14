@@ -20,7 +20,38 @@ class ManageUser extends Component
     public $search = '';
     public $sortby = 'username';
     public $delete_id;
+    public $userpanel = true;
+    public $loadCount = 5;
     public $role_id = '', $user_id = '', $name = '', $date = '', $mail = '', $username = '', $phone = '', $user_image = '';
+
+    public function loadMore(int $int): void
+    {
+        $this->loadCount += $int;
+    }
+
+    public function loadLess(int $int): void
+    {
+        $this->loadCount -= $int;
+    }
+
+    public function loadAll(): void
+    {
+        $this->loadCount = UserModel::where('role_id', '=', 4)->count();
+    }
+
+    public function loadAllLess(): void
+    {
+        $this->loadCount = 5;
+    }
+
+    public function userPanel(): void
+    {
+        $this->userpanel = true;
+    }
+    public function userPanelClient(): void
+    {
+        $this->userpanel = false;
+    }
 
     protected $listeners = [
         'confirmDelete' => 'deleteUser',
@@ -148,14 +179,16 @@ class ManageUser extends Component
 
     public function render()
     {
-        $coreUsers = UserModel::orderBy('role_id', 'asc')->whereIn('role_id', [1, 2, 3])->get();
-        $clientUsers = UserModel::orderBy($this->sortby, 'asc')->where('role_id', '=', 4)->where(function ($query) {
-            $query->where('username', 'like', '%' . $this->search . '%')->orWhere('name', 'like', '%' . $this->search . '%');
-        })->simplePaginate(5);
+        $definition = [
+            'coreUsers' => UserModel::orderBy('role_id', 'asc')->whereIn('role_id', [1, 2, 3])->get(),
+            'clientUsers' => UserModel::orderBy($this->sortby, 'asc')->where('role_id', '=', 4)->where(
+                function ($query) {
+                    $query->where('username', 'like', '%' . $this->search . '%')->orWhere('name', 'like', '%' . $this->search . '%');
+                }
+            )->limit($this->loadCount)->get(),
+            'testing' => UserModel::where('role_id', '=', '4')->get()
+        ];
 
-        return view('livewire.manage-user', [
-            'coreUsers' => $coreUsers,
-            'clientUsers' => $clientUsers
-        ]);
+        return view('livewire.manage-user', $definition);
     }
 }
