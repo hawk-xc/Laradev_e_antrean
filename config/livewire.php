@@ -12,7 +12,6 @@ return [
     | finds components. It's also referenced by the file creation commands.
     |
     */
-    // 'disabled' => true,
 
     'class_namespace' => 'App\\Livewire',
 
@@ -39,7 +38,7 @@ return [
     |
     */
 
-    'layout' => 'components.components.layouts.app',
+    'layout' => 'components.layouts.app',
 
     /*
     |---------------------------------------------------------------------------
@@ -75,6 +74,7 @@ return [
             'jpg', 'jpeg', 'mpga', 'webp', 'wma',
         ],
         'max_upload_time' => 5, // Max duration (in minutes) before an upload is invalidated...
+        'cleanup' => true, // Should cleanup temporary uploads older than 24 hrs...
     ],
 
     /*

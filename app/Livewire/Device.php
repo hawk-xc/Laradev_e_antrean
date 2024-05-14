@@ -6,15 +6,12 @@ use \App\Models\Device as DeviceModel;
 use \App\Models\Ticket as TicketModel;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Livewire\WithoutUrlPagination;
-use Livewire\WithPagination;
 use Livewire\Attributes\Validate;
 
 class Device extends Component
 {
-    use WithPagination, WithoutUrlPagination;
-
     public $device_name, $device_year, $device_id, $delete_id;
+    public $loadCount = 5;
     protected $listeners = ['confirmDelete' => 'deleteTicket'];
 
     public function fresh()
@@ -22,6 +19,27 @@ class Device extends Component
         $this->device_name = '';
         $this->device_year = '';
         $this->device_id = '';
+    }
+
+    // load more load less config
+    public function loadMore(int $int): void
+    {
+        $this->loadCount += $int;
+    }
+
+    public function loadLess(int $int): void
+    {
+        $this->loadCount -= $int;
+    }
+
+    public function loadAll(int $int): void
+    {
+        $this->loadCount = DeviceModel::where('user_id', $int)->count();
+    }
+
+    public function loadAllLess(): void
+    {
+        $this->loadCount = 5;
     }
 
     public function insert_testing()
@@ -42,10 +60,11 @@ class Device extends Component
 
         $create = DeviceModel::create($validate);
         if ($create) {
+            $this->dispatch('closeButton');
             $this->dispatch('notify', type: 'success', message: 'data successfully created!');
             event(new \App\Events\UserInteraction(Auth::user(), "Device => create new device " . $create->device_name . " with id " . $create->id));
             $this->fresh();
-            $this->dispatch('closeButton');
+            $this->dispatch('refresh');
         }
     }
 
@@ -126,8 +145,7 @@ class Device extends Component
     public function render()
     {
         $auth = Auth::user();
-        $devices = DeviceModel::with('User')->where('user_id', $auth->id)->orderBy('created_at', 'asc')->paginate(5);
-        $is_empty = isset($devices);
+        $devices = DeviceModel::with('User')->where('user_id', $auth->id)->orderBy('created_at', 'asc')->limit($this->loadCount)->get();
         return view('livewire.device')->with([
             'devices' => $devices,
         ]);
