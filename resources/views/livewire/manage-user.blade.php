@@ -1,15 +1,26 @@
-<div class="w-full flex flex-row gap-3 mt-5">
+<div class="w-full flex flex-row max-sm:flex-col gap-3 mt-5">
     <x-notification-laravel />
 
-    <div class="px-10 py-2 flex flex-col gap-2 h-60 aspect-square align-middle items-center">
+    <div class="px-10 py-2 flex flex-col gap-2 h-60 aspect-square align-middle items-center max-sm:hidden">
         <button class="btn {{ $userpanel ? 'btn-neutral' : '' }} text-xs w-full" wire:click="userPanel"><i
                 class="ri-user-2-line"></i> ruang pegawai</button>
         <button class="btn {{ !$userpanel ? 'btn-neutral' : '' }} text-xs w-full" wire:click="userPanelClient"><i
                 class="ri-user-3-line"></i> ruang pelanggan</button>
     </div>
-    <div class="shadow-md rounded-lg p-10 w-full border border-slate-200">
+    <div class="w-full flex justify-end items-end align-middle md:hidden">
+        <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn m-1">pilih data</div>
+            <ul tabindex="0" class="dropdown-content z-[1] flex gap-3 menu p-2 shadow bg-base-100 rounded-box w-52">
+              <li class="cursor-pointer btn {{ $userpanel ? 'btn-neutral' : '' }}" wire:click='userPanel'><a><i
+                class="ri-user-2-line"></i> ruang pegawai</a></li>
+              <li class="cursor-pointer btn {{ !$userpanel ? 'btn-neutral' : '' }}" wire:click='userPanelClient'><a><i
+                class="ri-user-3-line"></i> ruang pelanggan</a></li>
+            </ul>
+          </div>
+    </div>
+    <div class="shadow-md rounded-lg md:p-10 w-full border border-slate-200">
         @if ($userpanel)
-            <div class="flex flex-col gap-3" style="background-image: url({{ asset('images/card-background.png') }})">
+            <div class="flex flex-col gap-3">
                 @foreach ($coreUsers as $user)
                     <div wire:click='detail({{ $user->id }})' onclick="my_modal_5.showModal()"
                         class="flex flex-row justify-between hover:bg-slate-50 cursor-pointer p-4 shadow-md border border-slate-100 rounded-xl align-middle items-center">
@@ -93,8 +104,11 @@
                                 </div>
                             @endforelse
                     </table>
-                    @if (!$search)
-                        <span class="flex flex-row gap-4 align-middle items-center justify-between">
+                    
+                </div>
+            </div>
+            @if (!$search)
+                        <span class="flex my-5 flex-row max-sm:flex-col gap-4 align-middle items-center justify-between">
                             <p class="inline text-xs font-light">
                                 menampilkan
                                 {{ $loadCount > \App\Models\User::where('role_id', '=', '4')->count() ? \App\Models\User::where('role_id', '=', '4')->count() : $loadCount }}
@@ -120,8 +134,6 @@
                             </span>
                         </span>
                     @endif
-                </div>
-            </div>
         @endif
     </div>
     @script
