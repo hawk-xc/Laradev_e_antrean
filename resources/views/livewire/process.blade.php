@@ -57,7 +57,7 @@
 </dialog>
     {{-- In work, do what you enjoy. --}}
     <div class="overflow-x-auto">
-        @if ($process->isEmpty())
+        @if ($process->get()->isEmpty())
             <div class="py-20 hero">
                 <div class="text-center hero-content">
                     <div class="max-w-md">
@@ -83,15 +83,15 @@
                 <thead>
                     <tr class="text-lg">
                         <th><i class="ri-bubble-chart-line"></i> Status</th>
-                        <th>Customer name</th>
-                        <th>Device Name</th>
-                        <th>Employee Name</th>
-                        <th>Added on</th>
-                        <th>Action</th>
+                        <th>Nama Customer</th>
+                        <th>Nama Perangkat</th>
+                        <th>Nama Teknisi</th>
+                        <th>Ditambahkan Pada</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($process as $proces)
+                    @foreach ($process->get() as $proces)
                         <tr class="cursor-pointer hover:bg-gray-50">
                             <td>
                                     @if ($proces->status_id == 1)
@@ -99,7 +99,7 @@
                                             <button class="w-32 btn btn-secondary btn-sm"><i class="ri-flag-line"></i> Registrasi</button>
                                         </div>
                                     @elseif ($proces->status_id == 2)
-                                        <div class="lg:tooltip" data-tip="verified your ticket">
+                                        <div class="lg:tooltip" data-tip="verified ticket">
                                             <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i> Verifikasi</button>
                                         </div>
                                     @elseif ($proces->status_id == 3)
@@ -140,19 +140,31 @@
                                     <div class="lg:tooltip" data-tip="done bang">
                                         <button class="btn btn-success btn-sm" >Proses Kosong</button>
                                     </div>
-
                                 @endif
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
-            <span>{{ $process->links() }}</span>
+            @if ($process->get()->count() != null)
+            <div class="divider"></div> 
+            <div class="flex w-full ">
+                <span class="justify-start p-4 text-sm skeleton badge ">{{ $process->get()->count()}} dari {{ $process->count() }} data Proses</span>
+            </div>
+
+            <div class="flex justify-center ">
+            <ul class="font-bold menu menu-vertical lg:menu-horizontal bg-base-200 rounded-box">
+                <li class="mx-4"><button wire:click='addLimit(5)'><i class="ri-add-line"></i> Tampilkan 5 lagi</button></li>
+                @if ($limiter >5)
+                <li class="mx-4"><button wire:click='removeLimit(5)'><i class="ri-subtract-line"></i> Sembunyikan 5</button></li>
+                @endif
+            </ul>
+            </div>
+            {{-- <span>{{ $process->links() }}</span> --}}
+            @endif
         @endif
 
-        {{-- @if ($openModal)
-            <x-update-status :process="$process" :employees="$employees" :statuses="$statuses" />
-        @endif --}}
+
         
 
 

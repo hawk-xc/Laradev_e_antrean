@@ -15,14 +15,14 @@ class Device extends Component
     use WithPagination, WithoutUrlPagination;
 
     public $device_name, $device_year, $device_id, $delete_id;
-
-    public $action = 'create';
-
-    public array $checks = [];
-
     protected $listeners = ['confirmDelete' => 'deleteTicket'];
 
-
+    public function fresh()
+    {
+        $this->device_name = '';
+        $this->device_year = '';
+        $this->device_id = '';
+    }
 
     public function insert_testing()
     {
@@ -100,13 +100,6 @@ class Device extends Component
         }
     }
 
-    public function fresh()
-    {
-        $this->device_name = '';
-        $this->device_year = '';
-        $this->action = 'create';
-    }
-
     public function create()
     {
         $validate = $this->validate([
@@ -125,44 +118,18 @@ class Device extends Component
         }
     }
 
-    public function edit($id)
-    {
-        $this->action = 'update';
-        $this->device_id = $id;
-        $device = DeviceModel::find($id);
-        $this->device_name = $device->device_name;
-        $this->device_year = $device->device_year;
-    }
-
     public function close()
     {
         $this->fresh();
-    }
-
-    public function store()
-    {
-        $validate = $this->validate([
-            'device_name' => 'required|min:3',
-            'device_year' => 'required|numeric|min:4'
-        ]);
-
-        $validate['user_id'] = Auth::user()->id;
-        $device = DeviceModel::find($this->device_id);
-        $created = $device->update($validate);
-        if ($created) {
-            $this->dispatch('closeButton');
-            $this->dispatch('notify', type: 'success', message: 'data successfully updated!');
-            event(new \App\Events\UserInteraction(Auth::user(), "Device => update device {$device->device_name} with id " . $device->id));
-            $this->fresh();
-        }
     }
 
     public function render()
     {
         $auth = Auth::user();
         $devices = DeviceModel::with('User')->where('user_id', $auth->id)->orderBy('created_at', 'asc')->paginate(5);
-        $devicess = DeviceModel::where('user_id', Auth::user()->id)->get();
         $is_empty = isset($devices);
-        return view('livewire.device')->with(['devices' => $devices]);
+        return view('livewire.device')->with([
+            'devices' => $devices,
+        ]);
     }
 }

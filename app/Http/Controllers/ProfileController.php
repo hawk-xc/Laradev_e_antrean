@@ -24,6 +24,25 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
+
+    public function updatePhone(Request $request)
+    {
+        $request->validate([
+            'phone' => ['required', 'string', 'max:255'], // Sesuaikan aturan validasi sesuai kebutuhan Anda
+        ]);
+
+        $user = $request->user();
+        $user->phone = $request->input('phone');
+
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $request->user()->fill($request->validated());
