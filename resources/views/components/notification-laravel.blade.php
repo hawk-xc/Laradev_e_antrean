@@ -75,6 +75,7 @@
                     const deviceIdForm = $('#deviceIdForm');
                     const deviceNameForm = $('#deviceNameForm');
                     const deviceYearForm = $('#deviceYearForm');
+                    const driveLinkForm = $('#driveLinkForm');
                     const deviceLastUpdateForm = $('#deviceLastUpdateForm');
 
                     const originalDatetime = data.data.updated_at;
@@ -92,6 +93,7 @@
                     deviceIdForm.val(data.data.id);
                     deviceNameForm.val(data.data.device_name);
                     deviceYearForm.val(data.data.device_year);
+                    driveLinkForm.val(data.data.drive_link);
                     deviceLastUpdateForm.val(formattedDatetime);
                 });
 

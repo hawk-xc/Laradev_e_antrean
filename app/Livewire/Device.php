@@ -10,7 +10,7 @@ use Livewire\Attributes\Validate;
 
 class Device extends Component
 {
-    public $device_name, $device_year, $device_id, $delete_id;
+    public $device_name, $device_year, $drive_link, $device_id, $delete_id;
     public $loadCount = 5;
     protected $listeners = ['confirmDelete' => 'deleteTicket'];
 
@@ -18,6 +18,7 @@ class Device extends Component
     {
         $this->device_name = '';
         $this->device_year = '';
+        $this->drive_link = '';
         $this->device_id = '';
     }
 
@@ -53,7 +54,8 @@ class Device extends Component
         // dd($this);
         $validate = $this->validate([
             'device_name' => 'required|min:3',
-            'device_year' => 'required|numeric|digits:4|min:1990|max:' . date('Y')
+            'device_year' => 'required|numeric|digits:4|min:1990|max:' . date('Y'),
+            'drive_link' => 'required|min:3|url'
         ]);
 
         $validate['user_id'] = Auth::user()->id;
@@ -85,7 +87,8 @@ class Device extends Component
     {
         $validate = $this->validate([
             'device_name' => 'required|min:3',
-            'device_year' => 'required|numeric|digits:4|min:1990|max:' . date('Y')
+            'device_year' => 'required|numeric|digits:4|min:1990|max:' . date('Y'),
+            'drive_link' => 'required|min:3|url'
         ]);
 
         $validate['user_id'] = Auth::user()->id;
@@ -116,24 +119,6 @@ class Device extends Component
                 $this->dispatch('notify', type: 'success', message: 'data successfully deleted!');
                 event(new \App\Events\UserInteraction(Auth::user(), "Device => delete device " . $device->device_name . " with id " . $device->id));
             }
-        }
-    }
-
-    public function create()
-    {
-        $validate = $this->validate([
-            'device_name' => 'required|min:3',
-            'device_year' => 'required|integer|digits:4|min:1990|max:' . date('Y')
-        ]);
-
-        $validate['user_id'] = Auth::user()->id;
-
-        $create = DeviceModel::create($validate);
-        if ($create) {
-            $this->dispatch('closeButton');
-            $this->dispatch('notify', type: 'success', message: 'data successfully created!');
-            event(new \App\Events\UserInteraction(Auth::user(), "Device => create new device " . $create->device_name . " with id " . $create->id));
-            $this->fresh();
         }
     }
 
