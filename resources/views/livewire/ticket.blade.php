@@ -98,12 +98,11 @@
             <div class="py-20 hero">
                 <div class="text-center hero-content">
                     <div class="max-w-md">
-                        <h1 class="text-5xl font-bold">Hello there</h1>
-                        <p class="py-6">Currently the data is still empty, you can add data via the button below!
+                        <h1 class="text-5xl font-bold">Hallo {{ Auth::user()->username }} </h1>
+                        <p class="py-6">Saat ini data masih kosong, Anda dapat menambahkan data melalui tombol di bawah ini!
                         </p>
                         <button wire:click='create' onclick="my_modal_4.showModal()" class="btn btn-neutral btn-sm"><i
-                                class="ri-add-line"></i> Add
-                            ticket</button>
+                                class="ri-add-line"></i> Tambahkan Tiket</button>
                     </div>
                 </div>
             </div>

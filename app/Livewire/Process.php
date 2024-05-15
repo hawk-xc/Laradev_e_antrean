@@ -9,14 +9,15 @@ use App\Models\Status;
 use App\Models\Ticket; // Import model Ticket
 use App\View\Components\device;
 use Clockwork\Request\Request;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
-use Livewire\WithoutUrlPagination;
-use Livewire\WithPagination;
+// use Livewire\WithoutUrlPagination;
+// use Livewire\WithPagination;
 
 class Process extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    // use WithPagination, WithoutUrlPagination;
     public $openModal = false;
     // public $action = '';
     public $status_id;
@@ -26,13 +27,14 @@ class Process extends Component
     public $employe_id;
     public $sortBy = 'status';
     public $sortDirection = 'asc';
+    public $limiter = 5;
+
 
     public function sortByDate($direction)
     {
         $this->sortBy = 'date';
         $this->sortDirection = $direction;
     }
-
 
     public function fresh()
     {
@@ -43,6 +45,17 @@ class Process extends Component
         $this->openModal = false;
         // $this->action = '';
     }
+    public function addLimit($limiter)
+    {
+        if (count(Proces::all()) > $this->limiter) {
+            $this->limiter += $limiter;
+        }
+    }
+    public function removeLimit($limiter)
+    {
+        $this->limiter -= $limiter;
+    }
+
     public function render()
     {
         // $statuses = Status::get();
@@ -51,12 +64,14 @@ class Process extends Component
 
         if ($user->role_id === 1) {
             if ($this->sortBy === 'date') {
-                $process = Proces::orderBy('created_at', $this->sortDirection)->paginate(5);
+                $process = Proces::orderBy('created_at', $this->sortDirection)->limit($this->limiter);
             } else {
-                $process = Proces::latest()->paginate(5);
+                $process = Proces::latest()->limit($this->limiter);
             }
+        } elseif ($user->role_id === 2) {
+            $process = Proces::orderBy('id', 'asc')->latest()->limit($this->limiter);
         } else {
-            $process = Proces::where('user_id', Auth::user()->id)->orderBy('id', 'asc')->latest()->paginate(5);
+            $process = Proces::where('user_id', Auth::user()->id)->orderBy('id', 'asc')->latest()->limit($this->limiter);
         }
         $employees = User::where('role_id', '3')->get();
         $task = Proces::where('user_id', Auth::user()->id)->get();
@@ -116,6 +131,7 @@ class Process extends Component
             $this->fresh();
             $this->dispatch('closeButton');
             $this->dispatch('notify', type: 'success', message: 'Data successfully updated!');
+            event(new \App\Events\UserInteraction(Auth::user(), "Process => update proces from customer {$proces->ticket->device->user->name} with id " . $proces->id));
             // redirect('/process')->dispatch('notify', type: 'success', message: 'Data successfully updated!'));
             // session()->flash('message', 'Data successfully updated broww!');
             redirect('/process');
