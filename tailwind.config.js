@@ -15,6 +15,7 @@ export default {
                 // sans: ["Figtree", ...defaultTheme.fontFamily.sans],
                 // sans: ["Inter var", ...defaultTheme.fontFamily.sans],
                 sans: ["Montserrat", "sans-serif"],
+                times: ['Times New Roman', 'serif'],
             },
         },
     },
