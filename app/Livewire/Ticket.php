@@ -5,6 +5,7 @@ namespace App\Livewire;
 use \App\Models\Device;
 use \App\Models\Proces;
 use \App\Models\Ticket as TicketModel;
+use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Livewire\Component;
@@ -17,6 +18,7 @@ class Ticket extends Component
     use WithPagination, WithoutUrlPagination;
 
     public $ticket_id, $device_id, $description;
+    // public $count = 0;
     public $openModal = true;
     public $action = 'create';
 
@@ -44,15 +46,24 @@ class Ticket extends Component
             'description' => 'required|min:3'
         ]);
 
+        $validate['created_at'] = now()->format('Y-m-d H:i:s');
+        // $validate['created_at'] = now()->addDay(1)->format('Y-m-d H:i:s');
         $validate['closed_at'] = now()->addDay(3)->format('Y-m-d H:i:s');
 
-        if ($validate) :
+        // Membandingkan tanggal saja, tanpa waktu
+        $today = now()->format('Y-m-d');
+        $count = TicketModel::whereDate('created_at', $today)->count();
+        if ($validate['created_at'] == now()) {
+            $validate['id_ticket'] = now()->format('ymd') . ($count + 1);
+        } else {
+            $validate['id_ticket'] = now()->format('ymd') . ($count = 1);
+        }
+
+        if ($validate) {
             $ticket = TicketModel::create($validate);
             $data = [
                 'status_id' => 1,
                 'ticket_id' => $ticket->id,
-                // 'user_id' => Auth::user()->id
-                // 'user_id' => null,
             ];
 
             $create = Proces::create($data);
@@ -62,8 +73,9 @@ class Ticket extends Component
                 $this->fresh();
             }
             $this->dispatch('closeButton');
-        endif;
+        }
     }
+
 
     public function close()
     {
