@@ -13,6 +13,8 @@ class Ticket extends Model
         'device_id',
         'description',
         'closed_at',
+        'created_at',
+        'id_ticket'
     ];
 
     protected $with = ['proces', 'device'];
