@@ -5,7 +5,10 @@ namespace App\Livewire;
 use \App\Models\Device as DeviceModel;
 use \App\Models\Ticket as TicketModel;
 use \App\Models\Proces as ProcesModel;
+<<<<<<< HEAD
 use DateTime;
+=======
+>>>>>>> 357a7e4 (add update)
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Attributes\Validate;

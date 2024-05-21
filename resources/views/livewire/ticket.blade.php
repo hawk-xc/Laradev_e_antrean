@@ -1,34 +1,36 @@
 <div>
-    {{-- In work, do what you enjoy. --}}
+    <x-notification-laravel />
+
+    <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
+        <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
+        <span class="block mx-auto mb-10">please wait a moment...</span>
+    </div>
+
     <div class="overflow-x-auto">
-        @if (!$tickets->isEmpty())
-            <button onclick="my_modal_4.showModal()" wire:click='create' class="btn btn-sm"><i class="ri-add-line"></i>
-                Tambah Ticket</button>
+        @if (!$devices->isEmpty())
+            <button class="btn max-sm:btn-xs" onclick="createModal.showModal()" wire:click='insert_testing'>
+                tambah tiket <i class="ri-add-line"></i>
+            </button>
         @endif
 
-        <div class="overflow-x-auto" wire:loading>
-            <div class="absolute inset-0 flex items-center justify-center bg-gray-200 bg-opacity-75">
-                <div class="text-lg text-gray-800 loading loading-infinity loading-lg"></div>
-                <div class="text-lg text-gray-800">mohon ditunggu...</div>
-            </div>
-        </div>
-
-        <x-notification-laravel />
-        @if (!$tickets->isEmpty())
-            <table class="table">
+        @if (!$devices->isEmpty())
+            <table class="table max-sm:text-xs">
                 <!-- head -->
                 <thead>
                     <tr class="text-lg">
-                        <th><i class="ri-bubble-chart-line"></i></i></th>
-                        <th>Nama Perangkat</th>
-                        <th class="hidden sm:table-cell">Deskripsi</th>
-                        <th class="hidden sm:table-cell">Ditambahkan</th>
-                        <th>Opsi</th>
+                        <th>no antrean</th>
+                        <th>status</th>
+                        <th class="hidden sm:table-cell">nama perangkat</th>
+                        <th class="hidden sm:table-cell">ditambahkan</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($tickets as $ticket)
-                        <tr class="cursor-pointer hover:bg-gray-50">
+                    @foreach ($tickets as $key => $ticket)
+                        <tr class="cursor-pointer bg-gray-50 hover:bg-gray-100" onclick="editModal.showModal()"
+                            wire:click='edit_testing({{ $ticket->id }})'>
+                            <th
+                                class="{{ $ticket->proces->status_id == 5 ? 'bg-red-400' : 'bg-sky-400' }} rounded-r-full text-xl text-white">
+                                antrean#{{ $ticket->id }}</th>
                             <th>
                                 @if ($ticket->proces->status_id == 1)
                                     <div class="lg:tooltip" data-tip="currently registered">
@@ -58,96 +60,211 @@
                                     </div>
                                 @endif
                             </th>
-                            <td>{{ $ticket->device->device_name }}</td>
-                            <td class="hidden sm:table-cell">{{ $ticket->description }}</td>
-                            <td class="hidden sm:table-cell">{{ $ticket->created_at->diffForHumans() }}
-                            </td>
-                            <td class="hidden sm:table-cell">
-                                @if ($ticket->proces->status_id < 2)
-                                    <button class="px-4 btn btn-neutral" onclick="my_modal_4.showModal()"
-                                        wire:click="edit({{ $ticket->id }})">ubah</button>
-                                    <button type="button" class="btn btn-error"
-                                        wire:click.prevent='deleteConfirmation({{ $ticket->id }})'
-                                        {{ $ticket->proces->status_id >= 2 ? 'disabled' : false }}>hapus</button>
-                                @else
-                                    <button class="btn btn-secondary"><i class="ri-hourglass-line"></i> Tiket
-                                        diproses</button>
-                                @endif
-                            </td>
-                            <td class="sm:table-cell md:hidden">
-                                @if ($ticket->proces->status_id < 2)
-                                    <button class="px-5 btn" onclick="my_modal_4.showModal()"
-                                        wire:click="edit({{ $ticket->id }})">
-                                        <i class="ri-edit-box-fill"></i>
-                                    </button>
-                                    <button type="button" class="px-5 btn"
-                                        wire:click.prevent='deleteConfirmation({{ $ticket->id }})'>
-                                        <i class="ri-delete-bin-fill"></i>
-                                    </button>
-                                @else
-                                    <button class="btn btn-secondary"><i class="ri-hourglass-line"></i> Ticket on
-                                @endif
-                            </td>
+                            <td class="hidden sm:table-cell"><i class="ri-device-line"></i>
+                                {{ $ticket->device->device_name }}</td>
+                            <td class="hidden sm:table-cell"><i class="ri-calendar-schedule-line"></i>
+                                {{ $ticket->created_at->diffForHumans() }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
-            <span>{{ $tickets->links() }}</span>
+            <span class="flex flex-row gap-4 align-middle items-center my-10">
+                <p class="inline text-xs font-light">
+                    <i class="ri-database-2-line"></i> menampilkan
+                    {{ $loadCount > $tickets->count() ? $tickets->count() : $loadCount }}
+                    dari
+                    {{ \App\Models\Ticket::where('device_id', \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count() }}
+                    perangkat
+                </p>
+
+                @if ($loadCount <= 5)
+                    <button wire:click='loadAll'
+                        class="btn btn-xs btn-neutral {{ $tickets->count() > 10 ? 'hidden' : '' }}">
+                        tampilkan semua
+                    </button>
+                @endif
+
+                @if (
+                    $loadCount ==
+                        \App\Models\Ticket::where(
+                            'device_id',
+                            \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count())
+                    <button wire:click='loadAllLess'
+                        class="btn btn-xs btn-neutral">
+                        sembunyikan semua
+                    </button>
+                @endif
+
+                @if (
+                    $loadCount <
+                        \App\Models\Ticket::where(
+                            'device_id',
+                            \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count())
+                    <button wire:click='loadMore(5)' class="btn btn-xs btn-neutral">+ 5 lebih</button>
+                @endif
+                @if ($loadCount > 5)
+                    <button wire:click='loadLess(5)' class="btn btn-xs btn-neutral">- 5 kurang</button>
+                @endif
+            </span>
         @endif
-        @if ($tickets->isEmpty())
+        @if ($devices->isEmpty())
             <div class="py-20 hero">
                 <div class="text-center hero-content">
                     <div class="max-w-md">
-                        <h1 class="text-5xl font-bold">Hallo {{ Auth::user()->username }} </h1>
-                        <p class="py-6">Saat ini data masih kosong, Anda dapat menambahkan data melalui tombol di bawah ini!
-                        </p>
-                        <button wire:click='create' onclick="my_modal_4.showModal()" class="btn btn-neutral btn-sm"><i
-                                class="ri-add-line"></i> Tambahkan Tiket</button>
+                        <h1 class="text-5xl font-bold">Hello there</h1>
+                        <p class="py-6">Currently the data is still empty, you can add data via the button below!</p>
+                        <button class="btn max-sm:btn-xs btn-neutral" onclick="createModal.showModal()"
+                            wire:click='insert_testing'>
+                            <i class="ri-menu-search-line"></i> tambah tiket <i class="ri-add-line"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         @endif
 
-        @if ($openModal)
-            @if ($action == 'edit')
-                <x-update-form-modal :devices="$devices" />
-            @elseif ($action == 'create')
-                <x-create-form-modal :devices="$devices" />
-            @endif
-        @endif
+        <dialog id="editModal" class="modal" wire:ignore.self>
+            <div class="modal-box">
+                <h3 class="text-lg font-bold">Edit data tiket!</h3>
+                <div class="w-full p-5 my-3 text-xs rounded-md bg-stone-100">
+                    <span class="font-semibold text-md"><i class="ri-information-2-line"></i> perhatian</span>
+                    <ul class="pl-4 mt-2 list-disc">
+                        <li>pastikan merubah nama perangkat anda dengan lengkap, merk dan type</li>
+                        <li>pastikan tahun produksi laptop anda dengan benar</li>
+                        <li>data perangkat yang anda inputkan akan menjadi pertimbangan kami untuk menentukan metode
+                            perbaikan
+                        </li>
+                    </ul>
+                </div>
 
+                {{-- form in here --}}
+                <label class="w-full form-control">
+                    <div class="label">
+                        <span class="label-text">Id tiket</span>
+                    </div>
+                    <input id="ticketIdForm" disabled type="number" placeholder="Type here"
+                        class="w-full input input-bordered" />
+                </label>
+                <label class="w-full form-control">
+                    <div class="label">
+                        <span class="label-text">terakhir update</span>
+                    </div>
+                    <input id="ticketLastUpdateForm" disabled type="text" placeholder="Type here"
+                        class="w-full input input-bordered" />
+                </label>
+                <label class="w-full form-control">
+                    <label class="w-full form-control">
+                        <div class="label">
+                            <span class="label-text">id perangkat</span>
+                            @error('device_id')
+                                <span class="label-text-alt">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <select
+                            class="select select-bordered @error('device_id')
+                        select-error
+                        @enderror"
+                            wire:model="device_id">
+                            <option selected value="null">Pick one</option>
+                            @foreach ($devices as $device)
+                                <option value="{{ $device->id }}" {{ $device->id == $device_id ? 'selected' : '' }}>
+                                    {{ $device->device_name }}</option>
+                            @endforeach
+                        </select>
+                    </label>
+                </label>
+                <label class="form-control">
+                    <div class="label">
+                        <span class="label-text">Deskripsi kendala</span>
+                        @error('description')
+                            <span class="label-text-alt">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <textarea id="ticketDescriptionForm" wire:model="description"
+                        class="h-36 textarea textarea-bordered @error('description') textarea-warning @enderror" rows="3"
+                        placeholder="Description..."></textarea>
+                </label>
+
+                <div class="flex flex-row justify-between modal-action">
+                    <label class="btn btn-error max-sm:btn-xs" wire:click.prevent='deleteConfirmation'>
+                        <i class="ri-inbox-archive-line"></i> Tutup
+                    </label>
+                    <span class="flex flex-row gap-3">
+                        <button class="btn btn-neutral max-sm:btn-xs" wire:click='update_testing'><i
+                                class="ri-check-line"></i>
+                            perbahrui</button>
+                        <form method="dialog" class="flex flex-row gap-3">
+                            <!-- if there is a button in form, it will close the modal -->
+                            <button id="closeButton" class="btn max-sm:btn-xs" wire:click='fresh'><i
+                                    class="ri-arrow-go-back-line"></i>
+                                Batal</button>
+                        </form>
+                    </span>
+                </div>
+            </div>
+        </dialog>
+        <dialog id="createModal" class="modal" wire:ignore.self>
+            <div class="modal-box">
+                <h3 class="text-lg font-bold">Tambah data tiket!</h3>
+                <div class="w-full p-5 my-3 text-xs rounded-md bg-stone-100">
+                    <span class="font-semibold text-md"><i class="ri-information-2-line"></i> perhatian</span>
+                    <ul class="pl-4 mt-2 list-disc">
+                        <li>pastikan menambahkan nama perangkat anda dengan lengkap, merk dan type</li>
+                        <li>pastikan tahun produksi laptop anda dengan benar</li>
+                        <li>data perangkat yang anda inputkan akan menjadi pertimbangan kami untuk menentukan metode
+                            perbaikan
+                        </li>
+                    </ul>
+                </div>
+                {{-- form in here --}}
+
+                <label class="w-full form-control">
+                    <div class="label">
+                        <span class="label-text">pilih perangkat</span>
+                    </div>
+
+                    <select
+                        class="select select-bordered @error('device_id')
+                    select-error
+                    @enderror"
+                        wire:model="device_id">
+                        <option selected value="null">Pick one</option>
+                        @foreach ($devices as $device)
+                            <option value="{{ $device->id }}">{{ $device->device_name }}</option>
+                        @endforeach
+                    </select>
+                    @error('device_id')
+                        <span class="label-text-alt text-error">{{ $message }}</span>
+                    @enderror
+                </label>
+
+                <label class="w-full form-control">
+                    <div class="label">
+                        <span class="label-text">Deskripsi kendala</span>
+                    </div>
+
+                    <textarea id="ticketDescriptionForm" wire:model="description"
+                        class="h-36 textarea textarea-bordered @error('description') textarea-warning @enderror" rows="3"
+                        placeholder="Description..."></textarea>
+                    @error('description')
+                        <span class="label-text-alt text-error">{{ $message }}</span>
+                    @enderror
+                </label>
+                {{-- form in here --}}
+
+                <div class="flex flex-row modal-action">
+                    <span class="flex flex-row gap-3">
+                        <button class="btn btn-neutral max-sm:btn-xs" wire:click='store_testing'><i
+                                class="ri-edit-line"></i>
+                            simpan</button>
+                        <form method="dialog" class="flex flex-row gap-3">
+                            <!-- if there is a button in form, it will close the modal -->
+                            <button id="closeModal" class="btn max-sm:btn-xs" wire:click='fresh'><i
+                                    class="ri-arrow-go-back-line"></i>
+                                Batal</button>
+                        </form>
+                    </span>
+                </div>
+            </div>
+        </dialog>
     </div>
-    @if (session('notify'))
-        <x-notification-laravel :message="session('notify')" />
-    @endif
-
-    @push('scripts')
-        <script>
-            document.addEventListener('livewire:load', function() {
-                // Eksekusi JavaScript setelah Livewire selesai dimuat
-                Livewire.on('messageReceived', function(message) {
-                    // Tampilkan pesan notifikasi
-                    var notification = document.getElementById("notification");
-                    var closeButton = document.getElementById("close-button");
-
-                    function showNotification() {
-                        // var notification = $("#notification");
-                        setTimeout(function() {
-                            // notification.addClass("opacity-0");
-                            notification.fadeOut('slow');
-                        }, 4000);
-                    }
-
-                    showNotification()
-
-                    closeButton.on("click", function() {
-                        notification.fadeOut('slow');
-                        // notification.addClass("opacity-0");
-                    });
-
-                    notification.hide();
-                });
-            });
-        </script>
-    @endpush
 </div>
