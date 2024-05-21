@@ -55,7 +55,7 @@ class Device extends Component
         $validate = $this->validate([
             'device_name' => 'required|min:3',
             'device_year' => 'required|numeric|digits:4|min:1990|max:' . date('Y'),
-            'drive_link' => 'required|min:3|url'
+            'drive_link' => 'min:3|url'
         ]);
 
         $validate['user_id'] = Auth::user()->id;

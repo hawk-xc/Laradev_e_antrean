@@ -25,13 +25,14 @@
 
                 $wire.on('show-delete', (data) => {
                     Swal.fire({
-                        title: "Are you sure?",
-                        text: "You won't be able to revert this!",
+                        title: "Apakah anda yakin?",
+                        text: "Status tiket akan diclose dan tidak dapat dipulihkan lagi!",
                         icon: "warning",
                         showCancelButton: true,
                         confirmButtonColor: "#3085d6",
                         cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes, delete it!"
+                        cancelButtonText: "tidak",
+                        confirmButtonText: "Ya, tetap ubah"
                     }).then((result) => {
                         if (result.isConfirmed) {
                             Livewire.dispatch('confirmDelete')
@@ -53,7 +54,8 @@
                         showCancelButton: true,
                         confirmButtonColor: "#3085d6",
                         cancelButtonColor: "#d33",
-                        confirmButtonText: "Yes, update this user!"
+                        cancelButtonText: "batal",
+                        confirmButtonText: "Ya, perbahrui user ini!"
                     }).then((result) => {
                         if (result.isConfirmed) {
                             Livewire.dispatch(data[0].response)
@@ -95,6 +97,31 @@
                     deviceYearForm.val(data.data.device_year);
                     driveLinkForm.val(data.data.drive_link);
                     deviceLastUpdateForm.val(formattedDatetime);
+                });
+
+                $wire.on('modals-ticket', (data) => {
+                    const ticketIdForm = $('#ticketIdForm');
+                    const deviceIdForm = $('#deviceIdForm');
+                    const ticketLastUpdateForm = $('#ticketLastUpdateForm');
+                    const ticketDescriptionForm =  $('#ticketDescriptionForm');
+
+                    const originalDatetime = data.data.updated_at;
+
+                    const dateTime = new Date(originalDatetime);
+
+                    const pad = (num) => {
+                        return num.toString().padStart(2, '0');
+                    };
+
+                    const formattedDatetime =
+                        `${dateTime.getFullYear()}-${pad(dateTime.getMonth() + 1)}-${pad(dateTime.getDate())} ${pad(dateTime.getHours())}:${pad(dateTime.getMinutes())}:${pad(dateTime.getSeconds())}`;
+
+                    // const deviceId = data.data.id;
+                    ticketIdForm.val(data.data.id);
+                    // deviceIdForm.val(data.data.id);
+                    // deviceNameForm.val(data.data.device_name);
+                    ticketLastUpdateForm.val(formattedDatetime);
+                    ticketDescriptionForm.val(data.data.description);
                 });
 
                 $wire.on('refresh', () => {

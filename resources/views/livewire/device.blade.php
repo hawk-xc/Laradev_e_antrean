@@ -9,7 +9,7 @@
     <div class="overflow-x-auto">
         @if (!$devices->isEmpty())
             <button class="btn max-sm:btn-xs" onclick="createModal.showModal()" wire:click='insert_testing'>
-                <i class="ri-menu-search-line"></i> tambah perangkat <i class="ri-add-line"></i>
+                tambah perangkat <i class="ri-add-line"></i>
             </button>
         @endif
 
