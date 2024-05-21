@@ -217,7 +217,7 @@
             <div class="flex flex-row w-full gap-3 p-5 mt-2 shadow border-slate-400">
                 <div class="avatar online placeholder">
                     <div class="h-10 text-white rounded-full shadow-sm aspect-square bg-neutral">
-                        @if (Auth::user()->user_image)
+                        @if (Auth::user()->user_image && !Auth::user()->user_image == 'default.png')
                             <img src="{{ Auth::user()->user_image }}" />
                         @else
                             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
@@ -295,7 +295,7 @@
                         <i class="text-3xl ri-coupon-3-line"></i>
                     </div>
                     <div class="stat-title">Tiket</div>
-                    <div class="text-2xl font-semibold">tiket#{{ $tickets->first()->id }}</div>
+                    <div class="text-2xl font-semibold">tiket#{{ $tickets->first()->id_ticket }}</div>
                     <div class="stat-desc">ditambahkan {{ $tickets->first()->created_at->diffForHumans() }}</div>
                 </div>
 
@@ -383,7 +383,7 @@
                                 <i class="text-3xl ri-coupon-3-line"></i>
                             </div>
                             <div class="stat-title">Tiket</div>
-                            <div class="text-2xl font-semibold">ticket#{{ $proces->ticket->id }}</div>
+                            <div class="text-2xl font-semibold">ticket#{{ $proces->ticket->id_ticket }}</div>
                             <div class="stat-desc">ditambahkan {{ $proces->ticket->created_at->diffForHumans() }}
                             </div>
                         </div>

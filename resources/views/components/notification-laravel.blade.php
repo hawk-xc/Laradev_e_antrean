@@ -100,6 +100,7 @@
                 });
 
                 $wire.on('modals-ticket', (data) => {
+                    const idTicket = $('#idTicket');
                     const ticketIdForm = $('#ticketIdForm');
                     const deviceIdForm = $('#deviceIdForm');
                     const ticketLastUpdateForm = $('#ticketLastUpdateForm');
@@ -118,6 +119,7 @@
 
                     // const deviceId = data.data.id;
                     ticketIdForm.val(data.data.id);
+                    idTicket.val(data.data.id_ticket);
                     // deviceIdForm.val(data.data.id);
                     // deviceNameForm.val(data.data.device_name);
                     ticketLastUpdateForm.val(formattedDatetime);

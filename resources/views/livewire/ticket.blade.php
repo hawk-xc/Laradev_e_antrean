@@ -18,7 +18,7 @@
                 <!-- head -->
                 <thead>
                     <tr class="text-lg">
-                        <th>no antrean</th>
+                        <th>no tiket</th>
                         <th>status</th>
                         <th class="hidden sm:table-cell">nama perangkat</th>
                         <th class="hidden sm:table-cell">ditambahkan</th>
@@ -29,8 +29,8 @@
                         <tr class="cursor-pointer bg-gray-50 hover:bg-gray-100" onclick="editModal.showModal()"
                             wire:click='edit_testing({{ $ticket->id }})'>
                             <th
-                                class="{{ $ticket->proces->status_id == 5 ? 'bg-red-400' : 'bg-sky-400' }} rounded-r-full text-xl text-white">
-                                antrean#{{ $ticket->id }}</th>
+                                class="bg-gradient-to-r {{ $ticket->proces->status_id == 5 ? 'from-red-400 to-red-200' : 'from-sky-400 to-sky-200' }} rounded-r-full text-xl text-white">
+                                tiket#{{ $ticket->id_ticket }}</th>
                             <th>
                                 @if ($ticket->proces->status_id == 1)
                                     <div class="lg:tooltip" data-tip="currently registered">
@@ -77,7 +77,7 @@
                     perangkat
                 </p>
 
-                @if ($loadCount <= 5)
+                @if ($loadCount <= 5 && !$tickets->count() == 5)
                     <button wire:click='loadAll'
                         class="btn btn-xs btn-neutral {{ $tickets->count() > 10 ? 'hidden' : '' }}">
                         tampilkan semua
@@ -128,20 +128,26 @@
                 <div class="w-full p-5 my-3 text-xs rounded-md bg-stone-100">
                     <span class="font-semibold text-md"><i class="ri-information-2-line"></i> perhatian</span>
                     <ul class="pl-4 mt-2 list-disc">
-                        <li>pastikan merubah nama perangkat anda dengan lengkap, merk dan type</li>
-                        <li>pastikan tahun produksi laptop anda dengan benar</li>
-                        <li>data perangkat yang anda inputkan akan menjadi pertimbangan kami untuk menentukan metode
-                            perbaikan
-                        </li>
+                        <li>pastikan menambahkan perangkat yang anda pilih benar</li>
+                        <li>berikan deskripsi yang jelas untuk kendala yang dialami</li>
+                        <li>apabila status tiket ditutup anda tidak bisa memulihkan kembali</li>
+                        <li>anda dapat melakukan perubahan tiket apabila status tiket belum diverifikasi oleh tim kami</li>
                     </ul>
                 </div>
 
                 {{-- form in here --}}
-                <label class="w-full form-control">
+                <label class="w-full form-control hidden">
                     <div class="label">
                         <span class="label-text">Id tiket</span>
                     </div>
                     <input id="ticketIdForm" disabled type="number" placeholder="Type here"
+                        class="w-full input input-bordered" />
+                </label>
+                <label class="w-full form-control">
+                    <div class="label">
+                        <span class="label-text">Id tiket</span>
+                    </div>
+                    <input id="idTicket" disabled type="number" placeholder="Type here"
                         class="w-full input input-bordered" />
                 </label>
                 <label class="w-full form-control">
@@ -164,7 +170,7 @@
                         select-error
                         @enderror"
                             wire:model="device_id">
-                            <option selected value="null">Pick one</option>
+                            <option selected value="null">Pilih salah satu</option>
                             @foreach ($devices as $device)
                                 <option value="{{ $device->id }}" {{ $device->id == $device_id ? 'selected' : '' }}>
                                     {{ $device->device_name }}</option>
@@ -181,7 +187,7 @@
                     </div>
                     <textarea id="ticketDescriptionForm" wire:model="description"
                         class="h-36 textarea textarea-bordered @error('description') textarea-warning @enderror" rows="3"
-                        placeholder="Description..."></textarea>
+                        placeholder="Deskripsi..."></textarea>
                 </label>
 
                 <div class="flex flex-row justify-between modal-action">
@@ -208,11 +214,8 @@
                 <div class="w-full p-5 my-3 text-xs rounded-md bg-stone-100">
                     <span class="font-semibold text-md"><i class="ri-information-2-line"></i> perhatian</span>
                     <ul class="pl-4 mt-2 list-disc">
-                        <li>pastikan menambahkan nama perangkat anda dengan lengkap, merk dan type</li>
-                        <li>pastikan tahun produksi laptop anda dengan benar</li>
-                        <li>data perangkat yang anda inputkan akan menjadi pertimbangan kami untuk menentukan metode
-                            perbaikan
-                        </li>
+                        <li>pastikan menambahkan perangkat yang anda pilih benar</li>
+                        <li>berikan deskripsi yang jelas untuk kendala yang dialami</li>
                     </ul>
                 </div>
                 {{-- form in here --}}
@@ -227,7 +230,7 @@
                     select-error
                     @enderror"
                         wire:model="device_id">
-                        <option selected value="null">Pick one</option>
+                        <option selected value="null">Pilih salah satu</option>
                         @foreach ($devices as $device)
                             <option value="{{ $device->id }}">{{ $device->device_name }}</option>
                         @endforeach
@@ -244,7 +247,7 @@
 
                     <textarea id="ticketDescriptionForm" wire:model="description"
                         class="h-36 textarea textarea-bordered @error('description') textarea-warning @enderror" rows="3"
-                        placeholder="Description..."></textarea>
+                        placeholder="Deskripsi..."></textarea>
                     @error('description')
                         <span class="label-text-alt text-error">{{ $message }}</span>
                     @enderror
