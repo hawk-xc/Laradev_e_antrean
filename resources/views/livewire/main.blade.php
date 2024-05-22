@@ -234,45 +234,44 @@
                             <input id="my-drawer" type="checkbox" class="drawer-toggle" />
                             <div class="drawer-content">
                                 <!-- Page content here -->
-                                <label for="my-drawer" class="drawer-button btn btn-neutral"><i
+                                <label id="drawerButton" for="my-drawer" class="drawer-button btn btn-neutral"><i
                                         class="ri-message-3-line"></i> kotak pesan</label>
                             </div>
 
+
                             {{-- drawer message --}}
-                            <div class="drawer-side z-50">
+                            <div id="drawerAction" class="drawer-side z-50 " wire:ignore.self>
                                 <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
-                                <ul class="menu p-4 w-96 max-sm:w-80 min-h-full bg-base-200 text-base-content gap-3">
-                                    <span class="text-2xl font-semibold text-slate-700"><i
+                                <ul
+                                    class="menu p-4 w-[50rem] max-sm:w-screen min-h-full text-base-content gap-3 bg-gradient-to-tr from-sky-400 to-lime-200">
+                                    <span class="text-2xl font-semibold text-slate-700 max-sm:flex max-sm:justify-between"><i
                                             class="ri-notification-2-line"></i>
-                                        Notifikasi</span>
+                                        <span>Notifikasi</span>
+                                        <label for="my-drawer" class="drawer-button md:hidden"><i class="ri-arrow-go-back-line"></i></label>
+                                    </span>
                                     <!-- Sidebar content here -->
-                                    @forelse ($notifications as $notification)
-                                        <li class="" onclick="my_modal_2.showModal()"
-                                            wire:click="notification({{ $notification->id }})">
-                                            <div
-                                                class="p-4 rounded-lg shadow-sm border cursor-pointer hover:bg-slate-100 w-full flex flex-row gap-4 items-center align-middle {{ !$notification->is_read ? 'border-r-8 border-r-sky-400' : '' }}">
-                                                <div class="avatar placeholder">
-                                                    <div
-                                                        class="h-10 text-white rounded-full shadow-sm aspect-square bg-neutral">
-                                                        H
-                                                    </div>
-                                                </div>
-                                                <div class="flex flex-col">
-                                                    <span class="font-light"><i class="ri-message-3-line"></i> pesan {{ !$notification->is_read ? 'belum dibaca' : 'sudah dibaca' }}</span>
-                                                    </span>
-                                                    <span>{{ substr($notification->message, 0, 10) }} <span
-                                                            class="italic text-sky-700">...klik
-                                                            selengkapnya</span></span>
-                                                </div>
+
+                                    @foreach ($notifications as $notification)
+                                        <div class="chat {{ $notification->is_user ? 'chat-end' : 'chat-start' }}">
+                                            <div class="chat-header font-semibold mb-1">
+                                                {{ $notification->is_user ? 'Anda' : 'Helpdesk' }}
                                             </div>
-                                        </li>
-                                    @empty
-                                        <div class="flex justify-center px-5 py-20 border border-base-300">
-                                            belum ada notifikasi untuk saat ini!
+                                            <div class="chat-bubble bg-white text-slate-900 text-wrap">{!! $notification->message !!}
+                                            </div>
+                                            <div class="chat-footer text-slate-900">
+                                                <time
+                                                    class="text-xs opacity-50">{{ $notification->created_at->diffForHumans() }}</time>
+                                            </div>
                                         </div>
-                                    @endforelse
+                                        @endforeach
+                                        <div class="my-8"></div>
                                 </ul>
+                                <div
+                                class="fixed border backdrop-blur-lg bottom-0 w-[50rem] max-sm:w-screen p-5 flex items-center align-middle justify-evenly gap-2">
+                                <textarea id="auto-resize" class="w-[40rem] rounded-lg max-sm:w-[20rem] pt-3 max-sm:pt-1 border input input-bordered" wire:ignore.self wire:model.live="userMessage"></textarea>
+                                <button onclick="document.getElementById('auto-resize').value = '' " class="btn" wire:click='sendMessage'><i class="ri-send-plane-line"></i></button>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -530,6 +529,21 @@
 
         $jumlahDataTicketPerBulan = json_encode($jumlahDataTicketPerBulan);
     @endphp
+    <script>
+        document.addEventListener('input', function(event) {
+            if (event.target.tagName.toLowerCase() !== 'textarea') return;
+
+            // Reset textarea height to auto to recalculate the scroll height
+            event.target.style.height = 'auto';
+
+            // Set the height of the textarea to the scroll height
+            event.target.style.height = event.target.scrollHeight + 'px';
+        });
+
+        function clearMessage() {
+                document.getElementById('#auto-resize').val('');
+            }
+    </script>
     <script type="text/javascript">
         $(document).ready(function() {
             const week = ['senin', 'selasa', 'rabu', 'kamis', 'jum\'at', 'sabtu', 'minggu'];

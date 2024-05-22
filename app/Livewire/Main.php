@@ -19,6 +19,7 @@ class Main extends Component
 {
     public $isVisible = true;
     public $message;
+    public $userMessage;
 
     public function showAllData()
     {
@@ -38,6 +39,15 @@ class Main extends Component
         ]);
 
         $this->message = $data;
+    }
+
+    public function sendMessage()
+    {
+        NotificationModel::create([
+            'user_id' => Auth::user()->id,
+            'message' => $this->userMessage,
+            'is_user' => true
+        ]);
     }
 
     public function render()

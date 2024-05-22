@@ -23,7 +23,8 @@ class SendNotification
     {
         \App\Models\Notification::create([
             'user_id' => $event->user->id,
-            'message' => $event->message
+            'message' => $event->message,
+            'client_side' => false
         ]);
     }
 }
