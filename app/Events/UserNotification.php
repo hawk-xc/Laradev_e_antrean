@@ -17,9 +17,10 @@ class UserNotification
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct(public $user, public $message)
     {
-        //
+        $this->user = $user;
+        $this->message = $message;
     }
 
     /**

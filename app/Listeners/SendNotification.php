@@ -21,6 +21,9 @@ class SendNotification
      */
     public function handle(UserNotification $event): void
     {
-        //
+        \App\Models\Notification::create([
+            'user_id' => $event->user->id,
+            'message' => $event->message
+        ]);
     }
 }

@@ -49,9 +49,15 @@ Route::get('/', function () {
     return view('landing-page');
 });
 
-Route::get('/sendmailer', function () {
-    \App\Jobs\MailerJob::dispatch('wahyutricahyono777@gmail.com', 'wahyu', 'done', \App\Models\Ticket::first());
-    // event(new \App\Events\sendNotification('wahyutricahyono777@gmail.com', 'suradin', 'suradinlothok@gmail.com', 'done', \App\Models\Ticket::first()));
+// Route::get('/sendmailer', function () {
+//     \App\Jobs\MailerJob::dispatch('wahyutricahyono777@gmail.com', 'wahyu', 'done', \App\Models\Ticket::first());
+//     // event(new \App\Events\sendNotification('wahyutricahyono777@gmail.com', 'suradin', 'suradinlothok@gmail.com', 'done', \App\Models\Ticket::first()));
+// });
+
+Route::get('/testing', function () {
+    $message = "Hallo user<p class='my-3'>untuk saat ini status ticket sedang dalam</p><p class='mb-3'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur libero iure eius quibusdam ratione quidem totam obcaecati veritatis deserunt laboriosam molestias aliquid voluptatem nesciunt quaerat tenetur quia vel, laborum fugit ut, maxime est ex rerum beatae! Aliquam, quia quod. Quis distinctio beatae, debitis totam saepe veniam dolores est facere odio?</p><p>terima kasih,</p>";
+    event(new \App\Events\UserNotification(Auth::user(), $message));
+    return 'ok';
 });
 
 
