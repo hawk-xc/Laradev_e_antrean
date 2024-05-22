@@ -215,7 +215,7 @@
             </div>
         @else
             <div class="flex flex-row w-full gap-3 p-5 mt-2 shadow border-slate-400">
-                <div class="avatar online placeholder">
+                <div class="avatar @if ($notifications->whereIn('is_read', false)->count() > 0) online @endif placeholder">
                     <div class="h-10 text-white rounded-full shadow-sm aspect-square bg-neutral">
                         @if (Auth::user()->user_image && !Auth::user()->user_image == 'default.png')
                             <img src="{{ Auth::user()->user_image }}" />
@@ -230,10 +230,50 @@
                         <span>{{ Auth::user()->name }}</span>
                     </div>
                     <div>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button class="btn btn-outline btn-sm">Logout</button>
-                        </form>
+                        <div class="drawer">
+                            <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+                            <div class="drawer-content">
+                                <!-- Page content here -->
+                                <label for="my-drawer" class="drawer-button btn btn-neutral"><i
+                                        class="ri-message-3-line"></i> kotak pesan</label>
+                            </div>
+
+                            {{-- drawer message --}}
+                            <div class="drawer-side z-50">
+                                <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+                                <ul class="menu p-4 w-96 max-sm:w-80 min-h-full bg-base-200 text-base-content gap-3">
+                                    <span class="text-2xl font-semibold text-slate-700"><i
+                                            class="ri-notification-2-line"></i>
+                                        Notifikasi</span>
+                                    <!-- Sidebar content here -->
+                                    @forelse ($notifications as $notification)
+                                        <li class="" onclick="my_modal_2.showModal()"
+                                            wire:click="notification({{ $notification->id }})">
+                                            <div
+                                                class="p-4 rounded-lg shadow-sm border cursor-pointer hover:bg-slate-100 w-full flex flex-row gap-4 items-center align-middle {{ !$notification->is_read ? 'border-r-8 border-r-sky-400' : '' }}">
+                                                <div class="avatar placeholder">
+                                                    <div
+                                                        class="h-10 text-white rounded-full shadow-sm aspect-square bg-neutral">
+                                                        H
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-col">
+                                                    <span class="font-light"><i class="ri-message-3-line"></i> pesan {{ !$notification->is_read ? 'belum dibaca' : 'sudah dibaca' }}</span>
+                                                    </span>
+                                                    <span>{{ substr($notification->message, 0, 10) }} <span
+                                                            class="italic text-sky-700">...klik
+                                                            selengkapnya</span></span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @empty
+                                        <div class="flex justify-center px-5 py-20 border border-base-300">
+                                            belum ada notifikasi untuk saat ini!
+                                        </div>
+                                    @endforelse
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -436,14 +476,39 @@
                     </div>
                 @endforeach
             @endif
-            <div class="border rounded-lg border-base-300">
-                <div class="p-5 text-xl border border-base-300"><i class="ri-discuss-line"></i> Notifikasi</div>
-                <div class="flex justify-center px-5 py-20 border border-base-300">
-                    belum ada notifikasi untuk saat ini!
-                </div>
-            </div>
         @endif
     @endif
+
+    @if ($message !== null)
+        <dialog id="my_modal_2" class="modal" wire:ignore.self>
+            <div class="modal-box">
+                <h3 class="font-bold text-lg">Pesan!</h3>
+                <div class="chat chat-start">
+                    <div class="avatar placeholder">
+                        <div class="h-10 text-white rounded-full shadow-sm aspect-square bg-neutral">
+                            H
+                        </div>
+                    </div>
+                    <div class="chat-header">
+                        Admin Helpdesk
+                        <time class="text-xs opacity-50">
+                            {{ $message->created_at }}
+                        </time>
+                    </div>
+                    <div class="chat-bubble bg-lime-100 text-slate-900 -translate-y-3">
+                        {!! $message->message !!}
+                    </div>
+                    <div class="chat-footer opacity-50">
+                        Delivered
+                    </div>
+                </div>
+            </div>
+            <form method="dialog" class="modal-backdrop">
+                <button>close</button>
+            </form>
+        </dialog>
+    @endif
+
     @php
         $jumlahDataUserPerBulan = array_fill(0, 12, 0);
         $jumlahDataTicketPerBulan = array_fill(0, 12, 0);
