@@ -252,7 +252,7 @@
                                     <!-- Sidebar content here -->
 
                                     @foreach ($notifications as $notification)
-                                        <div class="chat {{ $notification->is_user ? 'chat-end' : 'chat-start' }}">
+                                        <div class="chat {{ $notification->is_user ? 'chat-end' : 'chat-start' }}" wire:poll.1s>
                                             <div class="chat-header font-semibold mb-1">
                                                 {{ $notification->is_user ? 'Anda' : 'Helpdesk' }}
                                             </div>

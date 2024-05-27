@@ -56,6 +56,7 @@
                     </div>
                 @endif
 
+                {{-- User Manage --}}
                 @if (\App\Helpers\RoleHelper::isAdmin())
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('manageuser')" :active="request()->routeIs('manageuser')" class="gap-2">
@@ -65,11 +66,22 @@
                     </div>
                 @endif
 
+                {{-- Weblog Links --}}
                 @if (\App\Helpers\RoleHelper::isAdmin())
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('log')" :active="request()->routeIs('log')" class="gap-2">
                             <i class="ri-alarm-warning-line"></i>
                             {{ __('Web Log') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+
+                {{-- Chatter Links --}}
+                @if (\App\Helpers\RoleHelper::isAdmin() || \App\Helpers\RoleHelper::isHelpdesk())
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('chatter')" :active="request()->routeIs('chatter')" class="gap-2">
+                            <i class="ri-chat-1-line"></i>
+                            {{ __('Chatter') }}
                         </x-nav-link>
                     </div>
                 @endif
@@ -181,6 +193,15 @@
             <div class="pt-2 pb-3 space-y-1">
                 <x-responsive-nav-link :href="route('log')" :active="request()->routeIs('log')">
                     {{ __('Web Log') }}
+                </x-responsive-nav-link>
+            </div>
+        @endif
+
+        {{-- Chatter Links --}}
+        @if (\App\Helpers\RoleHelper::isAdmin() || \App\Helpers\RoleHelper::isHelpdesk())
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link :href="route('chatter')" :active="request()->routeIs('chatter')">
+                    {{ __('Chatter') }}
                 </x-responsive-nav-link>
             </div>
         @endif
