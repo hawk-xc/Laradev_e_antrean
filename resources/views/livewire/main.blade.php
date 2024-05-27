@@ -235,7 +235,7 @@
                             <div class="drawer-content">
                                 <!-- Page content here -->
                                 <label id="drawerButton" for="my-drawer" class="drawer-button btn btn-neutral"><i
-                                        class="ri-message-3-line"></i> kotak pesan</label>
+                                        class="ri-message-3-line"></i> <span class="max-sm:hidden">kotak pesan</span></label>
                             </div>
 
 
@@ -256,7 +256,7 @@
                                             <div class="chat-header font-semibold mb-1">
                                                 {{ $notification->is_user ? 'Anda' : 'Helpdesk' }}
                                             </div>
-                                            <div class="chat-bubble bg-white text-slate-900 text-wrap">{!! $notification->message !!}
+                                            <div class="chat-bubble bg-white text-slate-900 text-wrap max-w-[43rem] max-sm:max-w-[20rem]">{!! $notification->message !!}
                                             </div>
                                             <div class="chat-footer text-slate-900">
                                                 <time
