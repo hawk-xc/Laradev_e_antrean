@@ -234,44 +234,54 @@
                             <input id="my-drawer" type="checkbox" class="drawer-toggle" />
                             <div class="drawer-content">
                                 <!-- Page content here -->
-                                <label id="drawerButton" for="my-drawer" class="drawer-button btn btn-neutral"><i
-                                        class="ri-message-3-line"></i> <span class="max-sm:hidden">kotak pesan</span></label>
+                                <label id="drawerButton" for="my-drawer" class="drawer-button btn btn-neutral"
+                                    wire:click='readMessage({{ Auth::user()->id }})'><i
+                                        class="ri-message-3-line"></i> <span class="max-sm:hidden">kotak
+                                        pesan</span></label>
                             </div>
 
 
                             {{-- drawer message --}}
-                            <div id="drawerAction" class="drawer-side z-50 " wire:ignore.self>
+                            <div id="drawerAction" class="z-50 drawer-side " wire:ignore.self>
                                 <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
                                 <ul
                                     class="menu p-4 w-[50rem] max-sm:w-screen min-h-full text-base-content gap-3 bg-gradient-to-tr from-sky-400 to-lime-200">
-                                    <span class="text-2xl font-semibold text-slate-700 max-sm:flex max-sm:justify-between"><i
+                                    <span
+                                        class="text-2xl font-semibold text-slate-700 max-sm:flex max-sm:justify-between"><i
                                             class="ri-notification-2-line"></i>
                                         <span>Notifikasi</span>
-                                        <label for="my-drawer" class="drawer-button md:hidden"><i class="ri-arrow-go-back-line"></i></label>
+                                        <label for="my-drawer" class="drawer-button md:hidden"><i
+                                                class="ri-arrow-go-back-line"></i></label>
                                     </span>
                                     <!-- Sidebar content here -->
 
                                     @foreach ($notifications as $notification)
-                                        <div class="chat {{ $notification->is_user ? 'chat-end' : 'chat-start' }}" wire:poll.1s>
-                                            <div class="chat-header font-semibold mb-1">
+                                        <div class="chat {{ $notification->is_user ? 'chat-end' : 'chat-start' }}"
+                                            wire:poll.1s>
+                                            <div class="mb-1 font-semibold chat-header">
                                                 {{ $notification->is_user ? 'Anda' : 'Helpdesk' }}
                                             </div>
-                                            <div class="chat-bubble bg-white text-slate-900 text-wrap max-w-[43rem] max-sm:max-w-[20rem]">{!! $notification->message !!}
+                                            <div
+                                                class="chat-bubble bg-white text-slate-900 text-wrap max-w-[43rem] max-sm:max-w-[20rem]">
+                                                {!! $notification->message !!}
                                             </div>
                                             <div class="chat-footer text-slate-900">
                                                 <time
                                                     class="text-xs opacity-50">{{ $notification->created_at->diffForHumans() }}</time>
                                             </div>
                                         </div>
-                                        @endforeach
-                                        <div class="my-8"></div>
+                                    @endforeach
+                                    <div class="my-8"></div>
                                 </ul>
                                 <div
-                                class="fixed border backdrop-blur-lg bottom-0 w-[50rem] max-sm:w-screen p-5 flex items-center align-middle justify-evenly gap-2">
-                                <textarea id="auto-resize" class="w-[40rem] rounded-lg max-sm:w-[20rem] pt-3 max-sm:pt-1 border input input-bordered" wire:ignore.self wire:model.live="userMessage"></textarea>
-                                <button onclick="document.getElementById('auto-resize').value = '' " class="btn" wire:click='sendMessage'><i class="ri-send-plane-line"></i></button>
+                                    class="fixed border backdrop-blur-lg bottom-0 w-[50rem] max-sm:w-screen p-5 flex items-center align-middle justify-evenly gap-2">
+                                    <textarea id="auto-resize" class="w-[40rem] rounded-lg max-sm:w-[20rem] pt-3 max-sm:pt-1 border input input-bordered"
+                                        wire:ignore.self wire:model.live="userMessage"></textarea>
+                                    <button onclick="document.getElementById('auto-resize').value = '' "
+                                        class="btn" wire:click='sendMessage'><i
+                                            class="ri-send-plane-line"></i></button>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </div>
                 </div>
@@ -481,7 +491,7 @@
     @if ($message !== null)
         <dialog id="my_modal_2" class="modal" wire:ignore.self>
             <div class="modal-box">
-                <h3 class="font-bold text-lg">Pesan!</h3>
+                <h3 class="text-lg font-bold">Pesan!</h3>
                 <div class="chat chat-start">
                     <div class="avatar placeholder">
                         <div class="h-10 text-white rounded-full shadow-sm aspect-square bg-neutral">
@@ -494,10 +504,10 @@
                             {{ $message->created_at }}
                         </time>
                     </div>
-                    <div class="chat-bubble bg-lime-100 text-slate-900 -translate-y-3">
+                    <div class="-translate-y-3 chat-bubble bg-lime-100 text-slate-900">
                         {!! $message->message !!}
                     </div>
-                    <div class="chat-footer opacity-50">
+                    <div class="opacity-50 chat-footer">
                         Delivered
                     </div>
                 </div>
@@ -541,8 +551,8 @@
         });
 
         function clearMessage() {
-                document.getElementById('#auto-resize').val('');
-            }
+            document.getElementById('#auto-resize').val('');
+        }
     </script>
     <script type="text/javascript">
         $(document).ready(function() {

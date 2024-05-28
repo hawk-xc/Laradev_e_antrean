@@ -31,14 +31,9 @@ class Main extends Component
         $this->isVisible = true;
     }
 
-    public function notification(int $id): void
+    public function readMessage(int $id)
     {
-        $data = NotificationModel::find($id);
-        $data->update([
-            'is_read' => 1
-        ]);
-
-        $this->message = $data;
+        NotificationModel::where('user_id', $id)->update(['is_read' => 1]);
     }
 
     public function sendMessage()

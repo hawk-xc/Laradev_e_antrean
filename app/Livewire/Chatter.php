@@ -17,6 +17,7 @@ class Chatter extends Component
     public function selectMessage(int $id)
     {
         $this->usrId = $id;
+        // Notification::where('user_id', $this->usrId)->update(['is_read' => 1]);
     }
 
     public function render()
