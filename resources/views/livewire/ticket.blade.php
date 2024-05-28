@@ -68,7 +68,7 @@
                     @endforeach
                 </tbody>
             </table>
-            <span class="flex flex-row gap-4 align-middle items-center my-10">
+            <span class="flex flex-row items-center gap-4 my-10 align-middle">
                 <p class="inline text-xs font-light">
                     <i class="ri-database-2-line"></i> menampilkan
                     {{ $loadCount > $tickets->count() ? $tickets->count() : $loadCount }}
@@ -77,7 +77,7 @@
                     perangkat
                 </p>
 
-                @if ($loadCount <= 5 && !$tickets->count() == 5)
+                @if ($tickets->count() >= 10)
                     <button wire:click='loadAll'
                         class="btn btn-xs btn-neutral {{ $tickets->count() > 10 ? 'hidden' : '' }}">
                         tampilkan semua
@@ -89,8 +89,7 @@
                         \App\Models\Ticket::where(
                             'device_id',
                             \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count())
-                    <button wire:click='loadAllLess'
-                        class="btn btn-xs btn-neutral">
+                    <button wire:click='loadAllLess' class="btn btn-xs btn-neutral">
                         sembunyikan semua
                     </button>
                 @endif
@@ -131,12 +130,13 @@
                         <li>pastikan menambahkan perangkat yang anda pilih benar</li>
                         <li>berikan deskripsi yang jelas untuk kendala yang dialami</li>
                         <li>apabila status tiket ditutup anda tidak bisa memulihkan kembali</li>
-                        <li>anda dapat melakukan perubahan tiket apabila status tiket belum diverifikasi oleh tim kami</li>
+                        <li>anda dapat melakukan perubahan tiket apabila status tiket belum diverifikasi oleh tim kami
+                        </li>
                     </ul>
                 </div>
 
                 {{-- form in here --}}
-                <label class="w-full form-control hidden">
+                <label class="hidden w-full form-control">
                     <div class="label">
                         <span class="label-text">Id tiket</span>
                     </div>
