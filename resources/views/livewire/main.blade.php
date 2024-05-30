@@ -234,15 +234,14 @@
                             <input id="my-drawer" type="checkbox" class="drawer-toggle" />
                             <div class="drawer-content">
                                 <!-- Page content here -->
-                                <label id="drawerButton" for="my-drawer" class="drawer-button btn btn-neutral"
-                                    wire:click='readMessage({{ Auth::user()->id }})'><i
+                                <label id="drawerButton" for="my-drawer" class="drawer-button btn btn-neutral"><i
                                         class="ri-message-3-line"></i> <span class="max-sm:hidden">kotak
                                         pesan</span></label>
                             </div>
 
 
                             {{-- drawer message --}}
-                            <div id="drawerAction" class="z-50 drawer-side " wire:ignore.self>
+                            <div id="drawerAction" class="drawer-side z-50 " wire:ignore.self>
                                 <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
                                 <ul
                                     class="menu p-4 w-[50rem] max-sm:w-screen min-h-full text-base-content gap-3 bg-gradient-to-tr from-sky-400 to-lime-200">
@@ -258,7 +257,7 @@
                                     @foreach ($notifications as $notification)
                                         <div class="chat {{ $notification->is_user ? 'chat-end' : 'chat-start' }}"
                                             wire:poll.1s>
-                                            <div class="mb-1 font-semibold chat-header">
+                                            <div class="chat-header font-semibold mb-1">
                                                 {{ $notification->is_user ? 'Anda' : 'Helpdesk' }}
                                             </div>
                                             <div
@@ -309,7 +308,131 @@
                 $now = Illuminate\Support\Carbon::now();
             @endphp
 
-            <div id="singleCard" class="w-full my-5 shadow border-slate-400 stats">
+            <!-- Open the modal using ID.showModal() method -->
+
+            <dialog id="my_modal_1" class="modal" wire:ignore.self>
+                <div class="modal-box w-11/12 max-w-5xl">
+
+                    <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">
+                        <li class="{{ $proces_id ? \App\Models\Proces::find($proces_id)->status_id  >= 1 ? '' : "hidden" : null }}">
+                            <hr class="bg-primary" />
+                            <div class="timeline-middle">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="h-5 w-5">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="timeline-start md:text-end mb-10">
+                                @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id  == 1 : null)
+                                    <time class="font-mono italic">
+                                        {{ $proces_id ? "terakhir update " . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
+                                    </time>
+                                @endif
+                                <div class="text-lg font-black">
+                                    <div class="lg:tooltip" data-tip="currently registered">
+                                        <button class="w-32 btn btn-secondary btn-sm"><i
+                                                class="ri-flag-line max-sm:hidden"></i>
+                                            registrasi</button>
+                                    </div>
+                                </div>
+                                <span class="font-light mt-2">untuk saat ini antrean sudah diterima tim kami, untuk selanjutnya mohon menunggu antrean anda divertifikasi oleh tim helpdesk kami.</span>
+                            </div>
+                            <hr class="bg-primary" />
+                        </li> 
+                        <li class="{{ $proces_id ? \App\Models\Proces::find($proces_id)->status_id  >= 2 ? '' : "hidden" : null }}">
+                            <hr class="bg-primary" />
+                            <div class="timeline-middle">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="h-5 w-5">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="timeline-end mb-10">
+                                @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id  == 2 : null)
+                                    <time class="font-mono italic">
+                                        {{ $proces_id ? "terakhir update " . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
+                                    </time>
+                                @endif
+                                <div class="text-lg font-black">
+                                    <div class="lg:tooltip" data-tip="vertified your ticket">
+                                        <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
+                                            vertifikasi</button>
+                                    </div>
+                                </div>
+                                <span class="font-ligth mt-2">data antrean anda sudah sukses divertifikasi oleh tim helpdesk kami, silakan membawa perangkat anda ke toko kami untuk dapat segera mendapat penaganan.</span>
+                            </div>
+                            <hr class="bg-primary" />
+                        </li>
+                        <li class="{{ $proces_id ? \App\Models\Proces::find($proces_id)->status_id  >= 3 ? '' : "hidden" : null }}">
+                            <hr class="bg-primary" />
+                            <div class="timeline-middle">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="h-5 w-5">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="timeline-start md:text-end mb-10">
+                                @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id  == 3 : null)
+                                    <time class="font-mono italic">
+                                        {{ $proces_id ? "terakhir update " . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
+                                    </time>
+                                @endif
+                                <div class="text-lg font-black">
+                                    <div class="lg:tooltip" data-tip="process by team">
+                                        <button class="w-36 btn btn-info btn-sm"><i class="ri-flag-line"></i>
+                                            pengerjaan</button>
+                                    </div>
+                                </div>
+                                untuk  saat ini perangkat anda sedang dalam penanganan tim teknisi kami.
+                            </div>
+                            <hr class="bg-primary" />
+                        </li>
+                        <li class="{{ $proces_id ? \App\Models\Proces::find($proces_id)->status_id  >= 4 ? '' : "hidden" : null }}">
+                            <hr class="bg-primary" />
+                            <div class="timeline-middle">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                    class="h-5 w-5">
+                                    <path fill-rule="evenodd"
+                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="timeline-end mb-10">
+                                @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id  == 4 : null)
+                                    <time class="font-mono italic">
+                                        {{ $proces_id ? "terakhir update " . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
+                                    </time>
+                                @endif
+                                <div class="text-lg font-black">
+                                    <div class="lg:tooltip" data-tip="done">
+                                        <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
+                                            selesai</button>
+                                    </div>
+                                </div>
+                                perangkat anda sudah selesai perbaikan, mohon segera mengambil perangkat anda ditoko kami.
+                            </div>
+                            <hr class="bg-primary" />
+                        </li>
+                    </ul>
+
+
+                    <div class="modal-action">
+                        <form method="dialog">
+                            <!-- if there is a button in form, it will close the modal -->
+                            <button class="btn">Tutup</button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
+
+            <div id="singleCard" class="w-full my-5 shadow border-slate-400 stats hover:bg-slate-100 cursor-pointer"
+                onclick="my_modal_1.showModal()" wire:click="getProces({{ $process->first()->id }})">
                 <div class="flex items-center justify-center align-middle stat">
                     @if ($process->first()->status_id == 1)
                         <div class="lg:tooltip" data-tip="currently registered">
@@ -323,7 +446,7 @@
                         </div>
                     @elseif ($process->first()->status_id == 3)
                         <div class="lg:tooltip" data-tip="process by team">
-                            <button class="w-32 btn btn-info btn-sm"><i class="ri-flag-line"></i>
+                            <button class="w-36 btn btn-info btn-sm"><i class="ri-flag-line"></i>
                                 pengerjaan</button>
                         </div>
                     @elseif ($process->first()->status_id == 4)
@@ -491,7 +614,7 @@
     @if ($message !== null)
         <dialog id="my_modal_2" class="modal" wire:ignore.self>
             <div class="modal-box">
-                <h3 class="text-lg font-bold">Pesan!</h3>
+                <h3 class="font-bold text-lg">Pesan!</h3>
                 <div class="chat chat-start">
                     <div class="avatar placeholder">
                         <div class="h-10 text-white rounded-full shadow-sm aspect-square bg-neutral">
@@ -504,10 +627,10 @@
                             {{ $message->created_at }}
                         </time>
                     </div>
-                    <div class="-translate-y-3 chat-bubble bg-lime-100 text-slate-900">
+                    <div class="chat-bubble bg-lime-100 text-slate-900 -translate-y-3">
                         {!! $message->message !!}
                     </div>
-                    <div class="opacity-50 chat-footer">
+                    <div class="chat-footer opacity-50">
                         Delivered
                     </div>
                 </div>
