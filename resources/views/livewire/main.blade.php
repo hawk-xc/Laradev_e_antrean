@@ -312,8 +312,11 @@
 
             <dialog id="my_modal_1" class="modal" wire:ignore.self>
                 <div class="modal-box w-11/12 max-w-5xl">
+                    <div class="flex justify-center align-middle items-center w-full">
+                        <span class="text-xl font-semibold mb-3 text-center">Timeline progres pengerjaan</span>
+                    </div>
 
-                    <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">
+                    <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical mt-10">
                         <li class="{{ $proces_id ? \App\Models\Proces::find($proces_id)->status_id  >= 1 ? '' : "hidden" : null }}">
                             <hr class="bg-primary" />
                             <div class="timeline-middle">
@@ -520,7 +523,9 @@
             {{-- <div class="allItem" class="hidden"> --}}
             @if (!$isVisible)
                 @foreach ($process->skip(1) as $proces)
-                    <div id="allItem" wire:after='hidden' class="w-full my-5 shadow border-slate-400 stats">
+                <div id="singleCard" class="w-full my-5 shadow border-slate-400 stats hover:bg-slate-100 cursor-pointer"
+                onclick="my_modal_1.showModal()" wire:click="getProces({{ $proces->id }})">
+                    {{-- <div id="allItem" wire:after='hidden' class="w-full my-5 shadow border-slate-400 stats"> --}}
                         <div class="flex items-center justify-center align-middle stat">
                             @if ($proces->status_id == 1)
                                 <div class="lg:tooltip" data-tip="currently registered">
