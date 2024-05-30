@@ -20,10 +20,16 @@ class Main extends Component
     public $isVisible = true;
     public $message;
     public $userMessage;
+    public $proces_id;
 
     public function showAllData()
     {
         $this->isVisible = false;
+    }
+
+    public function getProces(int $id): void
+    {
+        $this->proces_id = $id;
     }
 
     public function hideAllData()
@@ -31,9 +37,14 @@ class Main extends Component
         $this->isVisible = true;
     }
 
-    public function readMessage(int $id)
+    public function notification(int $id): void
     {
-        NotificationModel::where('user_id', $id)->update(['is_read' => 1]);
+        $data = NotificationModel::find($id);
+        $data->update([
+            'is_read' => 1
+        ]);
+
+        $this->message = $data;
     }
 
     public function sendMessage()
@@ -51,6 +62,7 @@ class Main extends Component
         $tickets = TicketModel::whereIn('device_id', $devices->pluck('id'))->orderBy('created_at', 'asc')->get();
         $process =  ProcesModel::whereIn('ticket_id', $tickets->pluck('id'))->orderBy('created_at', 'asc')->get();
         $notifications = NotificationModel::where('user_id', Auth::user()->id)->orderBy('created_at', 'asc')->get();
+        $timelines = ProcesModel::find($this->proces_id);
         $users = UserModel::all();
 
         return view('livewire.main', [
@@ -62,6 +74,7 @@ class Main extends Component
             'userJson' => json_encode($users),
             'procesJson' => json_encode($process),
             'ticketJson' => json_encode($tickets),
+            'timelines' => $timelines
         ]);
     }
 }
