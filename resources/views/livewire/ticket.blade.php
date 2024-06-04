@@ -110,11 +110,11 @@
             <div class="py-20 hero">
                 <div class="text-center hero-content">
                     <div class="max-w-md">
-                        <h1 class="text-5xl font-bold">Hello there</h1>
-                        <p class="py-6">Currently the data is still empty, you can add data via the button below!</p>
+                        <h1 class="text-5xl font-bold">Hallo!</h1>
+                        <p class="py-6">Saat ini data masih kosong, Anda dapat menambahkan data melalui tombol di bawah ini!</p>
                         <button class="btn max-sm:btn-xs btn-neutral" onclick="createModal.showModal()"
                             wire:click='insert_testing'>
-                            <i class="ri-menu-search-line"></i> tambah tiket <i class="ri-add-line"></i>
+                            <i class="ri-menu-search-line"></i> tambah antrean <i class="ri-add-line"></i>
                         </button>
                     </div>
                 </div>

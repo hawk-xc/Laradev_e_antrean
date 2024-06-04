@@ -19,28 +19,21 @@
                 <thead>
                     <tr class="text-lg">
                         <th><i class="ri-hashtag"></i></th>
-                        <th>device name</th>
-                        <th class="hidden sm:table-cell">device year</th>
-                        <th class="hidden sm:table-cell">added on</th>
-                        <th>option</th>
+                        <th>nama perangkat</th>
+                        <th class="hidden sm:table-cell">tahun perangkat</th>
+                        <th class="hidden sm:table-cell">ditambahkan pada</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($devices as $key => $device)
-                        <tr class="cursor-pointer hover:bg-gray-50">
+                        <tr class="cursor-pointer hover:bg-gray-50" onclick="editModal.showModal()"
+                        wire:click='edit_testing({{ $device->id }})'>
                             <th>
                                 {{ $key + 1 }}
                             </th>
                             <td>{{ $device->device_name }}</td>
                             <td class="hidden sm:table-cell">{{ $device->device_year }}</td>
                             <td class="hidden sm:table-cell">{{ $device->created_at->diffForHumans() }}</td>
-                            <td class="">
-                                {{-- <label wire:click="edit({{ $device->id }})" class="btn btn-neutral" --}}
-                                <button class="btn max-sm:btn-xs" onclick="editModal.showModal()"
-                                    wire:click='edit_testing({{ $device->id }})'>
-                                    <i class="ri-menu-search-line"></i> lihat!
-                                </button>
-                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -74,8 +67,8 @@
             <div class="py-20 hero">
                 <div class="text-center hero-content">
                     <div class="max-w-md">
-                        <h1 class="text-5xl font-bold">Hello there</h1>
-                        <p class="py-6">Currently the data is still empty, you can add data via the button below!</p>
+                        <h1 class="text-5xl font-bold">Hallo!</h1>
+                        <p class="py-6">Saat ini data masih kosong, Anda dapat menambahkan data melalui tombol di bawah ini!</p>
                         <button class="btn max-sm:btn-xs btn-neutral" onclick="createModal.showModal()"
                             wire:click='insert_testing'>
                             <i class="ri-menu-search-line"></i> tambah perangkat <i class="ri-add-line"></i>
