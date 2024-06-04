@@ -29,7 +29,7 @@
         <div class="mt-4">
             <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
             <label class="flex items-center gap-2 mt-2 bg-white input-bordered input input-sm">
-                <x-text-input id="password_confirmation" class="block w-full mt-1 " type="password" name="password"
+                <x-text-input id="password_confirmation" class="block w-full mt-1 " type="password" name="password_confirmation"
                     required autocomplete="new-password" />
             </label>
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
