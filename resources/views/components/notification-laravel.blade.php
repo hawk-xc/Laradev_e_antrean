@@ -131,7 +131,20 @@
                         window.location.reload();
                     }, 3000);
                 })
-            })
+            });
+
+            $('#imageInput').on('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#preview').attr('src', e.target.result).show();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    $('#preview').hide();
+                }
+            });
         </script>
     @endscript
 </div>
