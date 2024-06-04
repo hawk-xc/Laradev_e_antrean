@@ -262,7 +262,7 @@
                                             </div>
                                             <div
                                                 class="chat-bubble bg-white text-slate-900 text-wrap max-w-[43rem] max-sm:max-w-[20rem]">
-                                                {!! $notification->message !!}
+                                                <p class="break-words">{!! $notification->message !!}</p>
                                             </div>
                                             <div class="chat-footer text-slate-900">
                                                 <time
@@ -632,8 +632,8 @@
                             {{ $message->created_at }}
                         </time>
                     </div>
-                    <div class="chat-bubble bg-lime-100 text-slate-900 -translate-y-3">
-                        {!! $message->message !!}
+                    <div class="chat-bubble bg-lime-100 text-slate-900 -translate-y-3 text-wrap max-w-[43rem] max-sm:max-w-[20rem]">
+                        <p class="break-words">{!! $message->message !!}</p>
                     </div>
                     <div class="chat-footer opacity-50">
                         Delivered

@@ -9,7 +9,7 @@
     <div class="overflow-x-auto">
         @if (!$devices->isEmpty())
             <button class="btn max-sm:btn-xs" onclick="createModal.showModal()" wire:click='insert_testing'>
-                tambah tiket <i class="ri-add-line"></i>
+                tambah antrean <i class="ri-add-line"></i>
             </button>
         @endif
 

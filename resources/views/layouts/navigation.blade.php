@@ -38,7 +38,7 @@
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('ticket')" :active="request()->routeIs('ticket')" class="gap-2">
                             <i class="ri-coupon-3-line"></i>
-                            {{ __('Tiket') }}
+                            {{ __('Antrean') }}
                         </x-nav-link>
                     </div>
                 @endif
@@ -165,7 +165,7 @@
         @if (\App\Helpers\RoleHelper::isUser())
             <div class="pt-2 pb-3 space-y-1">
                 <x-responsive-nav-link :href="route('ticket')" :active="request()->routeIs('ticket')">
-                    {{ __('Tiket') }}
+                    {{ __('Antrean') }}
                 </x-responsive-nav-link>
             </div>
         @endif

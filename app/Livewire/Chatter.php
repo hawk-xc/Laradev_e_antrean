@@ -10,13 +10,35 @@ use \App\Models\{
     User
 };
 
+use Illuminate\Support\Facades\Auth;
+
+use PHPUnit\Framework\TestStatus\Notice;
+
 class Chatter extends Component
 {
     public $usrId;
+    public $Message;
+    public $openTextEditor = false;
+
+    public function sendMessage()
+    {
+        $validate = $this->validate([
+            'Message' => 'required|min:3'
+        ]);
+        if ($validate) {
+            $pesan = Notification::create([
+                'user_id' => $this->usrId,
+                'message' => $this->Message,
+                'is_user' => false
+            ]);
+        }
+    }
 
     public function selectMessage(int $id)
     {
         $this->usrId = $id;
+        $this->openTextEditor = true;
+        // dd($this);
         // Notification::where('user_id', $this->usrId)->update(['is_read' => 1]);
     }
 
