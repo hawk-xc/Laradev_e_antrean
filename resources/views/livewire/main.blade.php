@@ -93,7 +93,7 @@
                     <li>
                         <div
                             class="transition-all duration-150 shadow-lg cursor-pointer active:bg-slate-800 active:text-white timeline-start timeline-box hover:bg-slate-50">
-                            Register and Login</div>
+                            Register atau Login</div>
                         <div class="timeline-middle">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-5 h-5">
@@ -116,15 +116,14 @@
                         </div>
                         <a href="{{ route('device') }}"
                             class="transition-all duration-150 shadow-lg cursor-pointer active:bg-slate-800 active:text-white timeline-end timeline-box hover:bg-slate-50">
-                            Add your device</a>
+                            Tambahkan perangkat</a>
                         <hr />
                     </li>
                     <li>
                         <hr />
                         <a href="{{ route('ticket') }}"
                             class="transition-all duration-150 shadow-lg cursor-pointer active:bg-slate-800 active:text-white timeline-start timeline-box hover:bg-slate-50">
-                            Registering new
-                            ticket</a>
+                            Register antrean baru</a>
                         <div class="timeline-middle">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-5 h-5">
@@ -139,7 +138,7 @@
                         <hr />
                         <div
                             class="transition-all duration-150 shadow-lg cursor-pointer active:bg-slate-800 active:text-white timeline-end timeline-box hover:bg-slate-50">
-                            Get notification</div>
+                            Dapatkan notifikasi</div>
                         <div class="timeline-middle">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-5 h-5">
@@ -154,60 +153,50 @@
                     <div id="my-accordion" class="border collapse collapse-arrow border-base-300">
                         <input type="radio" name="my-accordion-2" checked="checked" />
                         <div class="text-xl font-medium collapse-title">
-                            Register and Login
+                            Register atau Login
                         </div>
                         <div class="collapse-content">
                             <p>
-                                Before you can add devices and add ticket queues, you need to register an account and
-                                create
-                                an
-                                account with valid credentials, we will not share your data.
+                                Setelah anda berhasil register dan login anda akan dibawa ke halaman dashboard ini.
                             </p>
                         </div>
                     </div>
                     <div id="my-accordion" class="border collapse collapse-arrow border-base-300">
                         <input type="radio" name="my-accordion-2" />
                         <div class="text-xl font-medium collapse-title">
-                            Add your device
+                            Tambahkan perangkat
                         </div>
                         <div class="collapse-content">
                             <p>
-                                You need to add the device you have to be able to create a new ticket queue, make sure
-                                the
-                                data
-                                you input is correct
+                                Pada tahap ini silakan anda tambah perangkat anda dihalaman tambah perangkat
                             </p>
                         </div>
                     </div>
                     <div id="my-accordion" class="border collapse collapse-arrow border-base-300">
                         <input type="radio" name="my-accordion-2" />
                         <div class="text-xl font-medium collapse-title">
-                            Registering new ticket
+                            Register antrean baru
                         </div>
                         <div class="collapse-content">
                             <p>
-                                If you have registered your device, the next step is to register a ticket, where this
-                                ticket
-                                will then be processed by our helpdesk team and technicians, you can also see activity
-                                history
-                                and other information on the ticket page, please remember the processing rules are 3x24
-                                hours
-                                from the start of the ticket made
+                                Jika anda sudah mendaftarkan perangkat anda, langkah selanjutnya adalah melakukan registrasi antrean, dimana antrean ini kemudian akan diproses oleh tim helpdesk dan teknisi kami, Anda juga dapat melihat aktivitasnya
+                                sejarah
+                                dan informasi lainnya di halaman <b>Antrean</b>, harap diingat aturan pemrosesannya adalah 3x24
+                                jam
+                                dari awal tiket dibuat
                             </p>
                         </div>
                     </div>
                     <div id="my-accordion" class="border collapse collapse-arrow border-base-300">
                         <input type="radio" name="my-accordion-2" />
                         <div class="text-xl font-medium collapse-title">
-                            Get notification
+                            Dapatkan notifikasi
                         </div>
                         <div class="collapse-content">
                             <p>
-                                When the repair process is complete, our team will send a notification to the customer
-                                via
-                                WhatsApp number and email address, make sure to always regularly check notifications if
-                                the
-                                ticket status goes into repair.
+                                Jika proses perbaikan telah selesai, tim kami akan mengirimkan notifikasi kepada pelanggan
+                                melalui
+                                fitur <b>Chat</b> dan alamat email, pastikan untuk selalu rutin mengecek notifikasi.
                             </p>
                         </div>
                     </div>
