@@ -14,7 +14,9 @@
                         <span class="text-xs">{{ $notification->created_at->diffForHumans() }}</span>
                     </span>
                 </div>
-                <span><i class="ri-circle-fill text-green-500"></i></span>
+                @if(\App\Models\Notification::where('user_id', $notification->id)->where('is_read', 0)->count() > 0)
+                    <span><i class="ri-circle-fill text-green-500"></i></span>
+                @endif
             </div>
         @empty
             <span>Belum ada pesan</span>
