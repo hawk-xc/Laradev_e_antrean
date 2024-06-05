@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->call(function () {
             $overdue = TicketModel::where('closed_at', '<', now());
-            ProcesModel::whereIn('ticket_id', $overdue->pluck('id'))->update(['status_id' => 5]);
+            ProcesModel::whereIn('ticket_id', $overdue->pluck('id'))->where('status_id', '!=', 4)->update(['status_id' => 5]);
         })->everyTenSeconds();
 
         $schedule->command('queue:work')->everyMinute();
