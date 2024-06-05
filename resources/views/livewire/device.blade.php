@@ -95,6 +95,10 @@
                     </ul>
                 </div>
 
+                <div class="">
+                    <img id="preview" src="storage/device_assets/{{ $device_image }}" class="my-1 rounded-lg">
+                </div>
+
                 {{-- form in here --}}
                 <label class="w-full form-control">
                     <div class="label">
@@ -180,6 +184,28 @@
                         </li>
                     </ul>
                 </div>
+
+                <div class="">
+                    <img id="preview" src="" class="my-1 rounded-lg" wire:ignore.self>
+                </div>
+
+                <label class="form-control w-full">
+                    <div class="label">
+                        <span class="label-text">sematkan gambar</span>
+                    </div>
+                    <input type="file" wire:model="device_image" class="file-input file-input-bordered w-full" id="imageInput"
+                        accept="image/*" />
+                    <div class="label">
+                        <span class="label-text-alt">gambar format yang didukung : <i>jpg, jpeg, png</i></span>
+                    </div>
+                    @error('device_image')
+                        <div class="label">
+                            <span class="text-red-500 label-text-alt">{{ $message }}</span>
+                        </div>
+                    @enderror
+                    <div wire:loading wire:target="device_image" class="text-sm text-gray-500 italic">Uploading...</div>
+                </label>
+
                 {{-- form in here --}}
                 <label class="w-full form-control">
                     <div class="label">
@@ -206,24 +232,9 @@
                     @enderror
                 </label>
 
-                <div class="">
-                    <img id="preview" src="" class="my-1 rounded-lg">
-                </div>
-
-                <label class="form-control w-full">
-                    <div class="label">
-                        <span class="label-text">sematkan gambar</span>
-                    </div>
-                    <input type="file" class="file-input file-input-bordered w-full" id="imageInput"
-                        accept="image/*" />
-                    <div class="label">
-                        <span class="label-text-alt">gambar format yang didukung : <i>img, jpg, jpeg, png</i></span>
-                    </div>
-                </label>
-
                 <label class="w-full form-control">
                     <div class="label">
-                        <span class="label-text">File pendukung</span>
+                        <span class="label-text">Dokumentasi pendukung</span>
                     </div>
                     <input id="driveLinkForm" wire:model='drive_link' type="text"
                         placeholder="contoh. https://drive.google.com/file/d/contoh-gambar-&-video-drive"

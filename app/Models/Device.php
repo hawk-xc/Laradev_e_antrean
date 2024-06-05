@@ -14,6 +14,7 @@ class Device extends Model
         'device_name',
         'device_year',
         'drive_link',
+        'image_link'
     ];
 
     // protected $with = ['user', 'ticket'];

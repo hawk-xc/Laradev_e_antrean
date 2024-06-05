@@ -105,6 +105,7 @@
                     const deviceIdForm = $('#deviceIdForm');
                     const ticketLastUpdateForm = $('#ticketLastUpdateForm');
                     const ticketDescriptionForm =  $('#ticketDescriptionForm');
+                    const previewImage = $('#preview')[0];
 
                     const originalDatetime = data.data.updated_at;
 
@@ -124,6 +125,8 @@
                     // deviceNameForm.val(data.data.device_name);
                     ticketLastUpdateForm.val(formattedDatetime);
                     ticketDescriptionForm.val(data.data.description);
+                    // previewImage.attr('src', 'storage/device_assets/' + data.data.image_url);
+                    $('#preview').attr('src', 'storage/device_assets/f433cf9696fb61b7676333576819b43c.jpg') 
                 });
 
                 $wire.on('refresh', () => {

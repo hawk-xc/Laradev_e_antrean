@@ -61,5 +61,9 @@ Route::get('/testing', function () {
     return 'ok';
 });
 
+Route::get('/image', function () {
+    return view('testing');
+});
+
 
 require __DIR__ . '/auth.php';
