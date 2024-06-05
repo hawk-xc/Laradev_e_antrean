@@ -28,7 +28,7 @@ class ProfileController extends Controller
     public function updatePhone(Request $request)
     {
         $request->validate([
-            'phone' => ['required', 'string', 'max:255'], // Sesuaikan aturan validasi sesuai kebutuhan Anda
+            'phone' => ['required', 'numeric'], // Sesuaikan aturan validasi sesuai kebutuhan Anda
         ]);
 
         $user = $request->user();

@@ -20,6 +20,7 @@
                     autofocus autocomplete="off" />
             </label>
             <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+                <span class="text-xs text-slate-600">contoh format 08xxxxxxxx / +62xxxxxxxx</span>
         </div>
 
         <div class="flex items-center gap-4">
