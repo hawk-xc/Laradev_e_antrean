@@ -65,16 +65,17 @@ class Ticket extends Component
         ]);
 
         $this->validate([
-            'device_image' => 'image|max:1024|mimes:jpg,png,jpeg',
+            'device_image' => 'nullable|image|max:1024|mimes:jpg,png,jpeg',
         ]);
 
-        $name = md5($this->device_image . microtime()) . '.' . $this->device_image->extension();
-
-        $this->device_image->storeAs('public/ticket_assets', $name);
+        if ($this->device_image) {
+            $name = md5($this->device_image . microtime()) . '.' . $this->device_image->extension();
+            $this->device_image->storeAs('public/ticket_assets', $name);
+            $validate['image_link'] = $name;
+        }
 
         $validate['created_at'] = now()->format('Y-m-d H:i:s');
         $validate['closed_at'] = now()->addDay(3)->format('Y-m-d H:i:s');
-        $validate['image_link'] = $name;
 
         $today = now()->format('Y-m-d');
         $count = TicketModel::whereDate('created_at', $today)->count();

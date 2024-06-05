@@ -95,9 +95,11 @@
                     </ul>
                 </div>
 
-                <div class="">
-                    <img id="preview" src="storage/device_assets/{{ $device_image }}" class="my-1 rounded-lg">
-                </div>
+                @if ($device_image != '-')
+                    <div class="">
+                        <img id="preview" src="storage/device_assets/{{ $device_image }}" class="my-1 rounded-lg">
+                    </div>
+                @endif
 
                 {{-- form in here --}}
                 <label class="w-full form-control">
@@ -193,8 +195,8 @@
                     <div class="label">
                         <span class="label-text">sematkan gambar</span>
                     </div>
-                    <input type="file" wire:model="device_image" class="file-input file-input-bordered w-full" id="imageInput"
-                        accept="image/*" />
+                    <input type="file" wire:model="device_image" class="file-input file-input-bordered w-full"
+                        id="imageInput" accept="image/*" />
                     <div class="label">
                         <span class="label-text-alt">gambar format yang didukung : <i>jpg, jpeg, png</i></span>
                     </div>
@@ -203,7 +205,8 @@
                             <span class="text-red-500 label-text-alt">{{ $message }}</span>
                         </div>
                     @enderror
-                    <div wire:loading wire:target="device_image" class="text-sm text-gray-500 italic">Uploading...</div>
+                    <div wire:loading wire:target="device_image" class="text-sm text-gray-500 italic">Uploading...
+                    </div>
                 </label>
 
                 {{-- form in here --}}

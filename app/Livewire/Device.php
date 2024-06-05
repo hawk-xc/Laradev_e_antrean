@@ -63,15 +63,16 @@ class Device extends Component
         ]);
 
         $this->validate([
-            'device_image' => 'image|max:1024|mimes:jpg,png,jpeg',
+            'device_image' => 'nullable|image|max:1024|mimes:jpg,png,jpeg',
         ]);
 
-        $name = md5($this->device_image . microtime()) . '.' . $this->device_image->extension();
-
-        $this->device_image->storeAs('public/device_assets', $name);
+        if ($this->device_image) {
+            $name = md5($this->device_image . microtime()) . '.' . $this->device_image->extension();
+            $this->device_image->storeAs('public/device_assets', $name);
+            $validate['image_link'] = $name;
+        }
 
         $validate['user_id'] = Auth::user()->id;
-        $validate['image_link'] = $name;
 
         $create = DeviceModel::create($validate);
         if ($create) {

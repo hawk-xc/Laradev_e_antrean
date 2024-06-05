@@ -131,9 +131,11 @@
                     </ul>
                 </div>
 
+                @if ($device_image != '-')
                 <div class="">
                     <img id="preview" src="storage/ticket_assets/{{ $device_image }}" class="my-1 rounded-lg">
                 </div>
+                @endif
 
                 {{-- form in here --}}
                 <label class="hidden w-full form-control">
