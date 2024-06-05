@@ -36,10 +36,10 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/device', fn () => view('Device'))->name('device')->middleware('is_user');
     Route::get('/ticket', fn () => view('Ticket'))->name('ticket')->middleware('is_user');
-    Route::get('/process', fn () => view('Process'))->name('process')->middleware('process');
+    Route::get('/process', fn () => view('Process'))->name('process')->middleware('is_admin_and_helpdesk');
     Route::get('/manageuser', fn () => view('ManageUser'))->name('manageuser')->middleware('is_admin');
-    Route::get('/weblog', fn () => view('WebLog'))->name('log')->middleware('is_helpdesk');
-    Route::get('/chatter', fn () => view('Chatter'))->name('chatter')->middleware('is_helpdesk');
+    Route::get('/weblog', fn () => view('WebLog'))->name('log')->middleware('is_admin');
+    Route::get('/chatter', fn () => view('Chatter'))->name('chatter')->middleware('is_admin_and_helpdesk');
 });
 
 Route::get('/auth/{provider}/redirect', [GoogleAuthController::class, 'redirect']);
@@ -54,16 +54,5 @@ Route::get('/', function () {
 //     \App\Jobs\MailerJob::dispatch('wahyutricahyono777@gmail.com', 'wahyu', 'done', \App\Models\Ticket::first());
 //     // event(new \App\Events\sendNotification('wahyutricahyono777@gmail.com', 'suradin', 'suradinlothok@gmail.com', 'done', \App\Models\Ticket::first()));
 // });
-
-Route::get('/testing', function () {
-    $message = "Hallo user<p class='my-3'>untuk saat ini status ticket sedang dalam</p><p class='mb-3'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur libero iure eius quibusdam ratione quidem totam obcaecati veritatis deserunt laboriosam molestias aliquid voluptatem nesciunt quaerat tenetur quia vel, laborum fugit ut, maxime est ex rerum beatae! Aliquam, quia quod. Quis distinctio beatae, debitis totam saepe veniam dolores est facere odio?</p><p>terima kasih,</p>";
-    event(new \App\Events\UserNotification(Auth::user(), $message));
-    return 'ok';
-});
-
-Route::get('/image', function () {
-    return view('testing');
-});
-
 
 require __DIR__ . '/auth.php';

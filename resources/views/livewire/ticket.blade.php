@@ -86,15 +86,19 @@
 
                 @if (
                     $loadCount ==
-                        \App\Models\Ticket::whereIn('device_id', \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count())
+                        \App\Models\Ticket::whereIn(
+                            'device_id',
+                            \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count())
                     <button wire:click='loadAllLess' class="btn btn-xs btn-neutral">
                         sembunyikan semua
                     </button>
                 @endif
-                
+
                 @if (
                     $loadCount <
-                        \App\Models\Ticket::whereIn('device_id', \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count())
+                        \App\Models\Ticket::whereIn(
+                            'device_id',
+                            \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count())
                     <button wire:click='loadMore(5)' class="btn btn-xs btn-neutral">+ 5 lebih</button>
                 @endif
                 @if ($loadCount > 5)
@@ -107,7 +111,8 @@
                 <div class="text-center hero-content">
                     <div class="max-w-md">
                         <h1 class="text-5xl font-bold">Hallo!</h1>
-                        <p class="py-6">Saat ini data masih kosong, Anda dapat menambahkan data melalui tombol di bawah ini!</p>
+                        <p class="py-6">Saat ini data masih kosong, Anda dapat menambahkan data melalui tombol di
+                            bawah ini!</p>
                         <button class="btn max-sm:btn-xs btn-neutral" onclick="createModal.showModal()"
                             wire:click='insert_testing'>
                             <i class="ri-menu-search-line"></i> tambah antrean <i class="ri-add-line"></i>
@@ -132,9 +137,9 @@
                 </div>
 
                 @if ($device_image != '-')
-                <div class="">
-                    <img id="preview" src="storage/ticket_assets/{{ $device_image }}" class="my-1 rounded-lg">
-                </div>
+                    <div class="">
+                        <img id="preview" src="storage/ticket_assets/{{ $device_image }}" class="my-1 rounded-lg">
+                    </div>
                 @endif
 
                 {{-- form in here --}}
@@ -174,7 +179,8 @@
                             wire:model="device_id">
                             <option selected value="null">Pilih salah satu</option>
                             @foreach ($devices as $device)
-                                <option value="{{ $device->id }}" {{ $device->id == $device_id ? 'selected' : '' }}>
+                                <option value="{{ $device->id }}"
+                                    {{ $device->id == $device_id ? 'selected' : '' }}>
                                     {{ $device->device_name }}</option>
                             @endforeach
                         </select>
@@ -230,8 +236,8 @@
                     <div class="label">
                         <span class="label-text">sematkan gambar</span>
                     </div>
-                    <input type="file" wire:model="device_image" class="file-input file-input-bordered w-full" id="imageInput"
-                        accept="image/*" />
+                    <input type="file" wire:model="device_image" class="file-input file-input-bordered w-full"
+                        id="imageInput" accept="image/*" />
                     <div class="label">
                         <span class="label-text-alt">gambar format yang didukung : <i>jpg, jpeg, png</i></span>
                     </div>
@@ -240,7 +246,8 @@
                             <span class="text-red-500 label-text-alt">{{ $message }}</span>
                         </div>
                     @enderror
-                    <div wire:loading wire:target="device_image" class="text-sm text-gray-500 italic">Uploading...</div>
+                    <div wire:loading wire:target="device_image" class="text-sm text-gray-500 italic">Uploading...
+                    </div>
                 </label>
 
                 <label class="w-full form-control">
