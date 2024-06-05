@@ -9,10 +9,12 @@ use DateTime;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
+use Livewire\WithFileUploads;
 
 class Ticket extends Component
 {
-    public $id, $device_id, $description, $ticket_updated_at, $ticket_id, $closed_id;
+    use WithFileUploads;
+    public $id, $device_id, $description, $ticket_updated_at, $ticket_id, $closed_id, $device_image;
 
     public $loadCount = 5;
     protected $listeners = ['confirmDelete' => 'deleteTicket'];
@@ -24,6 +26,7 @@ class Ticket extends Component
         $this->description = '';
         $this->ticket_id = '';
         $this->ticket_updated_at = '';
+        $this->device_image = '';
     }
 
     // load more load less config
@@ -61,8 +64,17 @@ class Ticket extends Component
             'description' => 'required|min:3',
         ]);
 
+        $this->validate([
+            'device_image' => 'image|max:1024|mimes:jpg,png,jpeg',
+        ]);
+
+        $name = md5($this->device_image . microtime()) . '.' . $this->device_image->extension();
+
+        $this->device_image->storeAs('public/ticket_assets', $name);
+
         $validate['created_at'] = now()->format('Y-m-d H:i:s');
         $validate['closed_at'] = now()->addDay(3)->format('Y-m-d H:i:s');
+        $validate['image_link'] = $name;
 
         $today = now()->format('Y-m-d');
         $count = TicketModel::whereDate('created_at', $today)->count();
@@ -97,6 +109,7 @@ class Ticket extends Component
         $this->description = $ticket->description;
         $this->ticket_updated_at = $ticket->updated_at;
         $this->ticket_id = $id;
+        $this->device_image = $ticket->image_link;
 
         $this->resetValidation(['device_name', 'device_year']);
 
