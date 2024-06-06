@@ -1,5 +1,5 @@
 <div>
-    <x-notification-laravel/>
+    <x-notification-laravel />
 
     <div wire:loading class="absolute flex flex-col justify-center m-10 text-lg text-white align-middle">
         <span class="block mx-auto mt-10 loading loading-infinity loading-lg"></span>
@@ -19,28 +19,21 @@
                 <thead>
                     <tr class="text-lg">
                         <th><i class="ri-hashtag"></i></th>
-                        <th>device name</th>
-                        <th class="hidden sm:table-cell">device year</th>
-                        <th class="hidden sm:table-cell">added on</th>
-                        <th>option</th>
+                        <th>nama perangkat</th>
+                        <th class="hidden sm:table-cell">tahun perangkat</th>
+                        <th class="hidden sm:table-cell">ditambahkan pada</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($devices as $key => $device)
-                        <tr class="cursor-pointer hover:bg-gray-50">
+                        <tr class="cursor-pointer hover:bg-gray-50" onclick="editModal.showModal()"
+                            wire:click='edit_testing({{ $device->id }})'>
                             <th>
                                 {{ $key + 1 }}
                             </th>
                             <td>{{ $device->device_name }}</td>
                             <td class="hidden sm:table-cell">{{ $device->device_year }}</td>
                             <td class="hidden sm:table-cell">{{ $device->created_at->diffForHumans() }}</td>
-                            <td class="">
-                                {{-- <label wire:click="edit({{ $device->id }})" class="btn btn-neutral" --}}
-                                <button class="btn max-sm:btn-xs" onclick="editModal.showModal()"
-                                    wire:click='edit_testing({{ $device->id }})'>
-                                    <i class="ri-menu-search-line"></i> lihat!
-                                </button>
-                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -52,30 +45,33 @@
                     dari {{ \App\Models\Device::where('user_id', Auth::user()->id)->count() }} perangkat
                 </p>
 
-                    @if ($loadCount < \App\Models\Device::where('user_id', Auth::user()->id)->count())
-                        <button wire:click='loadMore(5)' class="btn btn-xs btn-neutral">+ 5 lebih</button>
-                    @endif
-                    @if ($loadCount > 5)
-                        <button wire:click='loadLess(5)' class="btn btn-xs btn-neutral">- 5 kurang</button>
-                    @endif
-                    @if ($loadCount <= 5)
-                        <button wire:click='loadAll({{ Auth::user()->id }})' class="btn btn-xs btn-neutral {{ \App\Models\Device::where('user_id', Auth::user()->id)->count() < 10 ? 'hidden' : '' }}">
-                            tampilkan semua
-                        </button>
-                    @endif
-                    @if ($loadCount >= \App\Models\Device::where('user_id', Auth::user()->id)->count())
-                        <button wire:click='loadAllLess' class="btn btn-xs btn-neutral {{ \App\Models\Device::where('user_id', Auth::user()->id)->count() < 10 ? 'hidden' : '' }}">
-                            sembunyikan semua
-                        </button>
-                    @endif
+                @if ($loadCount < \App\Models\Device::where('user_id', Auth::user()->id)->count())
+                    <button wire:click='loadMore(5)' class="btn btn-xs btn-neutral">+ 5 lebih</button>
+                @endif
+                @if ($loadCount > 5)
+                    <button wire:click='loadLess(5)' class="btn btn-xs btn-neutral">- 5 kurang</button>
+                @endif
+                @if ($loadCount <= 5)
+                    <button wire:click='loadAll({{ Auth::user()->id }})'
+                        class="btn btn-xs btn-neutral {{ \App\Models\Device::where('user_id', Auth::user()->id)->count() < 10 ? 'hidden' : '' }}">
+                        tampilkan semua
+                    </button>
+                @endif
+                @if ($loadCount >= \App\Models\Device::where('user_id', Auth::user()->id)->count())
+                    <button wire:click='loadAllLess'
+                        class="btn btn-xs btn-neutral {{ \App\Models\Device::where('user_id', Auth::user()->id)->count() < 10 ? 'hidden' : '' }}">
+                        sembunyikan semua
+                    </button>
+                @endif
             </span>
         @endif
         @if ($devices->isEmpty())
             <div class="py-20 hero">
                 <div class="text-center hero-content">
                     <div class="max-w-md">
-                        <h1 class="text-5xl font-bold">Hello there</h1>
-                        <p class="py-6">Currently the data is still empty, you can add data via the button below!</p>
+                        <h1 class="text-5xl font-bold">Hallo!</h1>
+                        <p class="py-6">Saat ini data masih kosong, Anda dapat menambahkan data melalui tombol di
+                            bawah ini!</p>
                         <button class="btn max-sm:btn-xs btn-neutral" onclick="createModal.showModal()"
                             wire:click='insert_testing'>
                             <i class="ri-menu-search-line"></i> tambah perangkat <i class="ri-add-line"></i>
@@ -98,6 +94,12 @@
                         </li>
                     </ul>
                 </div>
+
+                @if ($device_image != '-')
+                    <div class="">
+                        <img id="preview" src="storage/device_assets/{{ $device_image }}" class="my-1 rounded-lg">
+                    </div>
+                @endif
 
                 {{-- form in here --}}
                 <label class="w-full form-control">
@@ -142,7 +144,8 @@
                     <div class="label">
                         <span class="label-text">File pendukung</span>
                     </div>
-                    <input id="driveLinkForm" wire:model='drive_link' type="text" placeholder="contoh. https://drive.google.com/file/d/contoh-gambar-&-video-drive"
+                    <input id="driveLinkForm" wire:model='drive_link' type="text"
+                        placeholder="contoh. https://drive.google.com/file/d/contoh-gambar-&-video-drive"
                         class="w-full input input-bordered" wire:loading.attr='disabled' />
                     @error('drive_link')
                         <div class="label">
@@ -183,6 +186,29 @@
                         </li>
                     </ul>
                 </div>
+
+                <div class="">
+                    <img id="preview" src="" class="my-1 rounded-lg" wire:ignore.self>
+                </div>
+
+                <label class="form-control w-full">
+                    <div class="label">
+                        <span class="label-text">sematkan gambar</span>
+                    </div>
+                    <input type="file" wire:model="device_image" class="file-input file-input-bordered w-full"
+                        id="imageInput" accept="image/*" />
+                    <div class="label">
+                        <span class="label-text-alt">gambar format yang didukung : <i>jpg, jpeg, png</i></span>
+                    </div>
+                    @error('device_image')
+                        <div class="label">
+                            <span class="text-red-500 label-text-alt">{{ $message }}</span>
+                        </div>
+                    @enderror
+                    <div wire:loading wire:target="device_image" class="text-sm text-gray-500 italic">Uploading...
+                    </div>
+                </label>
+
                 {{-- form in here --}}
                 <label class="w-full form-control">
                     <div class="label">
@@ -208,11 +234,13 @@
                         </div>
                     @enderror
                 </label>
+
                 <label class="w-full form-control">
                     <div class="label">
-                        <span class="label-text">File pendukung</span>
+                        <span class="label-text">Dokumentasi pendukung</span>
                     </div>
-                    <input id="driveLinkForm" wire:model='drive_link' type="text" placeholder="contoh. https://drive.google.com/file/d/contoh-gambar-&-video-drive"
+                    <input id="driveLinkForm" wire:model='drive_link' type="text"
+                        placeholder="contoh. https://drive.google.com/file/d/contoh-gambar-&-video-drive"
                         class="w-full input input-bordered" wire:loading.attr='disabled' />
                     @error('drive_link')
                         <div class="label">
