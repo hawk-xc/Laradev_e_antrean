@@ -179,9 +179,12 @@
                         </div>
                         <div class="collapse-content">
                             <p>
-                                Jika anda sudah mendaftarkan perangkat anda, langkah selanjutnya adalah melakukan registrasi antrean, dimana antrean ini kemudian akan diproses oleh tim helpdesk dan teknisi kami, Anda juga dapat melihat aktivitasnya
+                                Jika anda sudah mendaftarkan perangkat anda, langkah selanjutnya adalah melakukan
+                                registrasi antrean, dimana antrean ini kemudian akan diproses oleh tim helpdesk dan
+                                teknisi kami, Anda juga dapat melihat aktivitasnya
                                 sejarah
-                                dan informasi lainnya di halaman <b>Antrean</b>, harap diingat aturan pemrosesannya adalah 3x24
+                                dan informasi lainnya di halaman <b>Antrean</b>, harap diingat aturan pemrosesannya
+                                adalah 3x24
                                 jam
                                 dari awal tiket dibuat
                             </p>
@@ -194,7 +197,8 @@
                         </div>
                         <div class="collapse-content">
                             <p>
-                                Jika proses perbaikan telah selesai, tim kami akan mengirimkan notifikasi kepada pelanggan
+                                Jika proses perbaikan telah selesai, tim kami akan mengirimkan notifikasi kepada
+                                pelanggan
                                 melalui
                                 fitur <b>Chat</b> dan alamat email, pastikan untuk selalu rutin mengecek notifikasi.
                             </p>
@@ -306,113 +310,155 @@
                     </div>
 
                     <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical mt-10">
-                        <li class="{{ $proces_id ? \App\Models\Proces::find($proces_id)->status_id  >= 1 ? '' : "hidden" : null }}">
-                            <hr class="bg-primary" />
-                            <div class="timeline-middle">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="h-5 w-5">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <div class="timeline-start md:text-end mb-10">
-                                @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id  == 1 : null)
-                                    <time class="font-mono italic">
-                                        {{ $proces_id ? "terakhir update " . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
-                                    </time>
-                                @endif
-                                <div class="text-lg font-black">
-                                    <div class="lg:tooltip" data-tip="currently registered">
-                                        <button class="w-32 btn btn-secondary btn-sm"><i
-                                                class="ri-flag-line max-sm:hidden"></i>
-                                            registrasi</button>
-                                    </div>
-                                </div>
-                                <span class="font-light mt-2">untuk saat ini antrean sudah diterima tim kami, untuk selanjutnya mohon menunggu antrean anda divertifikasi oleh tim helpdesk kami.</span>
-                            </div>
-                            <hr class="bg-primary" />
-                        </li> 
-                        <li class="{{ $proces_id ? \App\Models\Proces::find($proces_id)->status_id  >= 2 ? '' : "hidden" : null }}">
-                            <hr class="bg-primary" />
-                            <div class="timeline-middle">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="h-5 w-5">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <div class="timeline-end mb-10">
-                                @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id  == 2 : null)
-                                    <time class="font-mono italic">
-                                        {{ $proces_id ? "terakhir update " . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
-                                    </time>
-                                @endif
-                                <div class="text-lg font-black">
-                                    <div class="lg:tooltip" data-tip="vertified your ticket">
-                                        <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
-                                            vertifikasi</button>
-                                    </div>
-                                </div>
-                                <span class="font-ligth mt-2">data antrean anda sudah sukses divertifikasi oleh tim helpdesk kami, silakan membawa perangkat anda ke toko kami untuk dapat segera mendapat penaganan.</span>
-                            </div>
-                            <hr class="bg-primary" />
-                        </li>
-                        <li class="{{ $proces_id ? \App\Models\Proces::find($proces_id)->status_id  >= 3 ? '' : "hidden" : null }}">
-                            <hr class="bg-primary" />
-                            <div class="timeline-middle">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="h-5 w-5">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <div class="timeline-start md:text-end mb-10">
-                                @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id  == 3 : null)
-                                    <time class="font-mono italic">
-                                        {{ $proces_id ? "terakhir update " . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
-                                    </time>
-                                @endif
-                                <div class="text-lg font-black">
-                                    <div class="lg:tooltip" data-tip="process by team">
-                                        <button class="w-36 btn btn-info btn-sm"><i class="ri-flag-line"></i>
-                                            pengerjaan</button>
-                                    </div>
-                                </div>
-                                untuk  saat ini perangkat anda sedang dalam penanganan tim teknisi kami.
-                            </div>
-                            <hr class="bg-primary" />
-                        </li>
-                        <li class="{{ $proces_id ? \App\Models\Proces::find($proces_id)->status_id  >= 4 ? '' : "hidden" : null }}">
-                            <hr class="bg-primary" />
-                            <div class="timeline-middle">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    class="h-5 w-5">
-                                    <path fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                                        clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                            <div class="timeline-end mb-10">
-                                @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id  == 4 : null)
-                                    <time class="font-mono italic">
-                                        {{ $proces_id ? "terakhir update " . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
-                                    </time>
-                                @endif
-                                <div class="text-lg font-black">
-                                    <div class="lg:tooltip" data-tip="done">
-                                        <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
-                                            selesai</button>
-                                    </div>
-                                </div>
-                                perangkat anda sudah selesai perbaikan, mohon segera mengambil perangkat anda ditoko kami.
-                            </div>
-                            <hr class="bg-primary" />
-                        </li>
-                    </ul>
 
+                        @if ($proces_id ? (\App\Models\Proces::find($proces_id)->status_id = 5) : '')
+                            <li
+                                class="{{ $proces_id ? (\App\Models\Proces::find($proces_id)->status_id == 5 ? '' : 'hidden') : null }}">
+                                <hr class="bg-primary" />
+                                <div class="timeline-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        class="h-5 w-5">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="timeline-end mb-10">
+                                    @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id == 2 : null)
+                                        <time class="font-mono italic">
+                                            {{ $proces_id ? 'terakhir update ' . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
+                                        </time>
+                                    @endif
+                                    <div class="text-lg font-black">
+                                        <div class="lg:tooltip" data-tip="vertified your ticket">
+                                            <button class="w-32 btn btn-error btn-sm"><i class="ri-flag-line"></i>
+                                                gagal</button>
+                                        </div>
+                                    </div>
+                                    <span class="font-ligth mt-2">
+                                        mohon maaf, proses perbaikan mengalami kegagalan, ditolak, atau dibatalkan
+                                    </span>
+                                </div>
+                                <hr class="bg-primary" />
+                            </li>
+                        @endif
+                        @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id != 5 : '')
+                            <li
+                                class="{{ $proces_id ? (\App\Models\Proces::find($proces_id)->status_id >= 1 ? '' : 'hidden') : null }}">
+                                <hr class="bg-primary" />
+                                <div class="timeline-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        class="h-5 w-5">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="timeline-start md:text-end mb-10">
+                                    @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id == 1 : null)
+                                        <time class="font-mono italic">
+                                            {{ $proces_id ? 'terakhir update ' . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
+                                        </time>
+                                    @endif
+                                    <div class="text-lg font-black">
+                                        <div class="lg:tooltip" data-tip="currently registered">
+                                            <button class="w-32 btn btn-secondary btn-sm"><i
+                                                    class="ri-flag-line max-sm:hidden"></i>
+                                                registrasi</button>
+                                        </div>
+                                    </div>
+                                    <span class="font-light mt-2">untuk saat ini antrean sudah diterima tim kami, untuk
+                                        selanjutnya mohon menunggu antrean anda divertifikasi oleh tim helpdesk
+                                        kami.</span>
+                                </div>
+                                <hr class="bg-primary" />
+                            </li>
+                            <li
+                                class="{{ $proces_id ? (\App\Models\Proces::find($proces_id)->status_id >= 2 ? '' : 'hidden') : null }}">
+                                <hr class="bg-primary" />
+                                <div class="timeline-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        class="h-5 w-5">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="timeline-end mb-10">
+                                    @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id == 2 : null)
+                                        <time class="font-mono italic">
+                                            {{ $proces_id ? 'terakhir update ' . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
+                                        </time>
+                                    @endif
+                                    <div class="text-lg font-black">
+                                        <div class="lg:tooltip" data-tip="vertified your ticket">
+                                            <button class="w-32 btn btn-accent btn-sm"><i class="ri-flag-line"></i>
+                                                vertifikasi</button>
+                                        </div>
+                                    </div>
+                                    <span class="font-ligth mt-2">data antrean anda sudah sukses divertifikasi oleh tim
+                                        helpdesk kami, silakan membawa perangkat anda ke toko kami untuk dapat segera
+                                        mendapat penaganan.</span>
+                                </div>
+                                <hr class="bg-primary" />
+                            </li>
+                            <li
+                                class="{{ $proces_id ? (\App\Models\Proces::find($proces_id)->status_id >= 3 ? '' : 'hidden') : null }}">
+                                <hr class="bg-primary" />
+                                <div class="timeline-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        class="h-5 w-5">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="timeline-start md:text-end mb-10">
+                                    @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id == 3 : null)
+                                        <time class="font-mono italic">
+                                            {{ $proces_id ? 'terakhir update ' . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
+                                        </time>
+                                    @endif
+                                    <div class="text-lg font-black">
+                                        <div class="lg:tooltip" data-tip="process by team">
+                                            <button class="w-36 btn btn-info btn-sm"><i class="ri-flag-line"></i>
+                                                pengerjaan</button>
+                                        </div>
+                                    </div>
+                                    untuk saat ini perangkat anda sedang dalam penanganan tim teknisi kami.
+                                </div>
+                                <hr class="bg-primary" />
+                            </li>
+                            <li
+                                class="{{ $proces_id ? (\App\Models\Proces::find($proces_id)->status_id >= 4 ? '' : 'hidden') : null }}">
+                                <hr class="bg-primary" />
+                                <div class="timeline-middle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                        class="h-5 w-5">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                                            clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                                <div class="timeline-end mb-10">
+                                    @if ($proces_id ? \App\Models\Proces::find($proces_id)->status_id == 4 : null)
+                                        <time class="font-mono italic">
+                                            {{ $proces_id ? 'terakhir update ' . \App\Models\Proces::find($proces_id)->created_at->format('d-m-Y H:i:s') : null }}
+                                        </time>
+                                    @endif
+                                    <div class="text-lg font-black">
+                                        <div class="lg:tooltip" data-tip="done">
+                                            <button class="w-32 btn btn-success btn-sm"><i class="ri-flag-line"></i>
+                                                selesai</button>
+                                        </div>
+                                    </div>
+                                    perangkat anda sudah selesai perbaikan, mohon segera mengambil perangkat anda ditoko
+                                    kami.
+                                </div>
+                                <hr class="bg-primary" />
+                            </li>
+                        @endif
+                    </ul>
 
                     <div class="modal-action">
                         <form method="dialog">
@@ -512,9 +558,10 @@
             {{-- <div class="allItem" class="hidden"> --}}
             @if (!$isVisible)
                 @foreach ($process->skip(1) as $proces)
-                <div id="singleCard" class="w-full my-5 shadow border-slate-400 stats hover:bg-slate-100 cursor-pointer"
-                onclick="my_modal_1.showModal()" wire:click="getProces({{ $proces->id }})">
-                    {{-- <div id="allItem" wire:after='hidden' class="w-full my-5 shadow border-slate-400 stats"> --}}
+                    <div id="singleCard"
+                        class="w-full my-5 shadow border-slate-400 stats hover:bg-slate-100 cursor-pointer"
+                        onclick="my_modal_1.showModal()" wire:click="getProces({{ $proces->id }})">
+                        {{-- <div id="allItem" wire:after='hidden' class="w-full my-5 shadow border-slate-400 stats"> --}}
                         <div class="flex items-center justify-center align-middle stat">
                             @if ($proces->status_id == 1)
                                 <div class="lg:tooltip" data-tip="currently registered">
@@ -621,7 +668,8 @@
                             {{ $message->created_at }}
                         </time>
                     </div>
-                    <div class="chat-bubble bg-lime-100 text-slate-900 -translate-y-3 text-wrap max-w-[43rem] max-sm:max-w-[20rem]">
+                    <div
+                        class="chat-bubble bg-lime-100 text-slate-900 -translate-y-3 text-wrap max-w-[43rem] max-sm:max-w-[20rem]">
                         <p class="break-words">{!! $message->message !!}</p>
                     </div>
                     <div class="chat-footer opacity-50">

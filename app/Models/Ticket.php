@@ -14,7 +14,8 @@ class Ticket extends Model
         'description',
         'closed_at',
         'created_at',
-        'id_ticket'
+        'id_ticket',
+        'image_link'
     ];
 
     protected $with = ['proces', 'device'];

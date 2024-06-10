@@ -39,7 +39,7 @@ class Chatter extends Component
         $this->usrId = $id;
         $this->openTextEditor = true;
         // dd($this);
-        // Notification::where('user_id', $this->usrId)->update(['is_read' => 1]);
+        Notification::where('user_id', $id)->update(['is_read' => 1]);
     }
 
     public function render()

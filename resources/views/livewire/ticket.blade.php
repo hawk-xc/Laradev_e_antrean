@@ -7,13 +7,13 @@
     </div>
 
     <div class="overflow-x-auto">
-        @if (!$devices->isEmpty())
+        @if (!$tickets->isEmpty())
             <button class="btn max-sm:btn-xs" onclick="createModal.showModal()" wire:click='insert_testing'>
                 tambah antrean <i class="ri-add-line"></i>
             </button>
         @endif
 
-        @if (!$devices->isEmpty())
+        @if (!$tickets->isEmpty())
             <table class="table max-sm:text-xs">
                 <!-- head -->
                 <thead>
@@ -73,7 +73,7 @@
                     <i class="ri-database-2-line"></i> menampilkan
                     {{ $loadCount > $tickets->count() ? $tickets->count() : $loadCount }}
                     dari
-                    {{ \App\Models\Ticket::where('device_id', \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count() }}
+                    {{ \App\Models\Ticket::whereIn('device_id', \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count() > 0 ? \App\Models\Ticket::whereIn('device_id', \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count() : null }}
                     perangkat
                 </p>
 
@@ -86,7 +86,7 @@
 
                 @if (
                     $loadCount ==
-                        \App\Models\Ticket::where(
+                        \App\Models\Ticket::whereIn(
                             'device_id',
                             \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count())
                     <button wire:click='loadAllLess' class="btn btn-xs btn-neutral">
@@ -96,7 +96,7 @@
 
                 @if (
                     $loadCount <
-                        \App\Models\Ticket::where(
+                        \App\Models\Ticket::whereIn(
                             'device_id',
                             \App\Models\Device::where('user_id', Auth::user()->id)->pluck('id'))->count())
                     <button wire:click='loadMore(5)' class="btn btn-xs btn-neutral">+ 5 lebih</button>
@@ -106,12 +106,13 @@
                 @endif
             </span>
         @endif
-        @if ($devices->isEmpty())
+        @if ($tickets->isEmpty())
             <div class="py-20 hero">
                 <div class="text-center hero-content">
                     <div class="max-w-md">
                         <h1 class="text-5xl font-bold">Hallo!</h1>
-                        <p class="py-6">Saat ini data masih kosong, Anda dapat menambahkan data melalui tombol di bawah ini!</p>
+                        <p class="py-6">Saat ini data masih kosong, Anda dapat menambahkan data melalui tombol di
+                            bawah ini!</p>
                         <button class="btn max-sm:btn-xs btn-neutral" onclick="createModal.showModal()"
                             wire:click='insert_testing'>
                             <i class="ri-menu-search-line"></i> tambah antrean <i class="ri-add-line"></i>
@@ -134,6 +135,12 @@
                         </li>
                     </ul>
                 </div>
+
+                @if ($device_image != '-')
+                    <div class="">
+                        <img id="preview" src="storage/ticket_assets/{{ $device_image }}" class="my-1 rounded-lg">
+                    </div>
+                @endif
 
                 {{-- form in here --}}
                 <label class="hidden w-full form-control">
@@ -172,7 +179,8 @@
                             wire:model="device_id">
                             <option selected value="null">Pilih salah satu</option>
                             @foreach ($devices as $device)
-                                <option value="{{ $device->id }}" {{ $device->id == $device_id ? 'selected' : '' }}>
+                                <option value="{{ $device->id }}"
+                                    {{ $device->id == $device_id ? 'selected' : '' }}>
                                     {{ $device->device_name }}</option>
                             @endforeach
                         </select>
@@ -219,6 +227,28 @@
                     </ul>
                 </div>
                 {{-- form in here --}}
+
+                <div class="">
+                    <img id="preview" src="" class="my-1 rounded-lg" wire:ignore.self>
+                </div>
+
+                <label class="form-control w-full">
+                    <div class="label">
+                        <span class="label-text">sematkan gambar</span>
+                    </div>
+                    <input type="file" wire:model="device_image" class="file-input file-input-bordered w-full"
+                        id="imageInput" accept="image/*" />
+                    <div class="label">
+                        <span class="label-text-alt">gambar format yang didukung : <i>jpg, jpeg, png</i></span>
+                    </div>
+                    @error('device_image')
+                        <div class="label">
+                            <span class="text-red-500 label-text-alt">{{ $message }}</span>
+                        </div>
+                    @enderror
+                    <div wire:loading wire:target="device_image" class="text-sm text-gray-500 italic">Uploading...
+                    </div>
+                </label>
 
                 <label class="w-full form-control">
                     <div class="label">

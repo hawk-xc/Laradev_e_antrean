@@ -5,6 +5,9 @@
                 class="flex flex-row items-center justify-between pl-1 pr-5 align-middle transition-all duration-150 border rounded-lg cursor-pointer border-slate-200 even:bg-slate-50 hover:bg-slate-200"
                 wire:click="selectMessage({{ $notification->id }})">
                 <div class="flex flex-row items-center gap-3 p-1 align-middle">
+                class="border border-slate-200 even:bg-slate-50 rounded-lg flex flex-row justify-between align-middle items-center pl-1 pr-5 cursor-pointer hover:bg-slate-200 duration-150 transition-all"
+                wire:click="selectMessage({{ $notification->id }})" wire:poll.1s>
+                div class="flex flex-row p-1 gap-3 align-middle items-center">
                     <div
                         class="flex items-center justify-center h-10 text-white align-middle rounded-full shadow-sm aspect-square bg-neutral">
                         {{ strtoupper(substr($notification->name, 0, 1)) }}
@@ -14,7 +17,10 @@
                         <span class="text-xs">{{ $notification->created_at->diffForHumans() }}</span>
                     </span>
                 </div>
-                <span><i class="text-green-500 ri-circle-fill"></i></span>
+                <span><i class="text-green-500 ri-circle-fill"></i></span
+                @if(\App\Models\Notification::where('user_id', $notification->id)->where('is_read', 0)->count() > 0)
+                    <span><i class="ri-circle-fill text-green-500"></i></span>
+                @endif
             </div>
         @empty
             <span>Belum ada pesan</span>

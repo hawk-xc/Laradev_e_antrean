@@ -2,15 +2,19 @@
 
 namespace App\Livewire;
 
-use \App\Models\Device as DeviceModel;
-use \App\Models\Ticket as TicketModel;
+use \App\Models\{
+    Device as DeviceModel,
+    Ticket as TicketModel
+};
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\Attributes\Validate;
 
 class Device extends Component
 {
-    public $device_name, $device_year, $drive_link, $device_id, $delete_id;
+    use WithFileUploads;
+    public $device_name, $device_year, $drive_link, $device_id, $delete_id, $device_image;
     public $loadCount = 5;
     protected $listeners = ['confirmDelete' => 'deleteTicket'];
 
@@ -20,6 +24,7 @@ class Device extends Component
         $this->device_year = '';
         $this->drive_link = '';
         $this->device_id = '';
+        $this->device_image = '';
     }
 
     // load more load less config
@@ -51,12 +56,21 @@ class Device extends Component
 
     public function store_testing()
     {
-        // dd($this);
         $validate = $this->validate([
             'device_name' => 'required|min:3',
             'device_year' => 'required|numeric|digits:4|min:1990|max:' . date('Y'),
-            'drive_link' => 'nullable|url'
+            'drive_link' => 'nullable|url',
         ]);
+
+        $this->validate([
+            'device_image' => 'nullable|image|max:1024|mimes:jpg,png,jpeg',
+        ]);
+
+        if ($this->device_image) {
+            $name = md5($this->device_image . microtime()) . '.' . $this->device_image->extension();
+            $this->device_image->storeAs('public/device_assets', $name);
+            $validate['image_link'] = $name;
+        }
 
         $validate['user_id'] = Auth::user()->id;
 
@@ -77,6 +91,7 @@ class Device extends Component
         $this->delete_id = $id;
         $this->device_name = $device->device_name;
         $this->device_year = $device->device_year;
+        $this->device_image = $device->image_link;
         $this->resetValidation(['device_name', 'device_year']);
         $this->dispatch('modals', data: $device);
 
