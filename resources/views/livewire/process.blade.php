@@ -1,7 +1,7 @@
-<div>
+<div class="overflow-x-auto">
     {{-- modal --}}
 <dialog id="my_modal_4" class="modal" wire:ignore.self>
-    <div class="w-11/12 max-w-5xl modal-box">
+    <div class="w-11/12 max-w-5xl modal-box ">
         <h3 class="text-lg font-bold">Halo, menu proses pembaruan input!</h3>
         <div class="flex flex-col gap-2">
             <form wire:submit='testing'>
@@ -23,7 +23,6 @@
                         @endforeach
                     </select>
                 </label>
-                
                 <label class="max-w-xs w-96 form-control">
                     <div class="label">
                         <span class="label-text">Pilih Teknisi</span>
@@ -62,26 +61,48 @@
                 <div class="text-center hero-content">
                     <div class="max-w-md">
                         <h1 class="text-5xl font-bold">Hallo {{ Auth::user()->username }} !</h1>
-                        <p class="py-6">Saat ini data proses masih kosong, Mantap!</p>
+                        <p class="py-6">{{ $statusId ? "Proses yang anda cari dengan status tersebut tidak ada!": "  Saat ini data proses masih kosong, Mantap!" }}</p>
                         {{-- <button wire:click='create' onclick="my_modal_4.showModal()" class="btn btn-neutral btn-sm"><i class="ri-add-line"></i> Add ticket</button> --}}
-                        <button class="btn btn-neutral btn-sm">Antrean Kosong<i class="text-xl ri-check-double-line"></i></button>
+                        <button @if ($statusId)
+                            wire:click='redirectToProcessPage()'
+                        @endif class="btn btn-neutral btn-sm">{{ $statusId ? "Kembali" : "Kosong" }}<i class="text-xl ri-check-double-line"></i></button>
                         <h1></h1>
                     </div>
                 </div>
             </div>
         @else
             <x-notification-laravel />
-            <table class="table">
+            <table class="table max-sm:text-xs">
                 {{-- dropdown sorted data --}}
+    <div class="flex flex-wrap gap-8 pt-8 pb-4 mb-4 max-sm:flex-col ">
                 <details id="dropdown" class=" dropdown">
-                    <summary id="sumy" class="m-1 btn"><i class="ri-database-line"></i></i>Sort By </summary>
+                    <summary id="sumy" class="btn btn-sm"><i class="ri-database-line"></i></i>Sort By <i class="ri-expand-up-down-line"></i></summary>
                     <ul class="p-2 shadow-lg menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
-                        <li><a wire:click='sortByDate("desc")'><i class="ri-sort-asc"></i>Newest Process</a></li>
-                        <li><a wire:click='sortByDate("asc")'><i class="ri-sort-desc"></i>Oldest Process</a></li>
+                        <li><a wire:click='sortByDate("desc")'><i class="ri-sort-asc"></i>Proses Terbaru</a></li>
+                        <li><a wire:click='sortByDate("asc")'><i class="ri-sort-desc"></i>Proses Terlama</a></li>
                     </ul>
                 </details>
+            <p class="max-sm:pl-14">Or</p>
+            <div class="join">
+                <div class="lg:tooltip " data-tip="Sort By Registrasi">
+                    <button wire:click='sortByStatus(1)' class="w-32 btn join-item btn-sm"></i> Registrasi</button>
+                </div>
+                <div class="lg:tooltip " data-tip="Sort By Verifikasi">
+                    <button wire:click='sortByStatus(2)' class="w-32 btn join-item btn-sm"></i> Verifikasi</button>
+                </div>
+                <div class="lg:tooltip " data-tip="Sort By Pengerjaan">
+                    <button wire:click='sortByStatus(3)' class="w-32 btn join-item btn-sm"></i> Pengerjaan</button>
+                </div>
+                <div class="lg:tooltip " data-tip="Sort By Proses Selesai">
+                    <button wire:click='sortByStatus(4)' class="w-32 btn join-item btn-sm"></i> Selesai</button>
+                </div>
+                <div class="lg:tooltip " data-tip="Sort By Proses Ditolak">
+                    <button wire:click='sortByStatus(5)' class="w-32 btn join-item btn-sm"></i> Ditolak</button>
+                </div>
+            </div>
+        </div>
                 <thead>
-                    <tr class="text-lg">
+                    <tr class="text-lg ">
                         <th><i class="ri-bubble-chart-line"></i> Status</th>
                         <th>Nama Customer</th>
                         <th>Nama Perangkat</th>
@@ -126,16 +147,16 @@
                             <td>{{ $proces->created_at->diffForHumans() }}</td>
                             <td>
                                 @if ($user->role_id == 1)
-                                    <button class="btn btn-neutral" onclick="my_modal_4.showModal()" wire:click="edit({{ $proces->id }})" >Ubah</button>
+                                    <button class="btn btn-neutral max-sm:btn-xs" onclick="my_modal_4.showModal()" wire:click="edit({{ $proces->id }})" >Ubah</button>
                                 @endif
                                 @if ($proces->status_id == 1 && $user->role_id == 2)
-                                    <button class="btn btn-warning" onclick="my_modal_4.showModal()" wire:click="edit({{ $proces->id }})">Ubah</button>
+                                    <button class="btn btn-warning max-sm:btn-xs" onclick="my_modal_4.showModal()" wire:click="edit({{ $proces->id }})">Ubah</button>
                                 @endif
                                 @if ($proces->status_id == 2 && $user->role_id == 3)
-                                    <button class="btn btn-secondary" wire:click="processed({{ $proces->id }})">Proses</button>
+                                    <button class="btn btn-secondary max-sm:btn-xs" wire:click="processed({{ $proces->id }})">Proses</button>
                                 @endif
                                 @if ($proces->status_id == 3 && $user->role_id == 3)
-                                    <button class="btn btn-primary" wire:click="done({{ $proces->id }})">Proses Selesai</button>
+                                    <button class="btn btn-primary max-sm:btn-xs" wire:click="done({{ $proces->id }})">Proses Selesai</button>
                                     @elseif ($proces->status_id == 4 && $user->role_id == 3)
                                     <div class="lg:tooltip" data-tip="done bang">
                                         <button class="btn btn-success btn-sm" >Proses Kosong</button>
