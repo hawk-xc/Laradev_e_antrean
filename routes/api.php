@@ -3,8 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\apis\{
-    DeviceApisController,
-    LoginApisController,
+
+    AuthApisController,
+    TicketApisController,
+    ProfileApisController
 };
 
 /*
@@ -18,10 +20,15 @@ use \App\Http\Controllers\apis\{
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::post('/login', [LoginApisController::class, 'login']);
-Route::get('/device', [DeviceApisController::class, 'index']);
-Route::post('/device', [DeviceApisController::class, 'store']);
+
+Route::post('/login', [AuthApisController::class, 'login']);
+Route::post('/register', [AuthApisController::class, 'register']);
+
+// Route::resource('/profile', [ProfileApisController::class])->middleware('auth:sanctum');
+// Route::resource('/profile', [AuthApisController::class])->middleware('auth:sanctum');
+
+Route::get('/antrean', [TicketApisController::class, 'index'])->middleware('auth:sanctum');
