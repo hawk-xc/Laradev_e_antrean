@@ -4,6 +4,8 @@ namespace App\Http\Controllers\apis;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use \App\Models\Ticket;
+use Illuminate\Support\Facades\Validator;
 
 class TicketApisController extends Controller
 {
@@ -20,35 +22,29 @@ class TicketApisController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
-    }
+        $id = $request->user()->id;
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        $request->only(['device_id', 'description', 'image_link']);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
+        if ($validator = Validator::make($request->all(), [
+            'device_id' => 'required|int',
+            'description' => 'required|string|min:5',
+            'image_link' => 'nullable|url:http,https'
+        ])) {
+            return response()->json([
+                'status' => 200,
+                'data' => $request->all()
+            ]);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'data' => $validator->errors()
+            ]);
+        }
     }
 
     /**
@@ -64,6 +60,5 @@ class TicketApisController extends Controller
      */
     public function destroy(string $id)
     {
-        //
     }
 }
