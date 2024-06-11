@@ -2,11 +2,14 @@
     <div id="user_list" class="flex flex-col gap-1 w-3/12 h-[30rem] overflow-y-scroll px-2">
         @forelse ($notifications as $notification)
             <div id="messageCard"
+                class="flex flex-row items-center justify-between pl-1 pr-5 align-middle transition-all duration-150 border rounded-lg cursor-pointer border-slate-200 even:bg-slate-50 hover:bg-slate-200"
+                wire:click="selectMessage({{ $notification->id }})">
+                <div class="flex flex-row items-center gap-3 p-1 align-middle">
                 class="border border-slate-200 even:bg-slate-50 rounded-lg flex flex-row justify-between align-middle items-center pl-1 pr-5 cursor-pointer hover:bg-slate-200 duration-150 transition-all"
                 wire:click="selectMessage({{ $notification->id }})" wire:poll.1s>
-                <div class="flex flex-row p-1 gap-3 align-middle items-center">
+                div class="flex flex-row p-1 gap-3 align-middle items-center">
                     <div
-                        class="h-10 text-white rounded-full shadow-sm aspect-square bg-neutral flex justify-center align-middle items-center">
+                        class="flex items-center justify-center h-10 text-white align-middle rounded-full shadow-sm aspect-square bg-neutral">
                         {{ strtoupper(substr($notification->name, 0, 1)) }}
                     </div>
                     <span>
@@ -14,6 +17,7 @@
                         <span class="text-xs">{{ $notification->created_at->diffForHumans() }}</span>
                     </span>
                 </div>
+                <span><i class="text-green-500 ri-circle-fill"></i></span
                 @if(\App\Models\Notification::where('user_id', $notification->id)->where('is_read', 0)->count() > 0)
                     <span><i class="ri-circle-fill text-green-500"></i></span>
                 @endif
@@ -27,7 +31,7 @@
             class="h-[30rem] mb-5 overflow-y-scroll p-5 text-xs border border-slate-200 rounded-lg shadow-sm">
             @foreach ($selectedMessage as $notification)
                 <div class="chat {{ $notification->is_user ? 'chat-start' : 'chat-end' }}" wire:poll.1s>
-                    <div class="chat-header font-semibold mb-1">
+                    <div class="mb-1 font-semibold chat-header">
                         {{ $notification->is_user ? $notification->user->name : 'Helpdesk' }}
                     </div>
                     <div class="chat-bubble bg-slate-100 text-slate-800 text-wrap max-w-[43rem] max-sm:max-w-[20rem]">
@@ -46,7 +50,7 @@
             <button id="sendButton" class="btn btn-neutral" wire:click="sendMessage">kirim</button>
         </div>
         @error('Message')
-            <span class="label-text-alt text-red-500">{{ $message }}</span>
+            <span class="text-red-500 label-text-alt">{{ $message }}</span>
         @enderror
     </div>
 </div>

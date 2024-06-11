@@ -24,11 +24,22 @@ class Process extends Component
     public $description;
     public $proces_id;
     public $device_id;
+    public $statusId;
     public $employe_id;
     public $sortBy = 'status';
     public $sortDirection = 'asc';
     public $limiter = 5;
 
+
+    public function redirectToProcessPage()
+    {
+        return redirect()->route('process');
+    }
+    public function sortByStatus($status)
+    {
+        $this->sortBy = 'status';
+        $this->statusId = $status;
+    }
 
     public function sortByDate($direction)
     {
@@ -63,12 +74,31 @@ class Process extends Component
         $user = Auth::user();
 
         if ($user->role_id === 1) {
+            // if ($this->sortBy === 'date') {
+            //     $process = Proces::orderBy('created_at', $this->sortDirection)->limit($this->limiter);
+            // }
+            // if ($this->sortBy === 'status') {
+            //     $process = Proces::where('status_id', $this->sortDirection)->latest()->limit($this->limiter);
+            //     dd($this->statusId);
+            //     // dd($process);
+            // } else {
+            //     $process = Proces::latest()->limit($this->limiter);
+            // }
             if ($this->sortBy === 'date') {
                 $process = Proces::orderBy('created_at', $this->sortDirection)->limit($this->limiter);
+            } elseif ($this->sortBy === 'status' && $this->statusId !== null) {
+                $process = Proces::where('status_id', $this->statusId)->orderBy('id', 'desc')->limit($this->limiter);
             } else {
-                $process = Proces::latest()->limit($this->limiter);
+                $process = Proces::orderBy('id', 'desc')->limit($this->limiter);
             }
         } elseif ($user->role_id === 2) {
+            if ($this->sortBy === 'date') {
+                $process = Proces::orderBy('created_at', $this->sortDirection)->limit($this->limiter);
+            } elseif ($this->sortBy === 'status' && $this->statusId !== null) {
+                $process = Proces::where('status_id', $this->statusId)->orderBy('id', 'desc')->limit($this->limiter);
+            } else {
+                $process = Proces::orderBy('id', 'asc')->orderBy('id', 'desc')->limit($this->limiter);
+            }
             $process = Proces::orderBy('id', 'asc')->latest()->limit($this->limiter);
         } else {
             $process = Proces::where('user_id', Auth::user()->id)->orderBy('id', 'asc')->latest()->limit($this->limiter);
