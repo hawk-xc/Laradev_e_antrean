@@ -21,43 +21,18 @@ class ProfileApisController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Update the specified resource in storage.
      */
     public function store(Request $request)
     {
-        //
-    }
+        $user_id = $request->user()->id;
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
+        $request->only(['username', 'name', 'email', 'password']);
         //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+        return response()->json([
+            'data' => $request
+        ]);
     }
 
     /**

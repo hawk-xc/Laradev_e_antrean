@@ -26,7 +26,13 @@ use \App\Http\Controllers\apis\{
 Route::post('/login', [AuthApisController::class, 'login']);
 Route::post('/register', [AuthApisController::class, 'register']);
 
-// Route::resource('/profile', [ProfileApisController::class])->middleware('auth:sanctum');
-// Route::resource('/profile', [AuthApisController::class])->middleware('auth:sanctum');
-
-Route::get('/antrean', [TicketApisController::class, 'index'])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('/profile', ProfileApisController::class);
+    Route::resource('/ticket', TicketApisController::class);
+});
+// Route::resource(
+//     [
+//         'profile' => ProfileApisController::class,
+//         'ticket' => TicketApisController::class
+//     ]
+// )->middleware('auth:sanctum');
