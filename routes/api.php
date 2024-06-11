@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\apis\{
+    DeviceApisController,
     LoginApisController,
 };
 
@@ -22,3 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/login', [LoginApisController::class, 'login']);
+Route::get('/device', [DeviceApisController::class, 'index']);
+Route::post('/device', [DeviceApisController::class, 'store']);
