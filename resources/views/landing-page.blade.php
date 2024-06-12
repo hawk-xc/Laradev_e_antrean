@@ -20,14 +20,14 @@
             </div>
         </span>
     </nav>
-    <title>halaman ABC-Komputer</title>
+    <title>halaman Servi-Kom</title>
 </head>
 
 <body class="w-screen h-screen bg-center bg-no-repeat bg-cover"
     style="background-image: url('{{ asset('images/background.png') }}')">
     <div class="flex flex-col items-center justify-center w-full h-screen align-middle" data-aos="zoom-in-down">
         <span
-            class="text-8xl max-sm:text-[4rem] font-extrabold font-times bg-gradient-to-r from-primary to-blue-800 opacity-90 bg-clip-text text-transparent">ABC-Komputer</span>
+            class="text-8xl max-sm:text-[4rem] font-extrabold font-times bg-gradient-to-r from-primary to-blue-800 opacity-90 bg-clip-text text-transparent">Servi-Kom</span>
         <span class="flex flex-row gap-4 p-5">
             <div class="badge badge-neutral">cepat</div>
             <div class="badge badge-primary">efisien</div>
