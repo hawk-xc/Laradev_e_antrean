@@ -141,13 +141,15 @@
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        $('#preview').attr('src', e.target.result).show();
+                        $('#previewImage').attr('src', e.target.result).show();
                     };
                     reader.readAsDataURL(file);
                 } else {
-                    $('#preview').hide();
+                    $('#previewImage').hide();
                 }
             });
+
+            
         </script>
     @endscript
 </div>

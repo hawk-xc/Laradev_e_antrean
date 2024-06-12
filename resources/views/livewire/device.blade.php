@@ -188,7 +188,7 @@
                 </div>
 
                 <div class="">
-                    <img id="preview" src="" class="my-1 rounded-lg" wire:ignore.self>
+                    <img id="previewImage" src="" class="my-1 rounded-lg" wire:ignore.self>
                 </div>
 
                 <label class="form-control w-full">
@@ -196,7 +196,7 @@
                         <span class="label-text">sematkan gambar</span>
                     </div>
                     <input type="file" wire:model="device_image" class="file-input file-input-bordered w-full"
-                        id="imageInput" accept="image/*" />
+                        id="imageInput" accept="image/*" onchange="loadFile(event)"/>
                     <div class="label">
                         <span class="label-text-alt">gambar format yang didukung : <i>jpg, jpeg, png</i></span>
                     </div>

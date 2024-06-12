@@ -14,10 +14,11 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Tailwind CSS -->
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+    <div class="bg-custom-bg bg-cover bg-no-repeat min-h-screen">
         @include('layouts.navigation')
 
         <!-- Page Heading -->
