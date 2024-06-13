@@ -40,27 +40,27 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\Status::create([
-            'name' => 'open',
+            'name' => 'registrasi',
             'description' => 'status ticket waiting'
         ]);
 
         \App\Models\Status::create([
-            'name' => 'queue',
+            'name' => 'vertifikasi',
             'description' => 'status ticket masuk ke antrian'
         ]);
 
         \App\Models\Status::create([
-            'name' => 'proces',
+            'name' => 'proses',
             'description' => 'status ticket sudah diset ke proces'
         ]);
 
         \App\Models\Status::create([
-            'name' => 'done',
+            'name' => 'selesai',
             'description' => 'status ticket sudah selesai'
         ]);
 
         \App\Models\Status::create([
-            'name' => 'reject',
+            'name' => 'tolak',
             'description' => 'status ticket sudah ditolak'
         ]);
 
