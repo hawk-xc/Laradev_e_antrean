@@ -41,7 +41,7 @@
             <div class="w-11/12 max-w-6xl modal-box">
                 <div class="w-full carousel">
                     <div id="slide1" class="relative flex flex-col w-full carousel-item">
-                        <span class="my-2 text-xl">Halaman dashboard</span>
+                        <span class="my-2 text-xl">1. Halaman dashboard</span>
                         <img src="{{ asset('images/dashboard1.png') }}" class="w-full border rounded-lg" />
                         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                             <a href="#slide4" class="btn btn-circle">❮</a>
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div id="slide2" class="relative flex flex-col w-full carousel-item">
-                        <span class="my-2 text-xl">Halaman Perangkat</span>
+                        <span class="my-2 text-xl">2. Halaman Perangkat</span>
                         <img src="{{ asset('images/perangkat1.png') }}" class="w-full" />
                         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                             <a href="#slide1" class="btn btn-circle">❮</a>
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div id="slide3" class="relative flex flex-col w-full carousel-item">
-                        <span class="my-2 text-xl">Halaman Perangkat</span>
+                        <span class="my-2 text-xl">3. Tambah Perangkat</span>
                         <img src="{{ asset('images/perangkat2.png') }}" class="w-full" />
                         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                             <a href="#slide2" class="btn btn-circle">❮</a>
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div id="slide4" class="relative flex flex-col w-full carousel-item">
-                        <span class="my-2 text-xl">Halaman Antean</span>
+                        <span class="my-2 text-xl">4. Halaman Antean</span>
                         <img src="{{ asset('images/antrean1.png') }}" class="w-full" />
                         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                             <a href="#slide3" class="btn btn-circle">❮</a>
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <div id="slide5" class="relative flex flex-col w-full carousel-item">
-                        <span class="my-2 text-xl">Halaman Antean</span>
+                        <span class="my-2 text-xl">5. Tambah Antean</span>
                         <img src="{{ asset('images/antrean2.png') }}" class="w-full" />
                         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                             <a href="#slide4" class="btn btn-circle">❮</a>
@@ -81,7 +81,7 @@
                         </div>
                     </div>
                     <div id="slide6" class="relative flex flex-col w-full carousel-item">
-                        <span class="my-2 text-xl">Halaman Dashboard</span>
+                        <span class="my-2 text-xl">6. Halaman Dashboard</span>
                         <img src="{{ asset('images/dashboard2.png') }}" class="w-full" />
                         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                             <a href="#slide5" class="btn btn-circle">❮</a>
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <div id="slide7" class="relative flex flex-col w-full carousel-item">
-                        <span class="my-2 text-xl">Halaman Dashboard</span>
+                        <span class="my-2 text-xl">7. Halaman Dashboard Timeline</span>
                         <img src="{{ asset('images/dashboard3.png') }}" class="w-full" />
                         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                             <a href="#slide6" class="btn btn-circle">❮</a>
@@ -97,7 +97,7 @@
                         </div>
                     </div>
                     <div id="slide8" class="relative flex flex-col w-full carousel-item">
-                        <span class="my-2 text-xl">Halaman Dashboard</span>
+                        <span class="my-2 text-xl">8. Halaman Chat</span>
                         <img src="{{ asset('images/dashboard4.png') }}" class="w-full" />
                         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                             <a href="#slide7" class="btn btn-circle">❮</a>
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                     <div id="slide9" class="relative flex flex-col w-full carousel-item">
-                        <span class="my-2 text-xl">Halaman Profile</span>
+                        <span class="my-2 text-xl">9.Halaman Profile</span>
                         <img src="{{ asset('images/profile1.png') }}" class="w-full" />
                         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                             <a href="#slide8" class="btn btn-circle">❮</a>
@@ -113,7 +113,7 @@
                         </div>
                     </div>
                     <div id="slide10" class="relative flex flex-col w-full carousel-item">
-                        <span class="my-2 text-xl">Halaman Profile</span>
+                        <span class="my-2 text-xl">10. Halaman Profile</span>
                         <img src="{{ asset('images/profile2.png') }}" class="w-full" />
                         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                             <a href="#slide9" class="btn btn-circle">❮</a>
@@ -121,7 +121,7 @@
                         </div>
                     </div>
                     <div id="slide9" class="relative flex flex-col w-full carousel-item">
-                        <span class="my-2 text-xl">Halaman Profile</span>
+                        <span class="my-2 text-xl">11. Halaman Profile</span>
                         <img src="{{ asset('images/profile1.png') }}" class="w-full" />
                         <div class="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
                             <a href="#slide8" class="btn btn-circle">❮</a>
