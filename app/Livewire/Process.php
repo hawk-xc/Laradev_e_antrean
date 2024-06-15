@@ -12,6 +12,7 @@ use Clockwork\Request\Request;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Illuminate\Support\Facades\Mail;
 // use Livewire\WithoutUrlPagination;
 // use Livewire\WithPagination;
 
@@ -143,26 +144,18 @@ class Process extends Component
         $this->dispatch('closeButton');
     }
 
+
+
     public function done($id)
     {
-        $blueprint_message = "<p>Hallo User</p><br><p>Terima kasih atas kesabaran dan pengertian Anda selama kami menangani permintaan perbaikan Anda.</p><br><p>Kami ingin menginformasikan bahwa untuk saat ini, proses perbaikan telah <b>selesai</b></p><br><p>Mohon untuk saat ini perangkat diambil ditoko.</p><br><p>Apabila Anda memiliki pertanyaan lebih lanjut atau memerlukan bantuan lainnya, jangan ragu untuk menghubungi kami melalui virtual chat ini.</p><br><p>Terima kasih atas pengertian dan kerjasamanya.</p><br><p>Salam hormat, Fitri</p><br><p>Helpdesk E-Service</p>";
-
         if (Proces::find($id)->update(['status_id' => 4])) {
-            \App\Models\Notification::create(
-                [
-                    'user_id' => $id,
-                    'message' => $blueprint_message,
-                    'is_read' => 0,
-                    'is_user' => 0
-                ]
-            );
             $this->dispatch('notify', type: 'success', message: $this->notification_message);
-
-            // run with php artisan queue:work to operate job
-            \App\Jobs\MailerJob::dispatch('wahyutricahyono777@gmail.com', 'wahyu', 'done', \App\Models\Ticket::first());
 
             $this->fresh();
         }
+
+        // \App\Jobs\MailerJob::dispatch('wahyutricahyono777@gmail.com', 'wahyu', 'done', \App\Models\Ticket::first());
+
         $this->dispatch('closeButton');
     }
 
@@ -174,6 +167,23 @@ class Process extends Component
         ]);
         $data['user_id'] = $this->employe_id;
         $proces = Proces::find($this->proces_id);
+
+        $ticket = Proces::find($this->proces_id)->ticket;
+
+        $blueprint_message = "<p>Hallo User</p><br><p>Terima kasih atas kesabaran dan pengertian Anda selama kami menangani permintaan perbaikan Anda.</p><br><p>Kami ingin menginformasikan bahwa untuk saat ini, proses perbaikan telah <b>selesai</b></p><br><p>Mohon untuk saat ini perangkat diambil ditoko.</p><br><p>Apabila Anda memiliki pertanyaan lebih lanjut atau memerlukan bantuan lainnya, jangan ragu untuk menghubungi kami melalui virtual chat ini.</p><br><p>Terima kasih atas pengertian dan kerjasamanya.</p><br><p>Salam hormat, Fitri</p><br><p>Helpdesk E-Service</p>";
+
+        \App\Models\Notification::create(
+            [
+                'user_id' => $ticket->device->user->id,
+                'message' => $blueprint_message,
+                'is_read' => 0,
+                'is_user' => 0
+            ]
+        );
+
+        // run with php artisan queue:work to operate job
+        \App\Jobs\MailerJob::dispatch($ticket->device->user->email, $ticket->device->user->name, 'done', $ticket);
+
         if ($proces->update($data)) {
             $this->fresh();
             $this->dispatch('closeButton');
