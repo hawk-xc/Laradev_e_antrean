@@ -7,10 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -48,13 +44,6 @@ Route::get('/auth/{provider}/callback', [GoogleAuthController::class, 'callback'
 Route::get('/', function () {
     // route('dashboard');
     return view('landing-page');
-});
-
-Route::get('/sendmailer', function () {
-    \App\Jobs\MailerJob::dispatch('wahyutricahyono777@gmail.com', 'wahyu', 'done', \App\Models\Ticket::first());
-    // event(new \App\Events\sendNotification('wahyutricahyono777@gmail.com', 'suradin', 'suradinlothok@gmail.com', 'done', \App\Models\Ticket::first()));
-
-    // Mail::to('cobacoba@mail.com')->send(new \App\Mail\SendMailer('percobaan bunuh diri', 'cobacoba@mail.com', 'sukses', \App\Models\Ticket::find(1)));
 });
 
 require __DIR__ . '/auth.php';
