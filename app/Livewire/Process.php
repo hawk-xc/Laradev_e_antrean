@@ -17,6 +17,8 @@ use Livewire\Component;
 
 class Process extends Component
 {
+    public $notification_message = 'Status perbaikan diperbahrui!';
+
     // use WithPagination, WithoutUrlPagination;
     public $openModal = false;
     // public $action = '';
@@ -135,7 +137,7 @@ class Process extends Component
         Proces::find($id)->update(['status_id' => 3]);
         // find($this->device_id);
         $proces = Proces::find($id);
-        $this->dispatch('notify', type: 'success', message: 'data successfull updated! ');
+        $this->dispatch('notify', type: 'success', message: $this->notification_message);
         event(new \App\Events\UserInteraction(Auth::user(), "Proces => update proces {$proces->ticket->device->device_name} with id " . $proces->id));
         $this->fresh();
         $this->dispatch('closeButton');
@@ -143,9 +145,24 @@ class Process extends Component
 
     public function done($id)
     {
-        Proces::find($id)->update(['status_id' => 4]);
-        $this->dispatch('notify', type: 'success', message: 'Device Has Been Final!');
-        $this->fresh();
+        $blueprint_message = "<p>Hallo User</p><br><p>Terima kasih atas kesabaran dan pengertian Anda selama kami menangani permintaan perbaikan Anda.</p><br><p>Kami ingin menginformasikan bahwa untuk saat ini, proses perbaikan telah <b>selesai</b></p><br><p>Mohon untuk saat ini perangkat diambil ditoko.</p><br><p>Apabila Anda memiliki pertanyaan lebih lanjut atau memerlukan bantuan lainnya, jangan ragu untuk menghubungi kami melalui virtual chat ini.</p><br><p>Terima kasih atas pengertian dan kerjasamanya.</p><br><p>Salam hormat, Fitri</p><br><p>Helpdesk E-Service</p>";
+
+        if (Proces::find($id)->update(['status_id' => 4])) {
+            \App\Models\Notification::create(
+                [
+                    'user_id' => $id,
+                    'message' => $blueprint_message,
+                    'is_read' => 0,
+                    'is_user' => 0
+                ]
+            );
+            $this->dispatch('notify', type: 'success', message: $this->notification_message);
+
+            // run with php artisan queue:work to operate job
+            \App\Jobs\MailerJob::dispatch('wahyutricahyono777@gmail.com', 'wahyu', 'done', \App\Models\Ticket::first());
+
+            $this->fresh();
+        }
         $this->dispatch('closeButton');
     }
 
@@ -160,7 +177,7 @@ class Process extends Component
         if ($proces->update($data)) {
             $this->fresh();
             $this->dispatch('closeButton');
-            $this->dispatch('notify', type: 'success', message: 'Data successfully updated!');
+            $this->dispatch('notify', type: 'success', message: $this->notification_message);
             event(new \App\Events\UserInteraction(Auth::user(), "Process => update proces from customer {$proces->ticket->device->user->name} with id " . $proces->id));
             // redirect('/process')->dispatch('notify', type: 'success', message: 'Data successfully updated!'));
             // session()->flash('message', 'Data successfully updated broww!');
