@@ -41,15 +41,27 @@ class SendMailer extends Mailable
      */
     public function content(): Content
     {
-        return new Content(
-            markdown: 'user.mail.mailer',
-            with: [
-                'name' => $this->name,
-                'email' => $this->email,
-                'type' => $this->type,
-                'ticket' => $this->ticket
-            ]
-        );
+        if ($this->type == "done") {
+            return new Content(
+                markdown: 'user.mail.mailer',
+                with: [
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'type' => $this->type,
+                    'ticket' => $this->ticket
+                ]
+            );
+        } elseif ($this->type == "failure") {
+            return new Content(
+                markdown: 'user.mail.mailer2',
+                with: [
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'type' => $this->type,
+                    'ticket' => $this->ticket
+                ]
+            );
+        }
     }
 
     /**

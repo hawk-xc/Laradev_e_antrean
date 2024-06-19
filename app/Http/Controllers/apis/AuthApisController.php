@@ -13,9 +13,9 @@ class AuthApisController extends Controller
     public function index()
     {
         return response()->json([
-            'status' => false,
+            'status' => 403,
             'data' => 'unauthorized'
-        ], 404);
+        ], 403);
     }
 
     public function login(Request $request)
@@ -44,12 +44,12 @@ class AuthApisController extends Controller
                 'data' => 'user successfull auth',
                 'username'=> Auth::user()->username,
                 'token' => $request->user()->createToken('api-auth', $ability)->plainTextToken
-            ]);
+            ], 200);
         } else {
             return response()->json([
                 'status' => 404,
                 'data' => 'user not found'
-            ]);
+            ], 400);
         }
     }
 
@@ -68,17 +68,17 @@ class AuthApisController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => true,
+                'status' => 404,
                 'data' => $validator->errors()
-            ]);
+            ], 404);
         } else {
             $data['password'] = bcrypt($request['password']);
             User::create($data);
 
             return response()->json([
-                'status' => true,
+                'status' => 200,
                 'data' => 'user successfull saved!'
-            ]);
+            ], 200);
         }
     }
 }

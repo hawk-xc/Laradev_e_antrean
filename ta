@@ -1,0 +1,61 @@
+[1mdiff --git a/app/Livewire/Process.php b/app/Livewire/Process.php[m
+[1mindex 974355f..a2dfec1 100644[m
+[1m--- a/app/Livewire/Process.php[m
+[1m+++ b/app/Livewire/Process.php[m
+[36m@@ -168,21 +168,42 @@[m [mpublic function store()[m
+         $data['user_id'] = $this->employe_id;[m
+         $proces = Proces::find($this->proces_id);[m
+ [m
+[31m-        $ticket = Proces::find($this->proces_id)->ticket;[m
+[31m-[m
+[31m-        $blueprint_message = "<p>Hallo User</p><br><p>Terima kasih atas kesabaran dan pengertian Anda selama kami menangani permintaan perbaikan Anda.</p><br><p>Kami ingin menginformasikan bahwa untuk saat ini, proses perbaikan telah <b>selesai</b></p><br><p>Mohon untuk saat ini perangkat diambil ditoko.</p><br><p>Apabila Anda memiliki pertanyaan lebih lanjut atau memerlukan bantuan lainnya, jangan ragu untuk menghubungi kami melalui virtual chat ini.</p><br><p>Terima kasih atas pengertian dan kerjasamanya.</p><br><p>Salam hormat, Fitri</p><br><p>Helpdesk E-Service</p>";[m
+[31m-[m
+[31m-        \App\Models\Notification::create([m
+[31m-            [[m
+[31m-                'user_id' => $ticket->device->user->id,[m
+[31m-                'message' => $blueprint_message,[m
+[31m-                'is_read' => 0,[m
+[31m-                'is_user' => 0[m
+[31m-            ][m
+[31m-        );[m
+[32m+[m[32m        $ticket = $proces->ticket;[m
+[32m+[m
+[32m+[m[32m        switch ($ticket->status_id) {[m
+[32m+[m[32m            case 4:[m
+[32m+[m[32m                $blueprint_message = "<p>Hallo User</p><br><p>Terima kasih atas kesabaran dan pengertian Anda selama kami menangani permintaan perbaikan Anda.</p><br><p>Kami ingin menginformasikan bahwa untuk saat ini, proses perbaikan telah <b>selesai</b></p><br><p>Mohon untuk saat ini perangkat diambil ditoko.</p><br><p>Apabila Anda memiliki pertanyaan lebih lanjut atau memerlukan bantuan lainnya, jangan ragu untuk menghubungi kami melalui virtual chat ini.</p><br><p>Terima kasih atas pengertian dan kerjasamanya.</p><br><p>Salam hormat, Fitri</p><br><p>Helpdesk E-Service</p>";[m
+[32m+[m
+[32m+[m[32m                \App\Models\Notification::create([m
+[32m+[m[32m                    [[m
+[32m+[m[32m                        'user_id' => $ticket->device->user->id,[m
+[32m+[m[32m                        'message' => $blueprint_message,[m
+[32m+[m[32m                        'is_read' => 0,[m
+[32m+[m[32m                        'is_user' => 0[m
+[32m+[m[32m                    ][m
+[32m+[m[32m                );[m
+[32m+[m
+[32m+[m[32m                // run with php artisan queue:work to operate job[m
+[32m+[m[32m                \App\Jobs\MailerJob::dispatch($ticket->device->user->email, $ticket->device->user->name, 'done', $ticket);[m
+[32m+[m[32m                break;[m
+[32m+[m[32m            case 5:[m
+[32m+[m[32m                $blueprint_message = "<p>Hallo User</p><br><p>Terima kasih atas kesabaran dan pengertian Anda selama kami menangani permintaan perbaikan Anda.</p><br><p>Kami ingin menginformasikan bahwa untuk saat ini, proses perbaikan mengalami kegagalan karena <b>ditolak oleh team atau dibatalkan oleh pengguna</b></p><br><p>Kami mohon maaf atas ketidaknyamanan yang ditimbulkan. Tim kami sedang bekerja keras untuk menyelesaikan masalah ini secepat mungkin. Kami akan segera menghubungi Anda begitu perbaikan telah berhasil dilakukan.</p><br><p>Apabila Anda memiliki pertanyaan lebih lanjut atau memerlukan bantuan lainnya, jangan ragu untuk menghubungi kami melalui virtual chat ini.</p><br><p>Terima kasih atas pengertian dan kerjasamanya.</p><br><p>Salam hormat, Fitri</p><br><p>Helpdesk E-Service</p>";[m
+[32m+[m
+[32m+[m
+[32m+[m[32m                \App\Models\Notification::create([m
+[32m+[m[32m                    [[m
+[32m+[m[32m                        'user_id' => $ticket->device->user->id,[m
+[32m+[m[32m                        'message' => $blueprint_message,[m
+[32m+[m[32m                        'is_read' => 0,[m
+[32m+[m[32m                        'is_user' => 0[m
+[32m+[m[32m                    ][m
+[32m+[m[32m                );[m
+[32m+[m
+[32m+[m[32m                // run with php artisan queue:work to operate job[m
+[32m+[m[32m                \App\Jobs\MailerJob::dispatch($ticket->device->user->email, $ticket->device->user->name, 'failed', $ticket);[m
+[32m+[m[32m                break;[m
+[32m+[m[32m        }[m
+ [m
+[31m-        // run with php artisan queue:work to operate job[m
+[31m-        \App\Jobs\MailerJob::dispatch($ticket->device->user->email, $ticket->device->user->name, 'done', $ticket);[m
+ [m
+         if ($proces->update($data)) {[m
+             $this->fresh();[m

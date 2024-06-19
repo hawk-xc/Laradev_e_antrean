@@ -229,7 +229,7 @@
                 {{-- form in here --}}
 
                 <div class="">
-                    <img id="preview" src="" class="my-1 rounded-lg" wire:ignore.self>
+                    <img id="previewImage" src="" class="my-1 rounded-lg" wire:ignore.self>
                 </div>
 
                 <label class="form-control w-full">

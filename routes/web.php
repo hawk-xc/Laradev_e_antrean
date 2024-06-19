@@ -7,10 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,7 +32,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/device', fn () => view('Device'))->name('device')->middleware('is_user');
     Route::get('/ticket', fn () => view('Ticket'))->name('ticket')->middleware('is_user');
-    Route::get('/process', fn () => view('Process'))->name('process')->middleware('is_admin_and_helpdesk');
+    Route::get('/process', fn () => view('Process'))->name('process')->middleware('is_admin_and_helpdesk_and_techinician');
     Route::get('/manageuser', fn () => view('ManageUser'))->name('manageuser')->middleware('is_admin');
     Route::get('/weblog', fn () => view('WebLog'))->name('log')->middleware('is_admin');
     Route::get('/chatter', fn () => view('Chatter'))->name('chatter')->middleware('is_admin_and_helpdesk');
@@ -50,9 +46,11 @@ Route::get('/', function () {
     return view('landing-page');
 });
 
-// Route::get('/sendmailer', function () {
-//     \App\Jobs\MailerJob::dispatch('wahyutricahyono777@gmail.com', 'wahyu', 'done', \App\Models\Ticket::first());
-//     // event(new \App\Events\sendNotification('wahyutricahyono777@gmail.com', 'suradin', 'suradinlothok@gmail.com', 'done', \App\Models\Ticket::first()));
-// });
+Route::get('/sendmailer', function () {
+    \App\Jobs\MailerJob::dispatch('wahyutricahyono777@gmail.com', 'wahyu', 'failure', \App\Models\Ticket::first());
+    // event(new \App\Events\sendNotification('wahyutricahyono777@gmail.com', 'suradin', 'suradinlothok@gmail.com', 'done', \App\Models\Ticket::first()));
+
+    // Mail::to('cobacoba@mail.com')->send(new \App\Mail\SendMailer('percobaan bunuh diri', 'cobacoba@mail.com', 'done', \App\Models\Ticket::find(1)));
+});
 
 require __DIR__ . '/auth.php';

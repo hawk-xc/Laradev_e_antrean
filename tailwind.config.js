@@ -17,6 +17,9 @@ export default {
                 sans: ["Montserrat", "sans-serif"],
                 times: ['Times New Roman', 'serif'],
             },
+            backgroundImage: theme => ({
+                'custom-bg': "url('http://localhost:8000/images/mydoodles.png')",
+              }),
         },
     },
 
