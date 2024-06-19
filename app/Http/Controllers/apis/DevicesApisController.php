@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\apis;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DeviceResource;
 use App\Models\Device;
 use Illuminate\Http\Request;
+use App\Http\Resources\DeviceResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class DeviceApisController extends Controller
+class DevicesApisController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,6 +19,14 @@ class DeviceApisController extends Controller
         $device = Device::where('user_id', Auth::user()->id)->get();
         // $device =  Device::all();
         return new DeviceResource(true, 'List Data Posts', $device);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -57,7 +65,6 @@ class DeviceApisController extends Controller
      */
     public function show($id)
     {
-        // $perangkat = Device::where('user_id', Auth::user()->id)->where('id', $id)->first();
         $device =
             Device::where('user_id', Auth::user()->id)->where('id', $id)->first();
         if (!$device) {
@@ -67,9 +74,17 @@ class DeviceApisController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Device $device)
+    {
+        //
+    }
+
+    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Device $id)
     {
         $device = Device::find($id);
         if (!$device) {

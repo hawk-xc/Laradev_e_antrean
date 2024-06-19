@@ -42,6 +42,7 @@ class AuthApisController extends Controller
             return response()->json([
                 'status' => 200,
                 'data' => 'user successfull auth',
+                'username'=> Auth::user()->username,
                 'token' => $request->user()->createToken('api-auth', $ability)->plainTextToken
             ]);
         } else {
