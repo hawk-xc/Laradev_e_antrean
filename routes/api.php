@@ -19,6 +19,10 @@ use \App\Http\Controllers\apis\{
 |
 */
 
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
 Route::post('/login', [AuthApisController::class, 'login']);
 Route::post('/register', [AuthApisController::class, 'register']);
 
