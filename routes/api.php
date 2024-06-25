@@ -3,11 +3,17 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\apis\{
+
     AuthApisController,
+    DeviceApisController,
+    // DevicesApisController,
+    ProcessApisController,
     TicketApisController,
     ProfileApisController,
-    DeviceApisController
+    // DeviceApisController
 };
+use App\Http\Controllers\apis\DevicesApiController;
+use App\Http\Controllers\DevicesApiController as ControllersDevicesApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +26,10 @@ use \App\Http\Controllers\apis\{
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
 
 Route::post('/login', [AuthApisController::class, 'login']);
 Route::post('/register', [AuthApisController::class, 'register']);
@@ -33,5 +40,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/device', DeviceApisController::class);
     Route::put('/passwordupdate', [ProfileApisController::class, 'update_password']);
 });
+
+Route::apiResource('/proces', ProcessApisController::class)->only([
+    'index', 'store', 'show', 'update', 'destroy'
+])->middleware('auth:sanctum');
 
 // Route::resource('/device/{id}', DeviceApisController::class);
