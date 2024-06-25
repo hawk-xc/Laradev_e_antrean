@@ -47,7 +47,7 @@ class AuthApisController extends Controller
         } else {
             return response()->json([
                 'status' => 404,
-                'data' => 'user not found'
+                'data' => 'user not found or user not authed'
             ], 400);
         }
     }
