@@ -37,10 +37,14 @@ Route::post('/register', [AuthApisController::class, 'register']);
 // Route::resource('/profile', [AuthApisController::class])->middleware('auth:sanctum');
 
 Route::get('/antrean', [TicketApisController::class, 'index'])->middleware('auth:sanctum');
+// Route::get('/antrean', [TicketApisController::class, 'index']);
 // Route::resource('/devices', [DevicesApiController::class])->middleware('auth:sanctum');
+// Route::apiResource('/devices', DevicesApisController::class)->only([
+//     'index', 'store', 'show', 'update', 'destroy'
+// ])->middleware('auth:sanctum');
 Route::apiResource('/devices', DevicesApisController::class)->only([
     'index', 'store', 'show', 'update', 'destroy'
-])->middleware('auth:sanctum');
+]);
 Route::apiResource('/proces', ProcessApisController::class)->only([
     'index', 'store', 'show', 'update', 'destroy'
 ])->middleware('auth:sanctum');
