@@ -5,7 +5,8 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\apis\{
     AuthApisController,
     TicketApisController,
-    ProfileApisController
+    ProfileApisController,
+    DeviceApisController
 };
 
 /*
@@ -29,4 +30,8 @@ Route::post('/register', [AuthApisController::class, 'register']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/profile', ProfileApisController::class);
     Route::resource('/ticket', TicketApisController::class);
+    Route::resource('/device', DeviceApisController::class);
+    Route::put('/passwordupdate', [ProfileApisController::class, 'update_password']);
 });
+
+// Route::resource('/device/{id}', DeviceApisController::class);
