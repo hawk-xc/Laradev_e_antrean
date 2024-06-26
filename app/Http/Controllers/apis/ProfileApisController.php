@@ -6,6 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Models\{
+    Device,
+    Ticket,
+    User,
+    Proces
+};
 
 class ProfileApisController extends Controller
 {
@@ -33,8 +39,9 @@ class ProfileApisController extends Controller
         //
 
         return response()->json([
+            'status' => 200,
             'data' => $request
-        ]);
+        ], 200);
     }
 
     public function update_password(Request $request)
@@ -69,8 +76,36 @@ class ProfileApisController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
-        //
+        $devices = Device::where('user_id', $request->user()->id);
+        $ticket = Ticket::whereIn('device_id', $devices->pluck('id'));
+        $proces = Proces::whereIn('ticket_id', $ticket->pluck('id'));
+
+        try {
+            if ($ticket->count() < 1) {
+                // menghapus semua data device
+                if ($devices->count() >= 0) {
+                    $delete_device = $devices->get()->each->delete();
+                    if ($delete_device) {
+                        $request->user()->delete();
+                        return response()->json([
+                            'status' => 200,
+                            'data' => 'user berhasil dihapus!',
+                        ], 200);
+                    }
+                }
+            } else {
+                return response()->json([
+                    'status' => 405,
+                    'data' => 'user gagal dihapus!'
+                ], 405);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 404,
+                'data' => $e
+            ], 404);
+        }
     }
 }
