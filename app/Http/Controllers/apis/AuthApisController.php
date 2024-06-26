@@ -42,7 +42,7 @@ class AuthApisController extends Controller
             return response()->json([
                 'status' => 200,
                 'data' => 'user successfull auth',
-                'username'=> Auth::user()->username,
+                'username' => Auth::user()->username,
                 'token' => $request->user()->createToken('api-auth', $ability)->plainTextToken
             ], 200);
         } else {
@@ -56,6 +56,7 @@ class AuthApisController extends Controller
     public function register(Request $request)
     {
         $data = $request->only(['username', 'name', 'email', 'password']);
+        $data['email_verified_at'] = date('Y-m-d H:i:s');
 
         $rules = [
             'username' => 'required',
