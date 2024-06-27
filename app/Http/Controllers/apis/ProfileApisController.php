@@ -31,9 +31,10 @@ class ProfileApisController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
         $user = $request->user();
+        $data = [];
 
         $request->only(['username', 'name', 'email', 'b_password', 'n_password', 'c_password']);
 
@@ -51,7 +52,8 @@ class ProfileApisController extends Controller
                 return response()->json(['error' => 'Old password is incorrect'], 400);
             }
 
-            $user->password = Hash::make($request->n_password);
+            // $user->password = Hash::make($request->n_password);
+            $data['password'] = Hash::make($request->n_password);
         } else {
             $validator = Validator::make($request->all(), [
                 'username' => 'nullable',
@@ -60,10 +62,11 @@ class ProfileApisController extends Controller
             ]);
         }
 
-        $user->username = $request->username;
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $status = $user->save();
+        $data['username'] = $request->username;
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+
+        $status = User::find($user->id)->update($data);
 
         if ($status) {
             return response()->json([
