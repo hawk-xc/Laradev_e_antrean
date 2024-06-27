@@ -33,15 +33,49 @@ class ProfileApisController extends Controller
      */
     public function store(Request $request)
     {
-        $user_id = $request->user()->id;
+        $user = $request->user();
 
-        $request->only(['username', 'name', 'email', 'password']);
-        //
+        $request->only(['username', 'name', 'email', 'b_password', 'n_password', 'c_password']);
 
-        return response()->json([
-            'status' => 200,
-            'data' => $request
-        ], 200);
+        if (isset($request->b_password) && isset($request->n_password) && isset($request->c_password)) {
+            $validator = Validator::make($request->all(), [
+                'username' => 'nullable',
+                'name' => 'nullable',
+                'email' => 'nullable',
+                'b_password' => 'required',
+                'n_password' => 'required|min:6',
+                'c_password' => 'required|same:n_password',
+            ]);
+
+            if (!Hash::check($request->b_password, $user->password)) {
+                return response()->json(['error' => 'Old password is incorrect'], 400);
+            }
+
+            $user->password = Hash::make($request->n_password);
+        } else {
+            $validator = Validator::make($request->all(), [
+                'username' => 'nullable',
+                'name' => 'nullable',
+                'email' => 'nullable',
+            ]);
+        }
+
+        $user->username = $request->username;
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $status = $user->save();
+
+        if ($status) {
+            return response()->json([
+                'status' => 200,
+                'data' => 'data user berhasil diperbahrui!'
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 400,
+                'data' => 'data user gagal diperbahrui!'
+            ]);
+        }
     }
 
     public function update_password(Request $request)
