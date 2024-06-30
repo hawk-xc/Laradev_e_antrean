@@ -3,22 +3,30 @@
 namespace App\Http\Controllers\apis;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DeviceResource;
 use App\Models\Device;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class DeviceApisController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $device = Device::where('user_id', Auth::user()->id)->get();
-        // $device =  Device::all();
-        return new DeviceResource(true, 'List Data Posts', $device);
+        $devices = [];
+
+        foreach (Device::where('user_id', $request->user()->id)->get() as $device) {
+            $devices[] = $device;
+            $device['user_name'] = $device->User->name;
+            $device['created_at_diff'] = $device->created_at->diffForHumans();
+        }
+
+        return response()->json([
+            'status' => 200,
+            'total' => Device::where('user_id', $request->user()->id)->count(),
+            'data' => $devices
+        ], 200);
     }
 
     /**
@@ -26,78 +34,93 @@ class DeviceApisController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            // 'user_id' => 'required',
-            'device_name' => 'required|min:3',
-            'device_year' => 'required|numeric|digits:4|min:1990|max:' . date('Y'),
-            'drive_link' => 'nullable|url',
-            'device_image' => 'nullable|image|max:1024|mimes:jpg,png,jpeg',
-        ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-        if ($request->hasFile('device_image')) {
-            $image = $request->file('device_image');
-            $image->storeAs('public/posts', $image->hashName());
-        }
+        $request['user_id'] = $request->user()->id;
 
-        $device = Device::create([
-            // 'user_id' => Auth::user()->id,
-            'user_id' => $request->user()->id,
-            'device_name' => $request->device_name,
-            'device_year' => $request->device_year,
-            'drive_link' => $request->drive_link,
-            // 'image_link' => $image->hashName(),
+        $validated = $request->validate([
+            'user_id' => 'required',
+            'device_name' => 'required',
+            'device_year' => 'required',
+            'drive_link' => 'nullable',
         ]);
-        return new DeviceResource(true, 'Data Perangkat Berhasil Ditambahkan', $device);
+
+        try {
+            // Masukkan data ke dalam database
+            $device = Device::create($validated);
+
+            // Kembalikan respons JSON
+            return response()->json([
+                'status' => 200,
+                'data' => $device
+            ], 200);
+        } catch (\Exception $e) {
+            // Log error
+            // Log::error('Error creating device: ' . $e->getMessage());
+
+            // Kembalikan respons error
+            return response()->json([
+                'status' => 500,
+                'error' => 'Internal Server Error'
+            ], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Device $device)
     {
-        // $perangkat = Device::where('user_id', Auth::user()->id)->where('id', $id)->first();
-        $device =
-            Device::where('user_id', Auth::user()->id)->where('id', $id)->first();
-        if (!$device) {
-            return response()->json(['success' => false, 'message' => 'Data Perangkat Tidak Ditemukan'], 404);
-        }
-        return new DeviceResource(true, 'Data Perangkat Berhasil Ditampilkan', $device);
+        return response()->json([
+            'data' => 'data',
+            'status' => $device
+        ], 200);
     }
 
     /**
+     * Show the form for editing the sp
+    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Device $device)
     {
-        $device = Device::find($id);
-        if (!$device) {
-            return response()->json(['success' => false, 'message' => 'Data Perangkat Tidak Ditemukan'], 404);
-        }
-        $validator = Validator::make($request->all(), [
-            'device_name' => 'sometimes|required|min:3',
-            'device_year' => 'sometimes|required|numeric|digits:4|min:1990|max:' . date('Y'),
-            'drive_link' => 'nullable|url',
-            'device_image' => 'nullable|image|max:1024|mimes:jpg,png,jpeg',
+        $request['user_id'] = $request->user()->id;
+
+        $validated = $request->validate([
+            'user_id' => 'required',
+            'device_name' => 'required',
+            'device_year' => 'required',
+            'drive_link' => 'nullable',
         ]);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+
+        try {
+            // Masukkan data ke dalam database
+            $device = Device::find($device->id)->update($validated);
+
+            // Kembalikan respons JSON
+            return response()->json([
+                'status' => 200,
+                'data' => $device
+            ], 200);
+        } catch (\Exception $e) {
+            // Log error
+            // Log::error('Error creating device: ' . $e->getMessage());
+
+            // Kembalikan respons error
+            return response()->json([
+                'status' => 500,
+                'error' => 'Internal Server Error'
+            ], 500);
         }
-        $device->update($request->only('device_name', 'device_year', 'drive_link'));
-        return new DeviceResource(true, 'Data Perangkat Berhasil Diupdate', $device);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Device $device)
     {
-        $device = Device::find($id);
-        if (!$device) {
-            return response()->json(['success' => false, 'message' => 'Data Perangkat Tidak Ditemukan'], 404);
-        }
-        $device->delete();
-        return response()->json(['success' => true, 'message' => 'Data Perangkat Berhasil Dihapus']);
+        Device::destroy($device->id);
+        return response()->json([
+            'status' => 200,
+            'data' => 'sukses',
+        ], 200);
     }
 }

@@ -48,7 +48,7 @@ class AuthApisController extends Controller
         } else {
             return response()->json([
                 'status' => 404,
-                'data' => 'user not found'
+                'data' => 'user not found or user not authed'
             ], 400);
         }
     }
@@ -56,6 +56,7 @@ class AuthApisController extends Controller
     public function register(Request $request)
     {
         $data = $request->only(['username', 'name', 'email', 'password']);
+        $data['email_verified_at'] = date('Y-m-d H:i:s');
 
         $rules = [
             'username' => 'required',

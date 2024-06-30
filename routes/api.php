@@ -6,10 +6,11 @@ use \App\Http\Controllers\apis\{
 
     AuthApisController,
     DeviceApisController,
-    DevicesApisController,
+    // DevicesApisController,
     ProcessApisController,
     TicketApisController,
-    ProfileApisController
+    ProfileApisController,
+    // DeviceApisController
 };
 use App\Http\Controllers\apis\DevicesApiController;
 use App\Http\Controllers\DevicesApiController as ControllersDevicesApiController;
@@ -33,8 +34,12 @@ use App\Http\Controllers\DevicesApiController as ControllersDevicesApiController
 Route::post('/login', [AuthApisController::class, 'login']);
 Route::post('/register', [AuthApisController::class, 'register']);
 
-// Route::resource('/profile', [ProfileApisController::class])->middleware('auth:sanctum');
-// Route::resource('/profile', [AuthApisController::class])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::resource('/profile', ProfileApisController::class);
+    Route::resource('/ticket', TicketApisController::class);
+    Route::resource('/device', DeviceApisController::class);
+    Route::put('/passwordupdate', [ProfileApisController::class, 'update_password']);
+});
 
 Route::get('/antrean', [TicketApisController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/antrean', [TicketApisController::class, 'store'])->middleware('auth:sanctum');
@@ -52,11 +57,5 @@ Route::apiResource('/devices', DevicesApisController::class)->only([
 Route::apiResource('/proces', ProcessApisController::class)->only([
     'index', 'store', 'show', 'update', 'destroy'
 ])->middleware('auth:sanctum');
-// Route::apiResource('/devices', DevicesApiController::class)->only([
-//     // 'index', 'show', 'update', 'destroy'
-// ]);
-Route::get('/device', [DeviceApisController::class, 'index'])->middleware('auth:sanctum');
-Route::post('/device', [DeviceApisController::class, 'store'])->middleware('auth:sanctum');
-Route::put('/device/{id}', [DeviceApisController::class, 'show'])->middleware('auth:sanctum');
-Route::post('/device/{id}', [DeviceApisController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/device/{id}', [DeviceApisController::class, 'destroy'])->middleware('auth:sanctum');
+
+// Route::resource('/device/{id}', DeviceApisController::class);
