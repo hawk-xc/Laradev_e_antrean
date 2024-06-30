@@ -4,6 +4,7 @@ namespace App\Http\Controllers\apis;
 
 use App\Http\Controllers\Controller;
 use App\Models\Device;
+use App\Models\Proces;
 use Illuminate\Http\Request;
 use \App\Models\Ticket;
 use Illuminate\Support\Facades\Validator;
@@ -81,34 +82,62 @@ class TicketApisController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input yang diterima dari request
+        // Validasi input dari request
         $validated = $request->validate([
-            'user_id' => 'required|int',
             'device_name' => 'required|string',
-            'device_year' => 'required|string',
-            'drive_link' => 'nullable|string',
+            // 'device_id' => 'required|integer',
+            'description' => 'required|min:3',
+            'image_link' => 'nullable|min:3',
+            // 'device_image' => 'nullable|image|max:1024|mimes:jpg,png,jpeg',
         ]);
 
         try {
-            // Buat tiket baru berdasarkan data yang divalidasi
-            $ticket = Ticket::create([
-                'user_id' => $validated['user_id'],
-                'device_name' => $validated['device_name'],
-                'device_year' => $validated['device_year'],
-                'drive_link' => $validated['drive_link'],
-            ]);
+            // Proses upload gambar jika ada
+            // if ($request->hasFile('device_image')) {
+            //     $image = $request->file('device_image');
+            //     $name = md5($image->getClientOriginalName() . microtime()) . '.' . $image->getClientOriginalExtension();
+            //     $image->storeAs('public/ticket_assets', $name);
+            //     $validated['image_link'] = $name;
+            // }
 
-            // Kirim respons JSON berhasil dengan data tiket yang baru dibuat
+            // Tambahkan tanggal pembuatan dan tanggal penutupan default
+
+            $device_id = Device::where('device_name', $request->device_name)->pluck('id')->first();
+
+            // $validated['device_id'] = Device::where('device_name', $request->device_name)->pluck('id')->first();
+            // return ($device_id);
+            $validated['device_id'] = $device_id;
+            $validated['created_at'] = now()->format('Y-m-d H:i:s');
+            $validated['closed_at'] = now()->addDay(3)->format('Y-m-d H:i:s');
+
+            // return ($validated['device_id']);
+            // Generate ID tiket berdasarkan tanggal dan nomor urut hari itu
+            $today = now()->format('Y-m-d');
+            $count = Ticket::whereDate('created_at', $today)->count();
+            $validated['id_ticket'] = now()->format('ymd') . ($count + 1);
+
+            // Simpan data tiket baru
+            // dd($validated);
+            $ticket = Ticket::create($validated);
+
+            // Buat entri proses untuk tiket yang baru dibuat
+            $processData = [
+                'status_id' => 1, // Status default untuk proses baru
+                'ticket_id' => $ticket->id,
+            ];
+            Proces::create($processData);
+
+            // Kirim respons sukses
             return response()->json([
-                'status' => 200,
-                'data' => $ticket,
-                'message' => 'Ticket created successfully.'
+                'status' => 'success',
+                'message' => 'Ticket created successfully!',
+                'ticket' => $ticket,
             ], 200);
         } catch (\Exception $e) {
-            // Tangani kesalahan jika terjadi saat penyimpanan
+            // Tangani kesalahan jika terjadi saat menyimpan data
             return response()->json([
-                'status' => 500,
-                'error' => 'Failed to store ticket: ' . $e->getMessage()
+                'status' => 'error',
+                'message' => 'Failed to create ticket: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -117,15 +146,118 @@ class TicketApisController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    // public function update(Request $request, string $id)
+    // {
+    //     // Validasi input dari request
+
+    //     $validated = $request->validate([
+    //         'device_id' => 'required|numeric',
+    //         'description' => 'required|min:3',
+    //         'image_link' => 'nullable|min:3', // Jika memungkinkan ada gambar baru
+    //     ]);
+
+    //     try {
+    //         // Mencari tiket berdasarkan ID
+    //         $ticket = Ticket::find($id);
+
+    //         if (!$ticket) {
+    //             return response()->json(['success' => false, 'message' => 'Data Tiket Tidak Ditemukan'], 404);
+    //         }
+
+    //         // Proses upload gambar jika ada
+
+
+    //         // Event logging untuk interaksi pengguna
+    //         event(new \App\Events\UserInteraction($request->user(), "Ticket => update ticket " . $ticket->id));
+
+    //         $device_id = Device::where('device_name', $request->device_name)->pluck('id')->first();
+    //         // dd($device_id);
+    //         $validated['device_id'] = $device_id;
+
+
+    //         // Mengupdate data tiket
+    //         $ticket->update($validated);
+    //         if ($ticket->update($validated)) {
+    //             return response()->json([
+    //                 'success' => true,
+    //                 'message' => 'Data Tiket Berhasil Diperbarui!',
+    //                 'ticket' => $ticket
+    //             ]);
+    //         }
+
+    //         return response()->json(['success' => false, 'message' => 'Gagal Memperbarui Data Tiket'], 500);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['success' => false, 'message' => 'Terjadi Kesalahan: ' . $e->getMessage()], 500);
+    //     }
+    // }
+    public function update(string $id, Request $request)
     {
-        //
+        // Validasi input dari request
+        $validated = $request->validate([
+            // 'device_id' => 'required|numeric',
+            'description' => 'required|min:3',
+            'image_link' => 'nullable|min:3', // Jika memungkinkan ada gambar baru
+        ]);
+
+        try {
+            // Mencari tiket berdasarkan ID
+            $ticket = Ticket::find($id);
+
+            if (!$ticket) {
+                return response()->json(['success' => false, 'message' => 'Data Tiket Tidak Ditemukan'], 404);
+            }
+
+            // Proses upload gambar jika ada (tidak disertakan dalam contoh saat ini)
+
+            // Event logging untuk interaksi pengguna
+            // event(new \App\Events\UserInteraction($request->user(), "Ticket => update ticket " . $ticket->id));
+            // $validated['device_id'] = $request->device_name;
+            $validated['device_id'] = Device::where('device_name', $request->device_name)->pluck('id')->first();
+            // Perbarui data tiket
+            $ticket->update($validated);
+            // Ticket::where('id', $ticket->id)->update($validated);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Tiket Berhasil Diperbarui!',
+                'ticket' => $ticket
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Terjadi Kesalahan: ' . $e->getMessage()], 500);
+        }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
+        try {
+            // Mencari tiket berdasarkan ID
+            $ticket = Ticket::find($id);
+
+            if (!$ticket) {
+                return response()->json(['success' => false, 'message' => 'Data Tiket Tidak Ditemukan'], 404);
+            }
+
+            // Mengupdate status pada model Proces
+            $update = Proces::where('ticket_id', $ticket->id)->update(['status_id' => 5]);
+
+            if ($update) {
+                // Event logging untuk interaksi pengguna
+                event(new \App\Events\UserInteraction($request->user(), "Ticket => closed ticket " . $ticket->id));
+
+                // Menghapus tiket setelah status diperbarui
+                $ticket->delete();
+
+                return response()->json(['success' => true, 'message' => 'Data Tiket Berhasil Dihapus']);
+            }
+
+            return response()->json(['success' => false, 'message' => 'Gagal Mengupdate Status Tiket'], 500);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Terjadi Kesalahan: ' . $e->getMessage()], 500);
+        }
     }
 }
