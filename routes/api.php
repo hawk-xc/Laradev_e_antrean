@@ -41,6 +41,19 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/passwordupdate', [ProfileApisController::class, 'update_password']);
 });
 
+Route::get('/antrean', [TicketApisController::class, 'index'])->middleware('auth:sanctum');
+Route::post('/antrean', [TicketApisController::class, 'store'])->middleware('auth:sanctum');
+// Route::put('/antrean/{id}', [TicketApisController::class, 'update'])->middleware('auth:sanctum');
+Route::put('/antrean/{id}', [TicketApisController::class, 'update']);
+Route::delete('/antrean/{id}', [TicketApisController::class, 'destroy'])->middleware('auth:sanctum');
+// Route::get('/antrean', [TicketApisController::class, 'index']);
+// Route::resource('/devices', [DevicesApiController::class])->middleware('auth:sanctum');
+// Route::apiResource('/devices', DevicesApisController::class)->only([
+//     'index', 'store', 'show', 'update', 'destroy'
+// ])->middleware('auth:sanctum');
+Route::apiResource('/devices', DevicesApisController::class)->only([
+    'index', 'store', 'show', 'update', 'destroy'
+]);
 Route::apiResource('/proces', ProcessApisController::class)->only([
     'index', 'store', 'show', 'update', 'destroy'
 ])->middleware('auth:sanctum');

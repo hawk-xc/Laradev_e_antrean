@@ -16,9 +16,19 @@ class DevicesApisController extends Controller
      */
     public function index()
     {
-        $device = Device::where('user_id', Auth::user()->id)->get();
+        // $devices = [];
+        // $device = Device::where('user_id', Auth::user()->id)->get();
+
+        $devices = [];
+
+        // foreach (Device::where('user_id', Auth::user()->id)->get() as $device) {
+        foreach (Device::all() as $device) {
+            $devices[] = $device;
+            $device['user_name'] = $device->User->name;
+            $device['created_at_diff'] = $device->created_at->diffForHumans();
+        }
         // $device =  Device::all();
-        return new DeviceResource(true, 'List Data Posts', $device);
+        return new DeviceResource(true, 'List Data Posts', $devices);
     }
 
     /**

@@ -10,7 +10,7 @@ class ProcessResource extends JsonResource
     public $status;
     public $message;
     public $resource;
-    /** 
+    /**
      * Transform the resource into an array.
      *
      * @return array<string, mixed>
