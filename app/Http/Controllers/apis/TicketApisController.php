@@ -33,6 +33,8 @@ class TicketApisController extends Controller
 
                 // Loop melalui setiap tiket dari perangkat ini
                 foreach ($deviceTickets as $ticket) {
+                    $ticket['user_name'] = $request->user()->name;
+
                     $ticket['created_at_diff'] = $ticket->created_at->diffForHumans();
                     // Anda mungkin ingin menambahkan informasi tambahan lainnya di sini
 

@@ -43,6 +43,7 @@ class AuthApisController extends Controller
                 'status' => 200,
                 'data' => 'user successfull auth',
                 'username' => Auth::user()->username,
+                'name' => Auth::user()->name,
                 'token' => $request->user()->createToken('api-auth', $ability)->plainTextToken
             ], 200);
         } else {
